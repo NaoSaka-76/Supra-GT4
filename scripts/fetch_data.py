@@ -32,16 +32,17 @@ def _with_sentiment(items: list[dict]) -> list[dict]:
 def _motorsports_section() -> dict:
     regions = motorsports.fetch()
     for r in regions.values():
-        r["topics"] = _with_sentiment(r["topics"])
-        r["results"] = _with_sentiment(r["results"])
-        r["standings"] = _with_sentiment(r["standings"])
+        for series in r["series"]:
+            series["topics"] = _with_sentiment(series["topics"])
+            series["results"] = _with_sentiment(series["results"])
+            series["standings"] = _with_sentiment(series["standings"])
     return {
-        "label": "GR Supra GT4 参戦レース(地域別)",
+        "label": "GR Supra GT4 参戦レース(地域別・全14シリーズ)",
         "regions": regions,
         "note": (
-            "トピックス/レース結果はニュース記事ベースで集約しています。米国(GT4 America "
-            "Silver Teams)のみ公式サイトの実データからチームランキングをグラフ表示しています"
-            "(他地域を図示しない理由は各カード内に記載)。"
+            "トピックス/レース結果はニュース記事ベースで集約しています。スーパー耐久(日本・"
+            "アジア)は年間スケジュール、米国のGT4 America(Silver Teams)はチームランキングを"
+            "公式サイトの実データで取得しています(他シリーズを図示しない理由は各カード内に記載)。"
         ),
     }
 

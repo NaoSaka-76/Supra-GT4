@@ -2,18 +2,12 @@
 
 スーパー耐久(日本・アジア/ ST-Zクラス)は公式レース一覧ページに開催日・サーキット名・
 大会名が静的HTMLで明記されており、比較的安定して取得できるため実際にスクレイピングして
-一覧表示する。
-
-米国(Pirelli/Fanatec GT4 America)・欧州(GT4 European Series)・オセアニア
-(Monochrome GT4 Australia Series)はSRO Motorsports Group系列の共通CMSで運用されて
-おり、日程ページ自体はJavaScriptで描画される部分が多く構造も変わりやすいため、
-一覧化はせず公式カレンダーページへの直接リンクのみを提供する
-(各リンクはWatch実装時に実在を確認済み)。
+一覧表示する。他シリーズの日程は各シリーズ公式サイトへの直接リンクを motorsports.py 側で
+静的に保持している(サイトごとに構造が異なりJavaScript描画される部分も多いため)。
 """
 
 from __future__ import annotations
 
-import html as html_module
 import re
 from datetime import date
 
@@ -22,10 +16,6 @@ import requests
 from .common import REQUEST_TIMEOUT, USER_AGENT
 
 SUPER_TAIKYU_INDEX_URL = "https://supertaikyu.com/race/index.html"
-
-GT4_AMERICA_CALENDAR_URL = "https://www.gt4-america.com/calendar"
-GT4_EUROPE_CALENDAR_URL = "https://www.gt4series.com/calendar"
-GT4_AUSTRALIA_CALENDAR_URL = "https://gt4australia.com.au/calendar"
 
 
 def _session() -> requests.Session:
@@ -89,12 +79,3 @@ def fetch_super_taikyu_schedule() -> list[dict]:
     for e in events:
         del e["sort_key"]
     return events
-
-
-def fetch_all() -> dict:
-    return {
-        "japan_asia": fetch_super_taikyu_schedule(),
-        "us": {"link": GT4_AMERICA_CALENDAR_URL},
-        "europe": {"link": GT4_EUROPE_CALENDAR_URL},
-        "oceania": {"link": GT4_AUSTRALIA_CALENDAR_URL},
-    }

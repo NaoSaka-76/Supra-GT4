@@ -187,9 +187,9 @@
     return panel;
   }
 
-  function buildRegionGroup(title, items) {
-    var group = el("div", "region-card__group");
-    group.appendChild(el("div", "region-card__group-title", title));
+  function buildSeriesGroup(title, items) {
+    var group = el("div", "series-card__group");
+    group.appendChild(el("div", "series-card__group-title", title));
     if (items.length === 0) {
       group.appendChild(el("p", "panel__empty", "該当情報なし"));
     } else {
@@ -230,27 +230,27 @@
     return chart;
   }
 
-  function buildScheduleBlock(r) {
-    var wrap = el("div", "region-card__group");
-    wrap.appendChild(el("div", "region-card__group-title", "レース日程"));
+  function buildScheduleBlock(s) {
+    var wrap = el("div", "series-card__group");
+    wrap.appendChild(el("div", "series-card__group-title", "レース日程"));
 
-    if (r.schedule_link) {
+    if (s.schedule_link) {
       wrap.appendChild(
         el(
           "p",
-          "panel__note region-card__chart-note",
+          "panel__note series-card__chart-note",
           "日程データの構造が不安定なため一覧化を見送っています。公式カレンダーは以下のリンクからご確認ください。"
         )
       );
-      var link = el("a", "region-card__link", "公式カレンダーを見る ↗");
-      link.href = r.schedule_link;
+      var link = el("a", "series-card__link", "公式カレンダーを見る ↗");
+      link.href = s.schedule_link;
       link.target = "_blank";
       link.rel = "noopener noreferrer";
       wrap.appendChild(link);
       return wrap;
     }
 
-    var rounds = r.schedule || [];
+    var rounds = s.schedule || [];
     if (rounds.length === 0) {
       wrap.appendChild(el("p", "panel__empty", "日程情報を取得できませんでした。"));
       return wrap;
@@ -280,49 +280,71 @@
     return wrap;
   }
 
-  function buildRankingBlock(r) {
-    var wrap = el("div", "region-card__group");
-    wrap.appendChild(el("div", "region-card__group-title", "シリーズランキング"));
-    if (r.standings_chart && r.standings_chart.length > 0) {
-      wrap.appendChild(buildStandingsChart(r.standings_chart));
+  function buildRankingBlock(s) {
+    var wrap = el("div", "series-card__group");
+    wrap.appendChild(el("div", "series-card__group-title", "シリーズランキング"));
+    if (s.standings_chart && s.standings_chart.length > 0) {
+      wrap.appendChild(buildStandingsChart(s.standings_chart));
     }
-    if (r.standings_chart_note) {
-      wrap.appendChild(el("p", "panel__note region-card__chart-note", r.standings_chart_note));
+    if (s.standings_chart_note) {
+      wrap.appendChild(el("p", "panel__note series-card__chart-note", s.standings_chart_note));
     }
     return wrap;
   }
 
+  function buildSeriesCard(regionKey, s) {
+    var card = el("div", "series-card series-card--" + regionKey);
+    var header = el("div", "series-card__header");
+    header.appendChild(el("span", null, s.label));
+    card.appendChild(header);
+    card.appendChild(buildScheduleBlock(s));
+    card.appendChild(buildRankingBlock(s));
+    card.appendChild(buildSeriesGroup(REGION_GROUP_LABELS.topics, s.topics));
+    card.appendChild(buildSeriesGroup(REGION_GROUP_LABELS.results, s.results));
+    card.appendChild(buildSeriesGroup(REGION_GROUP_LABELS.standings, s.standings));
+
+    var link = el("a", "series-card__link", "公式ランキングを見る ↗");
+    link.href = s.standings_url;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    card.appendChild(link);
+
+    return card;
+  }
+
   function buildMotorsportsPanel(icon, section) {
     var panel = el("section", "panel panel--full");
-    var regionCount = Object.values(section.regions || {}).reduce(function (sum, r) {
-      return sum + r.topics.length + r.results.length + r.standings.length;
+    var regions = section.regions || {};
+    var totalCount = Object.values(regions).reduce(function (sum, r) {
+      return (
+        sum +
+        r.series.reduce(function (s2, series) {
+          return s2 + series.topics.length + series.results.length + series.standings.length;
+        }, 0)
+      );
     }, 0);
-    panel.appendChild(buildPanelHeader(icon, section.label, regionCount));
+    panel.appendChild(buildPanelHeader(icon, section.label, totalCount));
     if (section.note) panel.appendChild(el("p", "panel__note", section.note));
 
-    var grid = el("div", "motorsports");
-    Object.keys(section.regions || {}).forEach(function (key) {
-      var r = section.regions[key];
-      var card = el("div", "region-card region-card--" + key);
-      var header = el("div", "region-card__header");
-      if (r.flag) header.appendChild(el("span", "region-card__flag", r.flag));
-      header.appendChild(el("span", null, r.label));
-      card.appendChild(header);
-      card.appendChild(buildScheduleBlock(r));
-      card.appendChild(buildRankingBlock(r));
-      card.appendChild(buildRegionGroup(REGION_GROUP_LABELS.topics, r.topics));
-      card.appendChild(buildRegionGroup(REGION_GROUP_LABELS.results, r.results));
-      card.appendChild(buildRegionGroup(REGION_GROUP_LABELS.standings, r.standings));
+    var container = el("div", "motorsports");
+    Object.keys(regions).forEach(function (key) {
+      var r = regions[key];
+      var block = el("div", "motorsports-region");
+      var heading = el("div", "motorsports-region__title");
+      if (r.flag) heading.appendChild(el("span", "motorsports-region__flag", r.flag));
+      heading.appendChild(el("span", null, r.label));
+      heading.appendChild(el("span", "motorsports-region__count", r.series.length + " シリーズ"));
+      block.appendChild(heading);
 
-      var link = el("a", "region-card__link", "公式ランキングを見る ↗");
-      link.href = r.standings_url || r.standings_search_url;
-      link.target = "_blank";
-      link.rel = "noopener noreferrer";
-      card.appendChild(link);
+      var grid = el("div", "motorsports-region__grid");
+      r.series.forEach(function (s) {
+        grid.appendChild(buildSeriesCard(key, s));
+      });
+      block.appendChild(grid);
 
-      grid.appendChild(card);
+      container.appendChild(block);
     });
-    panel.appendChild(grid);
+    panel.appendChild(container);
     return panel;
   }
 
@@ -335,7 +357,9 @@
     var ms = data.sections.motorsports;
     if (ms && ms.regions) {
       Object.values(ms.regions).forEach(function (r) {
-        all = all.concat(r.topics, r.results, r.standings);
+        r.series.forEach(function (series) {
+          all = all.concat(series.topics, series.results, series.standings);
+        });
       });
     }
     return all;
@@ -360,7 +384,9 @@
     var motorsportsCount = 0;
     if (data.sections.motorsports && data.sections.motorsports.regions) {
       Object.values(data.sections.motorsports.regions).forEach(function (r) {
-        motorsportsCount += r.topics.length + r.results.length + r.standings.length;
+        r.series.forEach(function (series) {
+          motorsportsCount += series.topics.length + series.results.length + series.standings.length;
+        });
       });
     }
 
@@ -402,7 +428,7 @@
 
     // Tile 4: motorsports
     var t4 = el("div", "stat-tile");
-    t4.appendChild(el("div", "stat-tile__label", "参戦レース関連話題(4地域)"));
+    t4.appendChild(el("div", "stat-tile__label", "参戦レース関連話題(5地域・14シリーズ)"));
     var v4 = el("div", "stat-tile__value", String(motorsportsCount));
     v4.appendChild(el("small", null, "件"));
     t4.appendChild(v4);

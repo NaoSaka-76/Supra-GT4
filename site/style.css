@@ -29,6 +29,8 @@
   --region-eu-soft: #3a2f10;
   --region-oc: #4fd3a0;
   --region-oc-soft: #10382c;
+  --region-me: #e08a4f;
+  --region-me-soft: #3a2312;
 
   /* Supra GT4を強調するスポットライトカラー(セマンティック/地域色とは独立) */
   --spotlight: #ff2a3c;
@@ -83,6 +85,8 @@
     --region-eu-soft: #f6efdb;
     --region-oc: #128064;
     --region-oc-soft: #dcf4ec;
+    --region-me: #a8560f;
+    --region-me-soft: #f6e5d8;
 
     --spotlight: #b8001a;
     --spotlight-soft: #fbe2e4;
@@ -615,16 +619,59 @@ a { color: inherit; }
   font-size: 0.88rem;
 }
 
-/* ---- Motorsports panel (region cards) ---- */
+/* ---- Motorsports panel (region groups of series cards) ---- */
 
 .motorsports {
-  padding: 16px 20px 20px;
+  padding: 4px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.motorsports-region {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.motorsports-region__title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+}
+
+.motorsports-region:first-child .motorsports-region__title {
+  border-top: none;
+  padding-top: 0;
+}
+
+.motorsports-region__flag {
+  font-size: 1.3rem;
+  line-height: 1;
+}
+
+.motorsports-region__count {
+  margin-left: auto;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.76rem;
+  color: var(--ink-muted);
+  letter-spacing: 0.02em;
+}
+
+.motorsports-region__grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 16px;
 }
 
-.region-card {
+.series-card {
   border: 1px solid var(--line);
   border-radius: 10px;
   overflow: hidden;
@@ -633,7 +680,7 @@ a { color: inherit; }
   background: var(--surface);
 }
 
-.region-card__header {
+.series-card__header {
   padding: 12px 14px;
   font-family: var(--font-body);
   font-weight: 700;
@@ -644,17 +691,13 @@ a { color: inherit; }
   gap: 8px;
 }
 
-.region-card__flag {
-  font-size: 1.1rem;
-  line-height: 1;
-}
+.series-card--japan_asia { --region-color: var(--region-jp); --region-color-soft: var(--region-jp-soft); }
+.series-card--us { --region-color: var(--region-us); --region-color-soft: var(--region-us-soft); }
+.series-card--europe { --region-color: var(--region-eu); --region-color-soft: var(--region-eu-soft); }
+.series-card--oceania { --region-color: var(--region-oc); --region-color-soft: var(--region-oc-soft); }
+.series-card--middle_east { --region-color: var(--region-me); --region-color-soft: var(--region-me-soft); }
 
-.region-card--japan_asia { --region-color: var(--region-jp); --region-color-soft: var(--region-jp-soft); }
-.region-card--us { --region-color: var(--region-us); --region-color-soft: var(--region-us-soft); }
-.region-card--europe { --region-color: var(--region-eu); --region-color-soft: var(--region-eu-soft); }
-.region-card--oceania { --region-color: var(--region-oc); --region-color-soft: var(--region-oc-soft); }
-
-.region-card__header { background: var(--region-color); }
+.series-card__header { background: var(--region-color); }
 
 /* ---- Standings chart (実データによる順位グラフ) ---- */
 
@@ -757,7 +800,7 @@ a { color: inherit; }
   font-variant-numeric: tabular-nums;
 }
 
-.region-card__chart-note {
+.series-card__chart-note {
   margin: 4px 14px 8px;
   padding: 8px 10px;
   border-radius: 6px;
@@ -849,11 +892,11 @@ a { color: inherit; }
   white-space: nowrap;
 }
 
-.region-card__group {
+.series-card__group {
   border-top: 1px solid var(--line);
 }
 
-.region-card__group-title {
+.series-card__group-title {
   font-family: var(--font-display);
   font-weight: 700;
   font-size: 0.7rem;
@@ -862,12 +905,12 @@ a { color: inherit; }
   padding: 9px 14px 4px;
 }
 
-.region-card__group .panel__list {
+.series-card__group .panel__list {
   padding: 2px 6px 6px;
   max-height: 220px;
 }
 
-.region-card__link {
+.series-card__link {
   margin: 4px 14px 14px;
   display: inline-flex;
   align-items: center;
@@ -883,7 +926,7 @@ a { color: inherit; }
   border-radius: 7px;
   align-self: flex-start;
 }
-.region-card__link:hover { background: var(--region-color-soft, var(--accent-soft)); }
+.series-card__link:hover { background: var(--region-color-soft, var(--accent-soft)); }
 
 /* ---- Footer ---- */
 

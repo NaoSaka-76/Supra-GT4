@@ -1,13 +1,12 @@
-"""GR Supra GT4が参戦するGT4カテゴリーのレース情報を地域別に集約する。
+"""GR Supra GT4を含むGT4カテゴリーのレース情報を地域別・シリーズ別に集約する。
 
-日本・アジア(スーパー耐久 ST-Zクラス)、米国(Pirelli/Fanatec GT4 America)、
-欧州(GT4 European Series)、オセアニア(Monochrome GT4 Australia Series)の
-4地域に整理。各シリーズ公式サイトの結果・ランキング表は構造がそれぞれ異なり安定した
-スクレイピングが難しいため、ニュース記事(Google News RSS)ベースでトピックス・
-レース結果・ランキング関連の話題を集約する。米国(GT4 America Silver Teams)のみ
-公式サイトの実データからチームランキングをグラフ表示し、GR Supra GT4で参戦する
-チームを目立たせて表示する(理由は standings.py 参照)。日本・アジア(スーパー耐久)は
-公式レース一覧から年間スケジュールを実データで取得する。
+日本・アジア、米国、欧州、オセアニア、中東の5地域、計14シリーズに整理。各シリーズ
+公式サイトの結果・ランキング表は構造がそれぞれ異なり安定したスクレイピングが難しいため、
+基本はニュース記事(Google News RSS)ベースでトピックス・レース結果・ランキング関連の
+話題を集約し、公式サイトのスケジュール/ランキングページへの直接リンクを添える
+(URLは実装時に実在を確認済み)。例外的に、日本・アジアのスーパー耐久は年間スケジュールを、
+米国のGT4 America(Silver Teams)はチームランキングを、それぞれ公式サイトから実データで
+取得している(理由は schedule.py / standings.py 参照)。
 """
 
 from __future__ import annotations
@@ -15,7 +14,7 @@ from __future__ import annotations
 import urllib.parse
 
 from .common import dedupe_by_url, fetch_google_news_rss, sort_by_recency
-from .schedule import fetch_all as fetch_all_schedules
+from .schedule import fetch_super_taikyu_schedule
 from .standings import fetch_gt4_america_team_standings
 
 
@@ -25,74 +24,279 @@ def _search_link(query: str) -> str:
 
 REGIONS = {
     "japan_asia": {
-        "label": "日本・アジア — スーパー耐久 ST-Zクラス",
+        "label": "日本・アジア",
         "flag": "🇯🇵",
-        "queries": {
-            "topics": [
-                ("GRスープラ GT4 OR \"GR Supra GT4\" スーパー耐久 OR ST-Z", "ja", "JP", "JP:ja"),
-                ("\"GR Supra GT4\" \"Super Taikyu\" OR \"ST-Z\"", "en-US", "US", "US:en"),
-            ],
-            "results": [
-                ("スーパー耐久 ST-Z GRスープラ OR スープラGT4 決勝 OR レース結果 OR 表彰台 OR 優勝", "ja", "JP", "JP:ja"),
-            ],
-            "standings": [
-                ("スーパー耐久 ST-Zクラス ランキング OR ポイントランキング スープラ", "ja", "JP", "JP:ja"),
-            ],
-        },
-        "standings_url": "https://supertaikyu.com/race/standing.html",
-        "standings_search": "スーパー耐久 ST-Zクラス ランキング Supra GT4 2026",
+        "series": [
+            {
+                "key": "super_taikyu",
+                "label": "スーパー耐久 ST-Zクラス(日本)",
+                "queries": {
+                    "topics": [
+                        ("GRスープラ GT4 OR \"GR Supra GT4\" スーパー耐久 OR ST-Z", "ja", "JP", "JP:ja"),
+                        ("\"GR Supra GT4\" \"Super Taikyu\" OR \"ST-Z\"", "en-US", "US", "US:en"),
+                    ],
+                    "results": [
+                        ("スーパー耐久 ST-Z GRスープラ OR スープラGT4 決勝 OR レース結果 OR 表彰台 OR 優勝", "ja", "JP", "JP:ja"),
+                    ],
+                    "standings": [
+                        ("スーパー耐久 ST-Zクラス ランキング OR ポイントランキング スープラ", "ja", "JP", "JP:ja"),
+                    ],
+                },
+                "schedule_link": None,  # 公式サイトから実データ取得(has_real_schedule)
+                "has_real_schedule": True,
+                "standings_url": "https://supertaikyu.com/race/standing.html",
+            },
+            {
+                "key": "sro_japan_cup",
+                "label": "SRO Japan Cup GT4クラス(日本)",
+                "queries": {
+                    "topics": [
+                        ("\"GR Supra GT4\" \"SRO Japan Cup\" OR SROジャパンカップ", "ja", "JP", "JP:ja"),
+                    ],
+                    "results": [
+                        ("SROジャパンカップ GT4クラス GRスープラ OR スープラGT4 決勝 OR 表彰台 OR 優勝", "ja", "JP", "JP:ja"),
+                    ],
+                    "standings": [
+                        ("SROジャパンカップ GT4クラス ランキング スープラ", "ja", "JP", "JP:ja"),
+                    ],
+                },
+                "schedule_link": "https://www.gt-world-challenge-asia.com/calendar",
+                "standings_url": "https://www.gt-world-challenge-asia.com/standings",
+            },
+            {
+                "key": "sro_gt_cup_china",
+                "label": "SRO GT Cup(中国)",
+                "queries": {
+                    "topics": [
+                        ("\"GR Supra GT4\" \"SRO GT Cup\" China", "en-US", "US", "US:en"),
+                    ],
+                    "results": [
+                        ("\"GR Supra GT4\" \"SRO GT Cup\" race result OR podium OR win", "en-US", "US", "US:en"),
+                    ],
+                    "standings": [
+                        ("\"SRO GT Cup\" China championship standings Toyota OR \"GR Supra\"", "en-US", "US", "US:en"),
+                    ],
+                },
+                "schedule_link": _search_link("SRO GT Cup China 2026 calendar official"),
+                "standings_url": _search_link("SRO GT Cup China 2026 standings official"),
+            },
+        ],
     },
     "us": {
-        "label": "米国 — Pirelli/Fanatec GT4 America",
+        "label": "米国",
         "flag": "🇺🇸",
-        "queries": {
-            "topics": [
-                ("\"GR Supra GT4\" \"GT4 America\"", "en-US", "US", "US:en"),
-                ("\"GR Supra GT4\" \"GT World Challenge America\"", "en-US", "US", "US:en"),
-            ],
-            "results": [
-                ("\"GR Supra GT4\" GT4 America race result OR podium OR win OR finish", "en-US", "US", "US:en"),
-            ],
-            "standings": [
-                ("\"GT4 America\" championship standings Toyota OR \"GR Supra\"", "en-US", "US", "US:en"),
-            ],
-        },
-        "standings_url": "https://www.gt4-america.com/standings",
-        "standings_search": "GT4 America championship points standings 2026 Toyota GR Supra",
+        "series": [
+            {
+                "key": "gt4_america",
+                "label": "Pirelli/Fanatec GT4 America(Silver Teams)",
+                "queries": {
+                    "topics": [
+                        ("\"GR Supra GT4\" \"GT4 America\"", "en-US", "US", "US:en"),
+                        ("\"GR Supra GT4\" \"GT World Challenge America\"", "en-US", "US", "US:en"),
+                    ],
+                    "results": [
+                        ("\"GR Supra GT4\" GT4 America race result OR podium OR win OR finish", "en-US", "US", "US:en"),
+                    ],
+                    "standings": [
+                        ("\"GT4 America\" championship standings Toyota OR \"GR Supra\"", "en-US", "US", "US:en"),
+                    ],
+                },
+                "schedule_link": "https://www.gt4-america.com/calendar",
+                "has_real_standings": True,  # fetch_gt4_america_team_standings で補完
+                "standings_url": "https://www.gt4-america.com/standings",
+            },
+            {
+                "key": "imsa_michelin_pilot_challenge",
+                "label": "IMSA Michelin Pilot Challenge(GSクラス)",
+                "queries": {
+                    "topics": [
+                        ("\"GR Supra GT4\" \"Michelin Pilot Challenge\"", "en-US", "US", "US:en"),
+                    ],
+                    "results": [
+                        ("\"GR Supra GT4\" \"Michelin Pilot Challenge\" race result OR podium OR win", "en-US", "US", "US:en"),
+                    ],
+                    "standings": [
+                        ("\"Michelin Pilot Challenge\" GS class standings Toyota OR \"GR Supra\"", "en-US", "US", "US:en"),
+                    ],
+                },
+                "schedule_link": "https://www.imsa.com/michelinpilotchallenge/imsa-michelin-pilot-challenge-2026-schedule/",
+                "standings_url": "https://www.imsa.com/standings/",
+            },
+        ],
     },
     "europe": {
-        "label": "欧州 — GT4 European Series",
+        "label": "欧州",
         "flag": "🇪🇺",
-        "queries": {
-            "topics": [
-                ("\"GR Supra GT4\" \"GT4 European Series\"", "en-GB", "GB", "GB:en"),
-            ],
-            "results": [
-                ("\"GR Supra GT4\" \"GT4 European Series\" race result OR podium OR win", "en-GB", "GB", "GB:en"),
-            ],
-            "standings": [
-                ("\"GT4 European Series\" championship standings Toyota OR \"GR Supra\"", "en-GB", "GB", "GB:en"),
-            ],
-        },
-        "standings_url": "https://www.gt4series.com/standings",
-        "standings_search": "GT4 European Series championship standings 2026 Toyota GR Supra",
+        "series": [
+            {
+                "key": "gt4_european_series",
+                "label": "GT4 European Series",
+                "queries": {
+                    "topics": [
+                        ("\"GR Supra GT4\" \"GT4 European Series\"", "en-GB", "GB", "GB:en"),
+                    ],
+                    "results": [
+                        ("\"GR Supra GT4\" \"GT4 European Series\" race result OR podium OR win", "en-GB", "GB", "GB:en"),
+                    ],
+                    "standings": [
+                        ("\"GT4 European Series\" championship standings Toyota OR \"GR Supra\"", "en-GB", "GB", "GB:en"),
+                    ],
+                },
+                "schedule_link": "https://www.gt4series.com/calendar",
+                "standings_url": "https://www.gt4series.com/standings",
+            },
+            {
+                "key": "british_gt4",
+                "label": "British GT Championship(GT4クラス)",
+                "queries": {
+                    "topics": [
+                        ("\"GR Supra GT4\" \"British GT\"", "en-GB", "GB", "GB:en"),
+                    ],
+                    "results": [
+                        ("\"GR Supra GT4\" \"British GT\" race result OR podium OR win", "en-GB", "GB", "GB:en"),
+                    ],
+                    "standings": [
+                        ("\"British GT\" GT4 championship standings Toyota OR \"GR Supra\"", "en-GB", "GB", "GB:en"),
+                    ],
+                },
+                "schedule_link": "https://www.britishgt.com/calendar",
+                "standings_url": "https://www.britishgt.com/standings?filter_standing_type=0_2_teams",
+            },
+            {
+                "key": "french_gt4_cup",
+                "label": "French GT4 Cup",
+                "queries": {
+                    "topics": [
+                        ("\"GR Supra GT4\" \"French GT4 Cup\"", "en-US", "US", "US:en"),
+                        ("GRスープラ GT4 OR \"GR Supra GT4\" \"French GT4 Cup\"", "fr", "FR", "FR:fr"),
+                    ],
+                    "results": [
+                        ("\"GR Supra GT4\" \"French GT4 Cup\" race result OR podium OR win", "en-US", "US", "US:en"),
+                    ],
+                    "standings": [
+                        ("\"French GT4 Cup\" championship standings Toyota OR \"GR Supra\"", "en-US", "US", "US:en"),
+                    ],
+                },
+                "schedule_link": _search_link("French GT4 Cup 2026 calendar official SRO"),
+                "standings_url": _search_link("French GT4 Cup 2026 standings official SRO"),
+            },
+            {
+                "key": "gt4_italian_series",
+                "label": "GT4 Italian Series",
+                "queries": {
+                    "topics": [
+                        ("\"GR Supra GT4\" \"GT4 Italian Series\"", "en-US", "US", "US:en"),
+                    ],
+                    "results": [
+                        ("\"GR Supra GT4\" \"GT4 Italian Series\" race result OR podium OR win", "en-US", "US", "US:en"),
+                    ],
+                    "standings": [
+                        ("\"GT4 Italian Series\" championship standings Toyota OR \"GR Supra\"", "en-US", "US", "US:en"),
+                    ],
+                },
+                "schedule_link": "https://www.gt4series.com/calendar",
+                "standings_url": "https://www.gt4series.com/standings",
+            },
+            {
+                "key": "adac_gt4_germany",
+                "label": "ADAC GT4 Germany",
+                "queries": {
+                    "topics": [
+                        ("\"GR Supra GT4\" \"ADAC GT4 Germany\"", "en-US", "US", "US:en"),
+                        ("\"GR Supra GT4\" \"ADAC GT4 Germany\"", "de-DE", "DE", "DE:de"),
+                    ],
+                    "results": [
+                        ("\"GR Supra GT4\" \"ADAC GT4 Germany\" race result OR podium OR win", "en-US", "US", "US:en"),
+                    ],
+                    "standings": [
+                        ("\"ADAC GT4 Germany\" championship standings Toyota OR \"GR Supra\"", "en-US", "US", "US:en"),
+                    ],
+                },
+                "schedule_link": "https://www.adac-motorsport.de/en/adac-gt4-germany/race-calendar/",
+                "standings_url": "https://www.adac-motorsport.de/en/adac-gt4-germany/rankings/2026/",
+            },
+            {
+                "key": "nls_nuerburgring",
+                "label": "ニュルブルクリンク NLS・24h(SP10クラス)",
+                "queries": {
+                    "topics": [
+                        ("GR Supra GT4 Nürburgring Langstreckenserie OR NLS OR SP10", "de-DE", "DE", "DE:de"),
+                        ("\"GR Supra GT4\" Nürburgring 24 Hours OR NLS", "en-US", "US", "US:en"),
+                    ],
+                    "results": [
+                        ("\"GR Supra GT4\" Nürburgring race result OR podium OR win OR Sieg", "en-US", "US", "US:en"),
+                    ],
+                    "standings": [
+                        ("NLS SP10 championship standings Toyota OR \"GR Supra\"", "en-US", "US", "US:en"),
+                    ],
+                },
+                "schedule_link": "https://www.nuerburgring-langstrecken-serie.de/language/en/calendar-nurburgring-langstrecken-serie-2026/",
+                "standings_url": _search_link("NLS Nürburgring Langstreckenserie SP10 standings 2026"),
+            },
+            {
+                "key": "gt4_winter_series",
+                "label": "GT4 Winter Series(イベリア半島)",
+                "queries": {
+                    "topics": [
+                        ("\"GR Supra GT4\" \"GT4 Winter Series\"", "en-US", "US", "US:en"),
+                    ],
+                    "results": [
+                        ("\"GR Supra GT4\" \"GT4 Winter Series\" race result OR podium OR win", "en-US", "US", "US:en"),
+                    ],
+                    "standings": [
+                        ("\"GT4 Winter Series\" championship standings Toyota OR \"GR Supra\"", "en-US", "US", "US:en"),
+                    ],
+                },
+                "schedule_link": "https://gedlich-racing.com/en/winter-series/gt4-winter-series/",
+                "standings_url": _search_link("GT4 Winter Series 2026 standings results"),
+            },
+        ],
     },
     "oceania": {
-        "label": "オセアニア — Monochrome GT4 Australia Series",
+        "label": "オセアニア",
         "flag": "🇦🇺",
-        "queries": {
-            "topics": [
-                ("\"GR Supra GT4\" \"GT4 Australia\" OR \"Monochrome GT4\"", "en-AU", "AU", "AU:en"),
-            ],
-            "results": [
-                ("\"GR Supra GT4\" GT4 Australia race result OR podium OR win", "en-AU", "AU", "AU:en"),
-            ],
-            "standings": [
-                ("\"GT4 Australia\" championship standings Toyota OR \"GR Supra\"", "en-AU", "AU", "AU:en"),
-            ],
-        },
-        "standings_url": "https://gt4australia.com.au/standings",
-        "standings_search": "Monochrome GT4 Australia championship standings 2026 Toyota GR Supra",
+        "series": [
+            {
+                "key": "gt4_australia",
+                "label": "Monochrome GT4 Australia Series",
+                "queries": {
+                    "topics": [
+                        ("\"GR Supra GT4\" \"GT4 Australia\" OR \"Monochrome GT4\"", "en-AU", "AU", "AU:en"),
+                    ],
+                    "results": [
+                        ("\"GR Supra GT4\" GT4 Australia race result OR podium OR win", "en-AU", "AU", "AU:en"),
+                    ],
+                    "standings": [
+                        ("\"GT4 Australia\" championship standings Toyota OR \"GR Supra\"", "en-AU", "AU", "AU:en"),
+                    ],
+                },
+                "schedule_link": "https://gt4australia.com.au/calendar",
+                "standings_url": "https://gt4australia.com.au/standings",
+            },
+        ],
+    },
+    "middle_east": {
+        "label": "中東",
+        "flag": "🇦🇪",
+        "series": [
+            {
+                "key": "24h_series_middle_east",
+                "label": "24H Series Middle East(GT4クラス)",
+                "queries": {
+                    "topics": [
+                        ("\"GR Supra GT4\" \"24H Series\" Middle East OR Dubai OR \"Abu Dhabi\"", "en-US", "US", "US:en"),
+                    ],
+                    "results": [
+                        ("\"GR Supra GT4\" Dubai OR \"Abu Dhabi\" race result OR podium OR win", "en-US", "US", "US:en"),
+                    ],
+                    "standings": [
+                        ("\"24H Series\" Middle East GT4 standings Toyota OR \"GR Supra\"", "en-US", "US", "US:en"),
+                    ],
+                },
+                "schedule_link": "https://www.24hseries.com/races",
+                "standings_url": "https://www.24hseries.com/standings",
+            },
+        ],
     },
 }
 
@@ -104,49 +308,62 @@ def _fetch_group(query_list: list[tuple], limit: int = 5) -> list[dict]:
     return sort_by_recency(dedupe_by_url(items))
 
 
+def _build_series(series_cfg: dict) -> dict:
+    return {
+        "key": series_cfg["key"],
+        "label": series_cfg["label"],
+        "topics": _fetch_group(series_cfg["queries"]["topics"]),
+        "results": _fetch_group(series_cfg["queries"]["results"]),
+        "standings": _fetch_group(series_cfg["queries"]["standings"]),
+        "standings_url": series_cfg["standings_url"],
+        "standings_chart": None,
+        "standings_chart_note": None,
+        "schedule": [],
+        "schedule_link": series_cfg.get("schedule_link"),
+    }
+
+
 def fetch() -> dict:
     result: dict = {}
-    for key, region in REGIONS.items():
-        result[key] = {
+    for region_key, region in REGIONS.items():
+        result[region_key] = {
             "label": region["label"],
             "flag": region["flag"],
-            "topics": _fetch_group(region["queries"]["topics"]),
-            "results": _fetch_group(region["queries"]["results"]),
-            "standings": _fetch_group(region["queries"]["standings"]),
-            "standings_url": region["standings_url"],
-            "standings_search_url": _search_link(region["standings_search"]),
-            "standings_chart": None,
-            "standings_chart_note": None,
-            "schedule": [],
-            "schedule_link": None,
+            "series": [_build_series(s) for s in region["series"]],
         }
 
+    # スーパー耐久(日本・アジア)は公式サイトから年間スケジュールを実データ取得する。
+    taikyu_schedule = fetch_super_taikyu_schedule()
+    for series in result["japan_asia"]["series"]:
+        if series["key"] == "super_taikyu":
+            series["schedule"] = taikyu_schedule
+            series["standings_chart_note"] = (
+                "スーパー耐久 公式サイトのST-Zクラス別ランキング表は機械的な構造解釈が難しいため、"
+                "グラフ化は行っていません。「公式ランキングを見る」からご確認ください。"
+            )
+
+    # 米国のGT4 America(Silver Teams)は公式サイトからチームランキングを実データ取得する。
     us_chart = fetch_gt4_america_team_standings(limit=15)
-    result["us"]["standings_chart"] = us_chart["standings"]
-    result["us"]["standings_chart_note"] = (
-        us_chart["error"]
-        or "GT4 America \"Silver Teams\" チームランキング(公式サイト実データ)。"
-        "各レースの完全結果ページから使用車種を補完しており、Toyota GR Supra GT4で"
-        "参戦するチームには目印を付けています。"
-    )
-    result["japan_asia"]["standings_chart_note"] = (
-        "スーパー耐久 公式サイトのST-Zクラス別ランキング表は機械的な構造解釈が難しいため、"
-        "グラフ化は行っていません。「公式ランキングを見る」からご確認ください。"
-    )
-    result["europe"]["standings_chart_note"] = (
-        "GT4 European Series公式サイトはクラス別フィルターの構造が年度により変わりやすいため、"
-        "誤表示リスクを避けグラフ化は行っていません。「公式ランキングを見る」からご確認ください。"
-    )
-    result["oceania"]["standings_chart_note"] = (
-        "Monochrome GT4 Australia公式サイトはチーム別使用車種を確定する実績ページの構造を"
-        "確認できていないため、誤ってSupra以外のチームをハイライトするリスクを避けグラフ化は"
+    for series in result["us"]["series"]:
+        if series["key"] == "gt4_america":
+            series["standings_chart"] = us_chart["standings"]
+            series["standings_chart_note"] = (
+                us_chart["error"]
+                or "GT4 America \"Silver Teams\" チームランキング(公式サイト実データ)。"
+                "各レースの完全結果ページから使用車種を補完しており、Toyota GR Supra GT4で"
+                "参戦するチームには目印を付けています。"
+            )
+
+    # それ以外のシリーズは、順位表のクラス別フィルター構造やチーム別使用車種の確定方法を
+    # 安定的に確認できていないため、誤表示リスクを避けグラフ化は行わず、公式ランキング
+    # ページへの直接リンクのみを表示する。
+    default_note = (
+        "このシリーズの公式サイトは順位表の構造を安定的に解釈できないため、グラフ化は"
         "行っていません。「公式ランキングを見る」からご確認ください。"
     )
-
-    schedules = fetch_all_schedules()
-    result["japan_asia"]["schedule"] = schedules["japan_asia"]
-    result["us"]["schedule_link"] = schedules["us"]["link"]
-    result["europe"]["schedule_link"] = schedules["europe"]["link"]
-    result["oceania"]["schedule_link"] = schedules["oceania"]["link"]
+    for region in result.values():
+        for series in region["series"]:
+            if series["standings_chart_note"] is None:
+                series["standings_chart_note"] = default_note
 
     return result

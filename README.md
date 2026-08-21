@@ -10,7 +10,7 @@ GitHub Pagesで公開する。
 
 | セクション | 内容 | 取得方法 |
 | --- | --- | --- |
-| GR Supra GT4 参戦レース(地域別) | 日本・アジア(スーパー耐久 ST-Zクラス)、米国(Pirelli/Fanatec GT4 America)、欧州(GT4 European Series)、オセアニア(Monochrome GT4 Australia Series)の4地域に整理。各地域の今年度スケジュール・ランキング(Supra GT4をハイライト)・最新トピックスを表示 | Google News RSS(トピックス/結果/ランキング話題) + 各シリーズ公式サイト(スーパー耐久は日程を実データ取得、GT4 Americaはチームランキングを実データ取得、他2地域は公式カレンダー/ランキングページへの直接リンク) |
+| GR Supra GT4 参戦レース(地域別・全14シリーズ) | 日本・アジア(スーパー耐久 ST-Zクラス/SRO Japan Cup/SRO GT Cup中国)、米国(GT4 America/IMSA Michelin Pilot Challenge)、欧州(GT4 European Series/British GT/French GT4 Cup/GT4 Italian Series/ADAC GT4 Germany/ニュルブルクリンク NLS・24h/GT4 Winter Series)、オセアニア(Monochrome GT4 Australia)、中東(24H Series Middle East)の5地域・14シリーズに整理。各シリーズの今年度スケジュール・ランキング(Supra GT4をハイライト)・最新トピックスを表示 | Google News RSS(トピックス/結果/ランキング話題) + 各シリーズ公式サイト(スーパー耐久は日程、GT4 Americaはチームランキングを実データ取得。他シリーズは公式カレンダー/ランキングページへの直接リンク) |
 | GT4カテゴリー最新トピックス | GT4ホモロゲーション/レギュレーション、競合GT4(BMW M4 GT4・Mercedes-AMG GT4・Porsche Cayman GT4・Ford Mustang GT4・Aston Martin Vantage GT4・Audi R8 LMS GT4・McLaren Artura GT4等)の開発・アップデート、技術情報、Supra GT4や競合車の不具合情報をカテゴリー別バッジ付きで新着順に表示 | Google News RSS(日英) |
 | YouTube 人気動画/新着動画 | Supra GT4・競合GT4の動画を20本ずつ整理(サムネイル付き、日英クエリを統合)。人気動画は再生数順、新着動画は投稿日時順 | YouTube検索結果ページのベストエフォート・スクレイピング |
 | SNSでの話題 | X/Facebookの投稿の代替として、Supra GT4・競合GT4に関するニュース・ブログでの話題言及。「最新順」「話題順」をタブで切り替え表示 | Google News RSS |
@@ -22,7 +22,24 @@ GitHub Pagesで公開する。
 バッジへのマウスオーバー(タッチ操作の場合はタップ)で確認できる。あくまで見出し文のみに
 基づく自動推定であり、参考値として利用すること。
 
-## 参戦レース情報の実データ取得について
+## 参戦レース情報の全14シリーズ一覧
+
+| 地域 | シリーズ | 実データ取得 |
+| --- | --- | --- |
+| 日本・アジア | スーパー耐久 ST-Zクラス | 年間スケジュールを実データ取得 |
+| 日本・アジア | SRO Japan Cup(GT4クラス) | 公式カレンダー/ランキングへのリンクのみ |
+| 日本・アジア | SRO GT Cup(中国) | 公式サイト未確定のため検索リンク |
+| 米国 | Pirelli/Fanatec GT4 America(Silver Teams) | チームランキングを実データ取得(Supra GT4ハイライト) |
+| 米国 | IMSA Michelin Pilot Challenge(GSクラス) | 公式カレンダー/ランキングへのリンクのみ |
+| 欧州 | GT4 European Series | 公式カレンダー/ランキングへのリンクのみ |
+| 欧州 | British GT Championship(GT4クラス) | 公式カレンダー/ランキングへのリンクのみ |
+| 欧州 | French GT4 Cup | 公式サイト未確定のため検索リンク |
+| 欧州 | GT4 Italian Series | 公式カレンダー/ランキングへのリンクのみ |
+| 欧州 | ADAC GT4 Germany | 公式カレンダー/ランキングへのリンクのみ |
+| 欧州 | ニュルブルクリンク NLS・24h(SP10クラス) | 公式カレンダーへのリンク、ランキングは検索リンク |
+| 欧州 | GT4 Winter Series(イベリア半島) | 主催者(GEDLICH Racing)公式ページへのリンク、ランキングは検索リンク |
+| オセアニア | Monochrome GT4 Australia Series | 公式カレンダー/ランキングへのリンクのみ |
+| 中東 | 24H Series Middle East(GT4クラス) | 公式カレンダー/ランキングへのリンクのみ |
 
 - **スーパー耐久(日本・アジア)**: 公式レース一覧ページ(supertaikyu.com)から年間スケジュールを
   実データで取得している。全クラス共通日程のためST-Zクラス(GR Supra GT4)にもそのまま適用される。
@@ -30,10 +47,13 @@ GitHub Pagesで公開する。
 - **GT4 America(米国)**: gt4-america.comはTC America(tcamerica.us)と同じSRO Motorsports
   America系列の共通CMSで運用されており、"Silver Teams"クラスの順位表を実データで取得し、
   各レースの完全結果ページから補完した使用車種でGR Supra GT4参戦チームをハイライト表示している。
-- **GT4 European Series(欧州)/ Monochrome GT4 Australia(オセアニア)**: 順位表のクラス別
-  フィルター構造やチーム別使用車種の確定方法を安定的に確認できていないため、誤表示リスクを
-  避けグラフ化は行わず、公式カレンダー/ランキングページへの直接リンクのみを表示している
-  (URLは実装時に実在を確認済み)。
+- **上記2つ以外の12シリーズ**: 順位表のクラス別フィルター構造やチーム別使用車種の確定方法を
+  安定的に確認できていないため、誤表示リスクを避けグラフ化は行わず、公式カレンダー/ランキング
+  ページへの直接リンクのみを表示している(URLは実装時に実在を確認済み。ただしFrench GT4 Cup・
+  SRO GT Cup中国・ニュルブルクリンクNLS標準順位表・GT4 Winter Seriesの4シリーズは安定した
+  公式URLを特定できなかったため、Google検索へのリンクとしている)。トピックス/結果/ランキング
+  関連のニュースはGoogle News RSSでSupra GT4関連の話題を検索しているため、Supra GT4の
+  参戦実績が薄い/未確認のシリーズでは「該当情報なし」と表示されることがある。
 
 ## 既知の制約
 
@@ -58,9 +78,9 @@ scripts/
   sources/
     common.py            # RSS取得・数値/日時パース等の共通処理
     sentiment.py          # 見出し文からのポジティブ/ネガティブ推定(VADER + 日本語辞書)
-    motorsports.py         # 地域別(日本・アジア/米国/欧州/オセアニア)のレース情報集約
+    motorsports.py         # 地域別(日本・アジア/米国/欧州/オセアニア/中東)・全14シリーズのレース情報集約
     standings.py            # GT4 America公式サイトの実データランキング取得
-    schedule.py              # スーパー耐久の年間レース日程取得 + 他地域の公式カレンダーリンク
+    schedule.py              # スーパー耐久の年間レース日程取得
     gt4_topics.py             # GT4カテゴリー全体のトピックス(ホモロゲーション/技術/不具合等)
     youtube.py                 # YouTube人気/新着動画
     social_buzz.py              # SNS話題の代替指標(最新順/話題順)

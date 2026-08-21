@@ -1,0 +1,112 @@
+"""YouTube検索ページの軽量スクレイピングでSupra GT4/競合GT4動画の人気/新着を取得する。
+
+公式YouTube Data APIキーを利用しないため、検索結果ページに埋め込まれた
+`ytInitialData` JSONを正規表現で抽出するベストエフォート実装。
+YouTube側のページ構造変更で失敗する可能性があり、その場合は空リストを返す。
+"""
+
+from __future__ import annotations
+
+import json
+import re
+
+import requests
+
+from .common import REQUEST_TIMEOUT, USER_AGENT, parse_relative_seconds_ago, parse_view_count
+
+SEARCH_URL = "https://www.youtube.com/results?search_query={query}&hl={hl}&gl={gl}"
+WATCH_URL = "https://www.youtube.com/watch?v={video_id}"
+
+_REQUEST_HEADERS = {
+    "User-Agent": USER_AGENT,
+    "Accept-Language": "en-US,en;q=0.9",
+    # GitHub Actions等のデータセンター発IPからのアクセスでCookie同意ページに
+    # リダイレクトされるのを避けるため、同意済みとするCookieを送る。
+    "Cookie": "CONSENT=YES+cb.20210328-17-p0.en+FX+000",
+}
+
+
+def _fetch_raw_results(query: str, hl: str = "en", gl: str = "US") -> list[dict]:
+    url = SEARCH_URL.format(query=requests.utils.quote(query), hl=hl, gl=gl)
+    resp = requests.get(url, headers=_REQUEST_HEADERS, timeout=REQUEST_TIMEOUT)
+    resp.raise_for_status()
+
+    match = re.search(r"var ytInitialData = ({.*?});</script>", resp.text)
+    if not match:
+        return []
+    data = json.loads(match.group(1))
+
+    videos: list[dict] = []
+    try:
+        sections = (
+            data["contents"]["twoColumnSearchResultsRenderer"]["primaryContents"]
+            ["sectionListRenderer"]["contents"]
+        )
+        for section in sections:
+            items = section.get("itemSectionRenderer", {}).get("contents", [])
+            for item in items:
+                v = item.get("videoRenderer")
+                if not v:
+                    continue
+                title = "".join(run.get("text", "") for run in v.get("title", {}).get("runs", []))
+                video_id = v.get("videoId", "")
+                view_count_text = v.get("viewCountText", {}).get("simpleText", "")
+                published_text = v.get("publishedTimeText", {}).get("simpleText", "")
+                channel = ""
+                owner = v.get("ownerText", {}).get("runs", [])
+                if owner:
+                    channel = owner[0].get("text", "")
+                if not title or not video_id:
+                    continue
+                videos.append(
+                    {
+                        "video_id": video_id,
+                        "title": title,
+                        "url": WATCH_URL.format(video_id=video_id),
+                        "source": channel or "YouTube",
+                        "published": published_text,
+                        "view_count_text": view_count_text,
+                        "view_count": parse_view_count(view_count_text),
+                        "recency_seconds": parse_relative_seconds_ago(published_text),
+                        "thumbnail": f"https://img.youtube.com/vi/{video_id}/hqdefault.jpg",
+                    }
+                )
+    except (KeyError, TypeError):
+        return []
+    return videos
+
+
+def fetch(queries: list[str], top_n: int = 20, hl: str = "en", gl: str = "US") -> dict:
+    """複数クエリを合算し、人気動画・新着動画を返す。"""
+    raw: list[dict] = []
+    seen_ids: set[str] = set()
+    fetch_failed = False
+    for query in queries:
+        try:
+            results = _fetch_raw_results(query, hl=hl, gl=gl)
+        except Exception:  # noqa: BLE001
+            fetch_failed = True
+            continue
+        for v in results:
+            if v["video_id"] in seen_ids:
+                continue
+            seen_ids.add(v["video_id"])
+            raw.append(v)
+
+    if not raw:
+        message = (
+            "YouTube検索結果を取得できませんでした(ページ構造の変更の可能性)"
+            if fetch_failed
+            else "該当する動画が見つかりませんでした"
+        )
+        fallback = {
+            "title": message,
+            "url": f"https://www.youtube.com/results?search_query={requests.utils.quote(queries[0])}",
+            "source": "YouTube",
+            "published": "",
+        }
+        return {"popular": [fallback], "new": [fallback]}
+
+    popular = sorted(raw, key=lambda v: v["view_count"], reverse=True)[:top_n]
+    new = sorted(raw, key=lambda v: v["recency_seconds"])[:top_n]
+    return {"popular": popular, "new": new}

@@ -9,6 +9,10 @@
       "manufacturer": "TOYOTA",
       "model": "GR Supra GT4 EVO2",
       "is_supra": true,
+      "description": {
+        "ja": "2020年のデビュー以来120台以上を販売し、アジア・米国・欧州の3地域でクラスチャンピオンを獲得した実績を持つ完成度の高いGT4マシン。EVO2ではABS制御とレブマッチングを再チューニングし、ブレーキングからコーナー進入までの安定性をさらに引き上げている。SRO GT4 Manufacturer Rankingでも常に上位につける高い戦闘力を誇る。",
+        "en": "A proven GT4 machine with over 120 units sold since its 2020 debut and class championships won across Asia, the US, and Europe. The EVO2 update re-tunes ABS control and rev-matching for improved stability from braking through corner entry. Consistently ranks near the top of the SRO GT4 Manufacturer Ranking."
+      },
       "price": {
         "ja": "参考価格 約202,000ユーロ(欧州発表時)",
         "en": "Reference price approx. €202,000 (as announced in Europe)"
@@ -32,6 +36,10 @@
       "manufacturer": "BMW",
       "model": "M4 GT4 Evo",
       "is_supra": false,
+      "description": {
+        "ja": "GT4メーカーランキングで常に上位に位置する高い戦闘力を誇るマシン。S58型ターボエンジンによる余裕あるパワーと、耐久レースを見据えた堅牢性を両立させたEVOアップデートが施されている。",
+        "en": "Consistently a top contender in the GT4 manufacturer standings. The S58 turbocharged engine provides ample power, and the EVO update adds robustness aimed squarely at endurance racing."
+      },
       "price": {
         "ja": "参考価格 219,000ユーロ(税別、EVOパッケージ)",
         "en": "Reference price €219,000 (excl. tax, EVO package)"
@@ -54,6 +62,10 @@
       "manufacturer": "MERCEDES-AMG",
       "model": "GT4",
       "is_supra": false,
+      "description": {
+        "ja": "AMG GT Rをベースにした軽量アルミスペースフレーム構造が特徴。V8ツインターボによる高出力とコントロール性の良さを両立し、幅広いドライバーレベルに対応する扱いやすさを持つ。",
+        "en": "Built around a lightweight aluminum spaceframe derived from the AMG GT R. The twin-turbo V8 delivers strong power while remaining controllable, making it approachable for drivers of varying skill levels."
+      },
       "price": {
         "ja": "参考価格 198,850ユーロ(税別)",
         "en": "Reference price €198,850 (excl. tax)"
@@ -77,6 +89,10 @@
       "manufacturer": "PORSCHE",
       "model": "718 Cayman GT4 RS Clubsport",
       "is_supra": false,
+      "description": {
+        "ja": "911 GT3カップ譲りの自然吸気フラット6を搭載し、ミッドシップらしい俊敏なハンドリングが武器。PDKによる正確なシフトと高い信頼性から、GT4カテゴリー全体で最多クラスの参戦台数を誇る定番マシン。",
+        "en": "Powered by a naturally aspirated flat-six shared with the 911 GT3 Cup, delivering agile mid-engine handling. Precise PDK shifts and strong reliability have made it one of the most widely raced cars in the GT4 category."
+      },
       "price": {
         "ja": "参考価格 229,000ドル",
         "en": "Reference price $229,000"
@@ -102,6 +118,10 @@
         "en": "Mustang GT4 (built by Multimatic)"
       },
       "is_supra": false,
+      "description": {
+        "ja": "Multimatic Motorsportsが手掛ける堅牢な設計で、耐久レースでの信頼性に定評がある。5.0L V8のトルクフルな特性を活かし、IMSA Michelin Pilot ChallengeなどSRO以外の北米シリーズでも存在感を示す。",
+        "en": "Engineered by Multimatic Motorsports for endurance-racing durability. Its torquey 5.0L V8 gives it a strong presence not only in SRO series but also in North American championships like the IMSA Michelin Pilot Challenge."
+      },
       "price": {
         "ja": "参考価格 約210,000〜250,000ドル",
         "en": "Reference price approx. $210,000–$250,000"
@@ -124,6 +144,10 @@
       "manufacturer": "AUDI",
       "model": "R8 LMS GT4 (evo II)",
       "is_supra": false,
+      "description": {
+        "ja": "市販車と同じ5.2L自然吸気V10を搭載する数少ないGT4マシン。伸びやかな高回転特性と剛性の高いシャシーで扱いやすく、初心者からプロまで評価が高い。",
+        "en": "One of the few GT4 cars to retain the road car's naturally aspirated 5.2L V10. Its smooth high-rev character and stiff chassis make it approachable, earning praise from novices and pros alike."
+      },
       "price": {
         "ja": "参考価格 198,000ユーロ(税別)",
         "en": "Reference price €198,000 (excl. tax)"
@@ -146,6 +170,10 @@
       "manufacturer": "McLAREN",
       "model": "Artura GT4",
       "is_supra": false,
+      "description": {
+        "ja": "ハイブリッド機構を排したV6ツインターボにより大幅な軽量化を実現し、先代570S GT4比で約100kg軽い車重を誇る。ミッドシップならではの旋回性能の高さが最大の武器。",
+        "en": "The hybrid system is removed for GT4 duty, and the twin-turbo V6 layout cuts roughly 100kg versus the previous 570S GT4. Its mid-engine layout gives it standout cornering ability."
+      },
       "price": {
         "ja": "参考価格 200,000ポンド〜",
         "en": "Reference price from £200,000"
@@ -168,6 +196,10 @@
       "manufacturer": "ASTON MARTIN",
       "model": "Vantage GT4",
       "is_supra": false,
+      "description": {
+        "ja": "V8ツインターボによる力強いトルクと、英国製GTらしい高速域での安定性を両立。上位カテゴリーのVantage GT3で培った空力・シャシー開発のノウハウがGT4にもフィードバックされている。",
+        "en": "Combines strong twin-turbo V8 torque with the high-speed stability typical of British GT cars. Aerodynamic and chassis know-how from the higher Vantage GT3 program feeds directly into the GT4 version."
+      },
       "price": {
         "ja": "参考価格 225,000ポンド(税別)",
         "en": "Reference price £225,000 (excl. tax)"
@@ -190,6 +222,10 @@
       "manufacturer": "GINETTA",
       "model": "G56 GT4 EVO",
       "is_supra": false,
+      "description": {
+        "ja": "英国製の軽量シャシーにGM LS3ベースの6.2L V8を搭載するシンプルかつ手頃な構成。British GTを主戦場とし、優れたコストパフォーマンスで根強い人気を持つ。",
+        "en": "A simple, cost-effective package pairing a lightweight British-built chassis with a GM LS3-based 6.2L V8. Primarily campaigned in British GT, it holds a loyal following thanks to strong value for money."
+      },
       "price": {
         "ja": "参考価格 295,000ドル",
         "en": "Reference price $295,000"

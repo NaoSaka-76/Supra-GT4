@@ -127,24 +127,78 @@
         middle_east: "中東",
       },
       series: {
-        gt_world_challenge_asia: "GT World Challenge Asia",
-        super_taikyu: "スーパー耐久 ST-Zクラス(日本)",
-        sro_japan_cup: "SRO Japan Cup GT4クラス(日本)",
-        sro_gt_cup_china: "SRO GT Cup(中国)",
-        gt_world_challenge_america: "GT World Challenge America",
-        gt4_america: "Pirelli/Fanatec GT4 America(Silver Teams)",
-        imsa_michelin_pilot_challenge: "IMSA Michelin Pilot Challenge(GSクラス)",
-        gt_world_challenge_europe: "GT World Challenge Europe",
-        gt4_european_series: "GT4 European Series",
-        british_gt4: "British GT Championship(GT4クラス)",
-        french_gt4_cup: "French GT4 Cup",
-        gt4_italian_series: "GT4 Italian Series",
-        adac_gt4_germany: "ADAC GT4 Germany",
-        nls_nuerburgring: "ニュルブルクリンク NLS・24h(SP10クラス)",
-        gt4_winter_series: "GT4 Winter Series(イベリア半島)",
-        gt_world_challenge_australia: "GT World Challenge Australia",
-        gt4_australia: "Monochrome GT4 Australia Series",
-        "24h_series_middle_east": "24H Series Middle East(GT4クラス)",
+        gt_world_challenge_asia: {
+          label: "GT World Challenge Asia",
+          desc: "SRO主催のアジア地域GT3統一シリーズ。2024年からGT4クラスはSRO Japan Cupに移管されたため、本シリーズ自体はGT3が主体。",
+        },
+        super_taikyu: {
+          label: "スーパー耐久 ST-Zクラス(日本)",
+          desc: "日本の人気耐久レースシリーズ。GT4規定車両が属するST-Zクラスがあり、GR Supra GT4は2023年にクラスチャンピオンを獲得するなど高い戦闘力を発揮している。",
+        },
+        sro_japan_cup: {
+          label: "SRO Japan Cup GT4クラス(日本)",
+          desc: "日本国内でGT3/GTC/GT4規定車両が混走するSRO主催シリーズ。2024年からGT World Challenge AsiaのGT4クラスを引き継いだ。",
+        },
+        sro_gt_cup_china: {
+          label: "SRO GT Cup(中国)",
+          desc: "2025年に開幕した中国拠点のGT4専用スプリントシリーズ。上海・北京・珠海など主要サーキットを転戦する。",
+        },
+        gt_world_challenge_america: {
+          label: "GT World Challenge America",
+          desc: "北米のGT3主体の国際格式シリーズ。GT4 Americaと同一の大会ウィークエンドで開催される。",
+        },
+        gt4_america: {
+          label: "Pirelli/Fanatec GT4 America(Silver Teams)",
+          desc: "SRO Motorsports America主催のGT4専用シリーズ。Silver/Pro-Am/Amの3クラスに分かれ、GR Supra GT4は米国でもクラスチャンピオンを獲得した実績を持つ。",
+        },
+        imsa_michelin_pilot_challenge: {
+          label: "IMSA Michelin Pilot Challenge(GSクラス)",
+          desc: "IMSA主催の耐久シリーズにおけるGT4規定車両クラス(GS)。デイトナ24時間などの伝統レースを含み、GR Supra GT4 EVO2は2026年にも優勝実績を残している。",
+        },
+        gt_world_challenge_europe: {
+          label: "GT World Challenge Europe",
+          desc: "スパ24時間などを含む欧州最高峰のGT3シリーズ。GT4 European Seriesは同一大会ウィークエンドの併催カテゴリー。",
+        },
+        gt4_european_series: {
+          label: "GT4 European Series",
+          desc: "SRO主催の汎欧州GT4選手権。GR Supra GT4は欧州でもクラスチャンピオンを獲得しており、競争力の高いシリーズ。",
+        },
+        british_gt4: {
+          label: "British GT Championship(GT4クラス)",
+          desc: "英国伝統のGT選手権に設置されたGT4クラス。スプリント/耐久が混在し、参戦コンストラクターの層が厚い。",
+        },
+        french_gt4_cup: {
+          label: "French GT4 Cup",
+          desc: "フランス国内で開催されるSRO主催のGT4カップ。スパ・スピードウィークなど国際色のあるラウンドも含む。",
+        },
+        gt4_italian_series: {
+          label: "GT4 Italian Series",
+          desc: "2026年にACI SportとSROの提携で新設されたイタリア国内GT4選手権。ミサノ・モンツァ等の名門サーキットを転戦。",
+        },
+        adac_gt4_germany: {
+          label: "ADAC GT4 Germany",
+          desc: "ドイツ国内のDTM併催GT4選手権。ADAC GT Mastersへのステップアップを目指す若手ドライバーの登竜門。",
+        },
+        nls_nuerburgring: {
+          label: "ニュルブルクリンク NLS・24h(SP10クラス)",
+          desc: "ニュルブルクリンク・ノルドシュライフェを舞台にした伝統の耐久レースシリーズ。GT4車両はSP10クラスに統合され、GR Supra GT4は過去にクラスチャンピオンを獲得している。",
+        },
+        gt4_winter_series: {
+          label: "GT4 Winter Series(イベリア半島)",
+          desc: "12月〜3月にイベリア半島(スペイン・ポルトガル)で開催される冬季限定のGT4シリーズ。オフシーズンの実戦テストの場として活用される。",
+        },
+        gt_world_challenge_australia: {
+          label: "GT World Challenge Australia",
+          desc: "オセアニア地域のGT3主体シリーズ。GT4 Australia(Monochrome GT4 Australia)と同一大会ウィークエンドで開催される。",
+        },
+        gt4_australia: {
+          label: "Monochrome GT4 Australia Series",
+          desc: "SRO主催のオーストラリア/ニュージーランドGT4選手権。GR Supra GT4はTOYOTA GAZOO Racing Australiaのサポートを受け参戦している。",
+        },
+        "24h_series_middle_east": {
+          label: "24H Series Middle East(GT4クラス)",
+          desc: "Creventic主催、ドバイ24時間などを含む中東の耐久レースシリーズ。GT3/GT4等が混走するマルチクラス編成。",
+        },
       },
       categories: {
         homologation: "ホモロゲーション",
@@ -257,24 +311,78 @@
         middle_east: "Middle East",
       },
       series: {
-        gt_world_challenge_asia: "GT World Challenge Asia",
-        super_taikyu: "Super Taikyu ST-Z Class (Japan)",
-        sro_japan_cup: "SRO Japan Cup GT4 Class (Japan)",
-        sro_gt_cup_china: "SRO GT Cup (China)",
-        gt_world_challenge_america: "GT World Challenge America",
-        gt4_america: "Pirelli/Fanatec GT4 America (Silver Teams)",
-        imsa_michelin_pilot_challenge: "IMSA Michelin Pilot Challenge (GS Class)",
-        gt_world_challenge_europe: "GT World Challenge Europe",
-        gt4_european_series: "GT4 European Series",
-        british_gt4: "British GT Championship (GT4 Class)",
-        french_gt4_cup: "French GT4 Cup",
-        gt4_italian_series: "GT4 Italian Series",
-        adac_gt4_germany: "ADAC GT4 Germany",
-        nls_nuerburgring: "Nürburgring NLS / 24h (SP10 Class)",
-        gt4_winter_series: "GT4 Winter Series (Iberian Peninsula)",
-        gt_world_challenge_australia: "GT World Challenge Australia",
-        gt4_australia: "Monochrome GT4 Australia Series",
-        "24h_series_middle_east": "24H Series Middle East (GT4 Class)",
+        gt_world_challenge_asia: {
+          label: "GT World Challenge Asia",
+          desc: "An SRO-organized GT3 series spanning Asia. GT4 was folded into the SRO Japan Cup in 2024, so this series itself is now GT3-focused.",
+        },
+        super_taikyu: {
+          label: "Super Taikyu ST-Z Class (Japan)",
+          desc: "Japan's popular endurance racing series. GT4-spec cars compete in the ST-Z class, where the GR Supra GT4 won the class championship in 2023, showing strong competitiveness.",
+        },
+        sro_japan_cup: {
+          label: "SRO Japan Cup GT4 Class (Japan)",
+          desc: "An SRO-organized series in Japan running GT3/GTC/GT4-spec cars together. It absorbed GT World Challenge Asia's GT4 class from 2024.",
+        },
+        sro_gt_cup_china: {
+          label: "SRO GT Cup (China)",
+          desc: "A China-based GT4-only sprint series launched in 2025, touring major circuits including Shanghai, Beijing, and Zhuhai.",
+        },
+        gt_world_challenge_america: {
+          label: "GT World Challenge America",
+          desc: "North America's international GT3-based series, held on the same event weekends as GT4 America.",
+        },
+        gt4_america: {
+          label: "Pirelli/Fanatec GT4 America (Silver Teams)",
+          desc: "A GT4-only series run by SRO Motorsports America, split into Silver/Pro-Am/Am classes. The GR Supra GT4 has also won a class championship here in the US.",
+        },
+        imsa_michelin_pilot_challenge: {
+          label: "IMSA Michelin Pilot Challenge (GS Class)",
+          desc: "The GT4-spec class (GS) of IMSA's own endurance series, which includes classic races like the Daytona 24 Hours. The GR Supra GT4 EVO2 has scored wins as recently as 2026.",
+        },
+        gt_world_challenge_europe: {
+          label: "GT World Challenge Europe",
+          desc: "Europe's top-tier GT3 series, including the Spa 24 Hours. The GT4 European Series runs as a support category on the same event weekends.",
+        },
+        gt4_european_series: {
+          label: "GT4 European Series",
+          desc: "SRO's pan-European GT4 championship. A highly competitive series where the GR Supra GT4 has also taken class championships in Europe.",
+        },
+        british_gt4: {
+          label: "British GT Championship (GT4 Class)",
+          desc: "The GT4 class within Britain's storied GT championship, mixing sprint and endurance formats with a deep field of constructors.",
+        },
+        french_gt4_cup: {
+          label: "French GT4 Cup",
+          desc: "An SRO-organized GT4 cup held in France, including internationally flavored rounds such as the Spa Speedweek.",
+        },
+        gt4_italian_series: {
+          label: "GT4 Italian Series",
+          desc: "A new Italian GT4 championship launched in 2026 through a partnership between ACI Sport and SRO, touring historic circuits like Misano and Monza.",
+        },
+        adac_gt4_germany: {
+          label: "ADAC GT4 Germany",
+          desc: "A German GT4 championship run alongside DTM weekends, serving as a proving ground for young drivers aiming to step up to ADAC GT Masters.",
+        },
+        nls_nuerburgring: {
+          label: "Nürburgring NLS / 24h (SP10 Class)",
+          desc: "A storied endurance series held on the Nürburgring Nordschleife. GT4 cars are consolidated into the SP10 class, where the GR Supra GT4 has previously won the class title.",
+        },
+        gt4_winter_series: {
+          label: "GT4 Winter Series (Iberian Peninsula)",
+          desc: "A winter-only GT4 series held December through March on the Iberian Peninsula (Spain and Portugal), used as an off-season proving ground.",
+        },
+        gt_world_challenge_australia: {
+          label: "GT World Challenge Australia",
+          desc: "Oceania's GT3-based series, held on the same event weekends as GT4 Australia (Monochrome GT4 Australia).",
+        },
+        gt4_australia: {
+          label: "Monochrome GT4 Australia Series",
+          desc: "SRO's Australia/New Zealand GT4 championship. The GR Supra GT4 competes here with support from Toyota Gazoo Racing Australia.",
+        },
+        "24h_series_middle_east": {
+          label: "24H Series Middle East (GT4 Class)",
+          desc: "A Creventic-run endurance series in the Middle East including the Dubai 24 Hours, run as a multi-class field alongside GT3 and other categories.",
+        },
       },
       categories: {
         homologation: "Homologation",
@@ -597,11 +705,14 @@
 
   function buildSeriesCard(regionKey, s) {
     var i18n = t();
-    var label = i18n.series[s.key] || s.label || s.key;
+    var entry = i18n.series[s.key];
+    var label = (entry && entry.label) || s.label || s.key;
+    var desc = entry && entry.desc;
     var card = el("div", "series-card series-card--" + regionKey);
     var header = el("div", "series-card__header");
     header.appendChild(el("span", null, label));
     card.appendChild(header);
+    if (desc) card.appendChild(el("p", "series-card__desc", desc));
     card.appendChild(buildScheduleBlock(s));
     card.appendChild(buildRankingBlock(s));
     card.appendChild(buildSeriesGroup(i18n.groupTopics, s.topics));
@@ -736,6 +847,8 @@
     var body = el("div", "car-card__body");
     body.appendChild(el("span", "car-card__manufacturer", car.manufacturer));
     body.appendChild(el("h3", "car-card__model", model));
+    var description = pick(car.description);
+    if (description) body.appendChild(el("p", "car-card__desc", description));
     body.appendChild(el("div", "car-card__price", pick(car.price)));
 
     var specList = el("dl", "car-card__specs");

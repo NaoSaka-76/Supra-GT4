@@ -327,37 +327,6 @@ a { color: inherit; }
   margin-left: 4px;
 }
 
-.sentiment-bar {
-  display: flex;
-  height: 8px;
-  border-radius: 999px;
-  overflow: hidden;
-  margin-top: 10px;
-  background: var(--neutral-soft);
-}
-
-.sentiment-bar__seg--positive { background: var(--good); }
-.sentiment-bar__seg--neutral { background: var(--neutral); opacity: 0.5; }
-.sentiment-bar__seg--negative { background: var(--critical); }
-
-.sentiment-legend {
-  display: flex;
-  gap: 12px;
-  margin-top: 8px;
-  font-size: 0.72rem;
-  color: var(--ink-muted);
-  font-variant-numeric: tabular-nums;
-}
-
-.sentiment-legend span { display: flex; align-items: center; gap: 4px; }
-
-.legend-dot {
-  width: 7px; height: 7px; border-radius: 50%; display: inline-block;
-}
-.legend-dot--positive { background: var(--good); }
-.legend-dot--neutral { background: var(--neutral); }
-.legend-dot--negative { background: var(--critical); }
-
 /* ---- Board / grid ---- */
 
 .board {
@@ -927,6 +896,110 @@ a { color: inherit; }
   align-self: flex-start;
 }
 .series-card__link:hover { background: var(--region-color-soft, var(--accent-soft)); }
+
+/* ---- GT4 car catalog ---- */
+
+.car-grid {
+  padding: 16px 20px 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 18px;
+}
+
+.car-card {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--surface-sunken);
+}
+
+.car-card--spotlight {
+  border-color: var(--spotlight);
+  box-shadow: 0 0 0 1px var(--spotlight), 0 0 20px var(--spotlight-glow);
+}
+
+.car-card__photo {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.car-card__photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.car-card__badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: var(--surface);
+}
+
+.car-card__body {
+  display: flex;
+  flex-direction: column;
+  padding: 14px 16px 16px;
+  gap: 6px;
+}
+
+.car-card__manufacturer {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.74rem;
+  letter-spacing: 0.08em;
+  color: var(--ink-muted);
+}
+
+.car-card__model {
+  margin: 0;
+  font-family: var(--font-body);
+  font-weight: 800;
+  font-size: 1.1rem;
+  letter-spacing: -0.005em;
+}
+
+.car-card__price {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.86rem;
+  color: var(--accent-ink);
+  margin-bottom: 4px;
+}
+
+.car-card__specs {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 4px 10px;
+  margin: 0 0 10px;
+  font-size: 0.8rem;
+}
+
+.car-card__specs dt {
+  color: var(--ink-muted);
+  white-space: nowrap;
+}
+
+.car-card__specs dd {
+  margin: 0;
+  line-height: 1.4;
+}
+
+.car-card__credit {
+  margin: 4px 0 0;
+  font-size: 0.68rem;
+  color: var(--ink-muted);
+  line-height: 1.5;
+}
+
+.car-card__credit a {
+  text-decoration: underline;
+  text-decoration-color: var(--line);
+}
 
 /* ---- Footer ---- */
 

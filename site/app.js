@@ -12,6 +12,8 @@
       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H8l-4 4z"/></svg>',
     alert:
       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4l9.5 16H2.5z"/><line x1="12" y1="10" x2="12" y2="14.5"/><circle cx="12" cy="17.3" r="0.9" fill="currentColor" stroke="none"/></svg>',
+    car:
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16.5V12l1.8-5A2 2 0 017.7 5.5h8.6a2 2 0 011.9 1.5l1.8 5v4.5"/><path d="M4 16.5h16"/><path d="M4 16.5v2.3a1 1 0 001 1h1.2a1 1 0 001-1v-2.3"/><path d="M16.8 16.5v2.3a1 1 0 001 1H19a1 1 0 001-1v-2.3"/><circle cx="7.5" cy="13.2" r="1.1" fill="currentColor" stroke="none"/><circle cx="16.5" cy="13.2" r="1.1" fill="currentColor" stroke="none"/></svg>',
   };
 
   var LAYOUT = [
@@ -371,12 +373,6 @@
     var sentimentItems = collectSentimentItems(data);
     var totalCount = sentimentItems.length;
 
-    var counts = { positive: 0, neutral: 0, negative: 0 };
-    sentimentItems.forEach(function (item) {
-      var label = item.sentiment ? item.sentiment.label : "neutral";
-      counts[label] = (counts[label] || 0) + 1;
-    });
-
     var youtubeCount = ["youtube_popular", "youtube_new"].reduce(function (sum, key) {
       return sum + ((data.sections[key] && data.sections[key].items) || []).length;
     }, 0);
@@ -398,26 +394,6 @@
     t1.appendChild(v1);
     statsEl.appendChild(t1);
 
-    // Tile 2: sentiment breakdown
-    var t2 = el("div", "stat-tile");
-    t2.appendChild(el("div", "stat-tile__label", "評判"));
-    var v2 = el("div", "stat-tile__value", String(counts.positive));
-    v2.appendChild(el("small", null, "件ポジティブ"));
-    t2.appendChild(v2);
-    var total = counts.positive + counts.neutral + counts.negative || 1;
-    var bar = el("div", "sentiment-bar");
-    bar.appendChild(el("div", "sentiment-bar__seg sentiment-bar__seg--positive")).style.width = (100 * counts.positive / total) + "%";
-    bar.appendChild(el("div", "sentiment-bar__seg sentiment-bar__seg--neutral")).style.width = (100 * counts.neutral / total) + "%";
-    bar.appendChild(el("div", "sentiment-bar__seg sentiment-bar__seg--negative")).style.width = (100 * counts.negative / total) + "%";
-    t2.appendChild(bar);
-    var legend = el("div", "sentiment-legend");
-    var lp = el("span"); lp.appendChild(el("span", "legend-dot legend-dot--positive")); lp.appendChild(document.createTextNode(counts.positive + ""));
-    var ln = el("span"); ln.appendChild(el("span", "legend-dot legend-dot--neutral")); ln.appendChild(document.createTextNode(counts.neutral + ""));
-    var lg = el("span"); lg.appendChild(el("span", "legend-dot legend-dot--negative")); lg.appendChild(document.createTextNode(counts.negative + ""));
-    legend.appendChild(lp); legend.appendChild(ln); legend.appendChild(lg);
-    t2.appendChild(legend);
-    statsEl.appendChild(t2);
-
     // Tile 3: youtube
     var t3 = el("div", "stat-tile");
     t3.appendChild(el("div", "stat-tile__label", "YouTube動画(Supra GT4・競合GT4)"));
@@ -435,7 +411,65 @@
     statsEl.appendChild(t4);
   }
 
-  function render(data) {
+  function buildCarCard(car) {
+    var card = el("div", "car-card" + (car.is_supra ? " car-card--spotlight" : ""));
+
+    var figure = el("div", "car-card__photo");
+    var img = el("img");
+    img.src = car.photo.src;
+    img.alt = car.manufacturer + " " + car.model;
+    img.loading = "lazy";
+    figure.appendChild(img);
+    if (car.is_supra) figure.appendChild(el("span", "supra-tag car-card__badge", "SUPRA GT4"));
+    card.appendChild(figure);
+
+    var body = el("div", "car-card__body");
+    body.appendChild(el("span", "car-card__manufacturer", car.manufacturer));
+    body.appendChild(el("h3", "car-card__model", car.model));
+    body.appendChild(el("div", "car-card__price", car.price));
+
+    var specList = el("dl", "car-card__specs");
+    (car.specs || []).forEach(function (spec) {
+      specList.appendChild(el("dt", null, spec.label));
+      specList.appendChild(el("dd", null, spec.value));
+    });
+    body.appendChild(specList);
+
+    var link = el("a", "series-card__link", "公式サイトを見る ↗");
+    link.href = car.official_url;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    body.appendChild(link);
+
+    var credit = el("p", "car-card__credit");
+    credit.appendChild(document.createTextNode("Photo: "));
+    var creditLink = el("a", null, car.photo.credit + " (" + car.photo.license + ")");
+    creditLink.href = car.photo.source_url;
+    creditLink.target = "_blank";
+    creditLink.rel = "noopener noreferrer";
+    credit.appendChild(creditLink);
+    credit.appendChild(document.createTextNode(", via Wikimedia Commons"));
+    body.appendChild(credit);
+
+    card.appendChild(body);
+    return card;
+  }
+
+  function buildCarsPanel(carsData) {
+    var panel = el("section", "panel panel--full");
+    var cars = carsData.cars || [];
+    panel.appendChild(buildPanelHeader("car", "GT4参戦車両一覧", cars.length));
+    if (carsData.note) panel.appendChild(el("p", "panel__note", carsData.note));
+
+    var grid = el("div", "car-grid");
+    cars.forEach(function (car) {
+      grid.appendChild(buildCarCard(car));
+    });
+    panel.appendChild(grid);
+    return panel;
+  }
+
+  function render(data, carsData) {
     buildStats(data);
 
     board.innerHTML = "";
@@ -453,6 +487,9 @@
         panel = buildGenericPanel(entry.icon, section, entry.size);
       }
       board.appendChild(panel);
+      if (entry.key === "motorsports" && carsData) {
+        board.appendChild(buildCarsPanel(carsData));
+      }
     });
 
     lastUpdatedEl.textContent = "最終更新: " + (data.generated_at_jst || "不明");
@@ -472,12 +509,23 @@
     statusDot.classList.add("is-error");
   }
 
-  fetch("data/latest.json", { cache: "no-store" })
-    .then(function (res) {
+  function fetchJson(path) {
+    return fetch(path, { cache: "no-store" }).then(function (res) {
       if (!res.ok) throw new Error("HTTP " + res.status);
       return res.json();
+    });
+  }
+
+  fetchJson("data/latest.json")
+    .then(function (data) {
+      fetchJson("data/gt4_cars.json")
+        .then(function (carsData) {
+          render(data, carsData);
+        })
+        .catch(function () {
+          render(data, null);
+        });
     })
-    .then(render)
     .catch(function (err) {
       renderError("ダッシュボードデータの読み込みに失敗しました(" + err.message + ")。");
     });

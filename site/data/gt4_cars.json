@@ -1,0 +1,179 @@
+{
+  "updated": "2026-08-21",
+  "note": "SRO GT4 Manufacturer Ranking(gt4series.com)に現在参加している9メーカーの最新モデル。価格は各社発表・報道に基づく参考価格(オプション別、BoP/性能調整により出力等は変動)。写真はWikimedia Commonsのクリエイティブ・コモンズ・ライセンス画像を使用。",
+  "cars": [
+    {
+      "manufacturer": "TOYOTA",
+      "model": "GR Supra GT4 EVO2",
+      "is_supra": true,
+      "price": "参考価格 約202,000ユーロ(欧州発表時)",
+      "specs": [
+        { "label": "エンジン", "value": "直列6気筒 3.0L 直噴ターボ(シングルツインスクロール)" },
+        { "label": "最高出力", "value": "430PS(320kW)※BoPにより変動" },
+        { "label": "最大トルク", "value": "650Nm" },
+        { "label": "車両重量", "value": "1,350kg" },
+        { "label": "トランスミッション", "value": "7速AT(パドルシフト)/ FR" }
+      ],
+      "official_url": "https://toyotagazooracing.com/gt4/cars/",
+      "photo": {
+        "src": "https://upload.wikimedia.org/wikipedia/commons/8/83/Toyota_GR_Supra_GT4.jpg",
+        "credit": "Centralize",
+        "license": "CC BY-SA 4.0",
+        "source_url": "https://commons.wikimedia.org/wiki/File:Toyota_GR_Supra_GT4.jpg"
+      }
+    },
+    {
+      "manufacturer": "BMW",
+      "model": "M4 GT4 Evo",
+      "is_supra": false,
+      "price": "参考価格 219,000ユーロ(税別、EVOパッケージ)",
+      "specs": [
+        { "label": "エンジン", "value": "直列6気筒 3.0L ツインパワーターボ(S58型)" },
+        { "label": "最高出力", "value": "約518PS(431kW)※BoPにより変動" },
+        { "label": "車両重量", "value": "約1,530kg" },
+        { "label": "トランスミッション", "value": "7速セミオートマチック / FR" }
+      ],
+      "official_url": "https://www.bmw-m.com/en/fastlane/motorsport/race-cars/bmw-m4-gt4-evo.html",
+      "photo": {
+        "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/BMW_M4_GT4_Evo_of_CASALS_Motorsport_before_GTC%2BTCR_stage_one_race_at_the_Slovakia_Ring_%286_June_2026%29.jpg/960px-BMW_M4_GT4_Evo_of_CASALS_Motorsport_before_GTC%2BTCR_stage_one_race_at_the_Slovakia_Ring_%286_June_2026%29.jpg",
+        "credit": "CrashmasterSOAD",
+        "license": "CC BY-SA 4.0",
+        "source_url": "https://commons.wikimedia.org/wiki/File:BMW_M4_GT4_Evo_of_CASALS_Motorsport_before_GTC%2BTCR_stage_one_race_at_the_Slovakia_Ring_(6_June_2026).jpg"
+      }
+    },
+    {
+      "manufacturer": "MERCEDES-AMG",
+      "model": "GT4",
+      "is_supra": false,
+      "price": "参考価格 198,850ユーロ(税別)",
+      "specs": [
+        { "label": "エンジン", "value": "V8 4.0L ツインターボ" },
+        { "label": "最高出力", "value": "約510PS(375kW)※BoPにより変動" },
+        { "label": "最大トルク", "value": "600Nm" },
+        { "label": "車両重量", "value": "1,390kg" },
+        { "label": "トランスミッション", "value": "AMG製6速シーケンシャル / FR" }
+      ],
+      "official_url": "https://www.mercedes-amg.com/en/mercedes-amg-gt4",
+      "photo": {
+        "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f2/Mercedes-AMG_GT4.jpg/960px-Mercedes-AMG_GT4.jpg",
+        "credit": "Poppo154",
+        "license": "CC BY-SA 4.0",
+        "source_url": "https://commons.wikimedia.org/wiki/File:Mercedes-AMG_GT4.jpg"
+      }
+    },
+    {
+      "manufacturer": "PORSCHE",
+      "model": "718 Cayman GT4 RS Clubsport",
+      "is_supra": false,
+      "price": "参考価格 229,000ドル",
+      "specs": [
+        { "label": "エンジン", "value": "水平対向6気筒 4.0L 自然吸気" },
+        { "label": "最高出力", "value": "500PS(373kW)※BoPにより変動" },
+        { "label": "最大トルク", "value": "465Nm" },
+        { "label": "トランスミッション", "value": "7速PDK(デュアルクラッチ)/ RR" }
+      ],
+      "official_url": "https://racing.porsche.com/en-US/cars/718-cayman-gt4-rs-clubsport",
+      "photo": {
+        "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Porsche_718_Cayman_GT4_RS_Clubsport_%282022%29_%2852574383001%29.jpg/960px-Porsche_718_Cayman_GT4_RS_Clubsport_%282022%29_%2852574383001%29.jpg",
+        "credit": "Charles (Port Chester, New York)",
+        "license": "CC BY 2.0",
+        "source_url": "https://commons.wikimedia.org/wiki/File:Porsche_718_Cayman_GT4_RS_Clubsport_(2022)_(52574383001).jpg"
+      }
+    },
+    {
+      "manufacturer": "FORD",
+      "model": "Mustang GT4(Multimatic製)",
+      "is_supra": false,
+      "price": "参考価格 約210,000〜250,000ドル",
+      "specs": [
+        { "label": "エンジン", "value": "V8 5.0L 自然吸気(Coyote型)" },
+        { "label": "最高出力", "value": "約500PS(373kW)※BoPにより変動" },
+        { "label": "最大トルク", "value": "582Nm" },
+        { "label": "トランスミッション", "value": "Holinger製6速シーケンシャル / FR" }
+      ],
+      "official_url": "https://www.ford.com/performance/mustang-gt4/",
+      "photo": {
+        "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Ford_Mustang_GT4_%287387247084%29.jpg/960px-Ford_Mustang_GT4_%287387247084%29.jpg",
+        "credit": "nakhon100",
+        "license": "CC BY 2.0",
+        "source_url": "https://commons.wikimedia.org/wiki/File:Ford_Mustang_GT4_(7387247084).jpg"
+      }
+    },
+    {
+      "manufacturer": "AUDI",
+      "model": "R8 LMS GT4(evo II)",
+      "is_supra": false,
+      "price": "参考価格 198,000ユーロ(税別)",
+      "specs": [
+        { "label": "エンジン", "value": "V10 5.2L 自然吸気" },
+        { "label": "最高出力", "value": "495PS超(369kW)※BoPにより変動" },
+        { "label": "最大トルク", "value": "550Nm超" },
+        { "label": "トランスミッション", "value": "7速デュアルクラッチ / RR" }
+      ],
+      "official_url": "https://www.audi.com/en/sport/motorsport/audi-sport-customer-racing/r8-lms-gt4/",
+      "photo": {
+        "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/42/Audi_R8_LMS_GT4_Evo_-_Robert_Garza.jpg/960px-Audi_R8_LMS_GT4_Evo_-_Robert_Garza.jpg",
+        "credit": "OctaviaCombi",
+        "license": "CC BY-SA 4.0",
+        "source_url": "https://commons.wikimedia.org/wiki/File:Audi_R8_LMS_GT4_Evo_-_Robert_Garza.jpg"
+      }
+    },
+    {
+      "manufacturer": "McLAREN",
+      "model": "Artura GT4",
+      "is_supra": false,
+      "price": "参考価格 200,000ポンド〜",
+      "specs": [
+        { "label": "エンジン", "value": "V6 3.0L ツインターボ(ハイブリッド機構は非搭載)" },
+        { "label": "最高出力", "value": "585PS(436kW)※BoPにより変動" },
+        { "label": "車両重量", "value": "570S GT4比 約100kg軽量" },
+        { "label": "トランスミッション", "value": "7速シーケンシャル / RR" }
+      ],
+      "official_url": "https://cars.mclaren.com/gl_en/customer-racing/models/artura-gt4",
+      "photo": {
+        "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c7/2022_McLaren_Artura_GT4.jpg/960px-2022_McLaren_Artura_GT4.jpg",
+        "credit": "Calreyn88",
+        "license": "CC BY-SA 4.0",
+        "source_url": "https://commons.wikimedia.org/wiki/File:2022_McLaren_Artura_GT4.jpg"
+      }
+    },
+    {
+      "manufacturer": "ASTON MARTIN",
+      "model": "Vantage GT4",
+      "is_supra": false,
+      "price": "参考価格 225,000ポンド(税別)",
+      "specs": [
+        { "label": "エンジン", "value": "V8 4.0L ツインターボ" },
+        { "label": "最高出力", "value": "約500PS(373kW)※BoPにより変動" },
+        { "label": "車両重量", "value": "約1,300kg(乾燥重量)" },
+        { "label": "トランスミッション", "value": "8速AT(パドルシフト)/ FR" }
+      ],
+      "official_url": "https://media.astonmartin.com/new-aston-martin-vantage-gt4-completes-top-flight-line-up-of-production-based-gt-racers/",
+      "photo": {
+        "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/Aston_Martin_Vantage_GT4_%282022%29_%2852566174006%29.jpg/960px-Aston_Martin_Vantage_GT4_%282022%29_%2852566174006%29.jpg",
+        "credit": "Charles (Port Chester, New York)",
+        "license": "CC BY 2.0",
+        "source_url": "https://commons.wikimedia.org/wiki/File:Aston_Martin_Vantage_GT4_(2022)_(52566174006).jpg"
+      }
+    },
+    {
+      "manufacturer": "GINETTA",
+      "model": "G56 GT4 EVO",
+      "is_supra": false,
+      "price": "参考価格 295,000ドル",
+      "specs": [
+        { "label": "エンジン", "value": "V8 6.2L 自然吸気(GM LS3ベース、Ginetta製)" },
+        { "label": "最高出力", "value": "約425PS(317kW、リストリクター装着時)" },
+        { "label": "車両重量", "value": "1,400kg(BoP前)" },
+        { "label": "トランスミッション", "value": "非公開 / FR" }
+      ],
+      "official_url": "https://www.ginetta.com/us/our-cars/g56/g56-gt4/",
+      "photo": {
+        "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ab/Ginetta_G56_GT4_1.jpg/960px-Ginetta_G56_GT4_1.jpg",
+        "credit": "Calreyn88",
+        "license": "CC BY-SA 4.0",
+        "source_url": "https://commons.wikimedia.org/wiki/File:Ginetta_G56_GT4_1.jpg"
+      }
+    }
+  ]
+}

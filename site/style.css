@@ -284,6 +284,35 @@ a { color: inherit; }
   letter-spacing: 0.04em;
 }
 
+.lang-toggle {
+  display: flex;
+  gap: 4px;
+  padding: 3px;
+  border-radius: 999px;
+  background: var(--surface-sunken);
+  border: 1px solid var(--line);
+}
+
+.lang-toggle__btn {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.74rem;
+  letter-spacing: 0.02em;
+  padding: 4px 12px;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  color: var(--ink-muted);
+  cursor: pointer;
+}
+
+.lang-toggle__btn:hover { color: var(--ink); }
+
+.lang-toggle__btn.is-active {
+  background: var(--accent);
+  color: #fff;
+}
+
 /* ---- Stat strip ---- */
 
 .stats {

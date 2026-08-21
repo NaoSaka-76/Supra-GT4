@@ -1,6 +1,8 @@
 """GR Supra GT4を含むGT4カテゴリーのレース情報を地域別・シリーズ別に集約する。
 
-日本・アジア、米国、欧州、オセアニア、中東の5地域、計14シリーズに整理。各シリーズ
+日本・アジア、米国、欧州、オセアニア、中東の5地域、計18シリーズ(GT3主体の
+GT World Challenge各地域シリーズ4つを含む、同一大会ウィークエンドの上位カテゴリーとして
+掲載)に整理。各シリーズ
 公式サイトの結果・ランキング表は構造がそれぞれ異なり安定したスクレイピングが難しいため、
 基本はニュース記事(Google News RSS)ベースでトピックス・レース結果・ランキング関連の
 話題を集約し、公式サイトのスケジュール/ランキングページへの直接リンクを添える
@@ -27,6 +29,23 @@ REGIONS = {
         "label": "日本・アジア",
         "flag": "🇯🇵",
         "series": [
+            {
+                "key": "gt_world_challenge_asia",
+                "label": "GT World Challenge Asia",
+                "queries": {
+                    "topics": [
+                        ("\"GR Supra GT4\" \"GT World Challenge Asia\"", "en-US", "US", "US:en"),
+                    ],
+                    "results": [
+                        ("\"GR Supra GT4\" \"GT World Challenge Asia\" race result OR podium OR win", "en-US", "US", "US:en"),
+                    ],
+                    "standings": [
+                        ("\"GT World Challenge Asia\" standings Toyota OR \"GR Supra\"", "en-US", "US", "US:en"),
+                    ],
+                },
+                "schedule_link": "https://www.gt-world-challenge-asia.com/calendar",
+                "standings_url": "https://www.gt-world-challenge-asia.com/standings",
+            },
             {
                 "key": "super_taikyu",
                 "label": "スーパー耐久 ST-Zクラス(日本)",
@@ -87,6 +106,23 @@ REGIONS = {
         "flag": "🇺🇸",
         "series": [
             {
+                "key": "gt_world_challenge_america",
+                "label": "GT World Challenge America",
+                "queries": {
+                    "topics": [
+                        ("\"GR Supra GT4\" \"GT World Challenge America\"", "en-US", "US", "US:en"),
+                    ],
+                    "results": [
+                        ("\"GR Supra GT4\" \"GT World Challenge America\" race result OR podium OR win", "en-US", "US", "US:en"),
+                    ],
+                    "standings": [
+                        ("\"GT World Challenge America\" standings Toyota OR \"GR Supra\"", "en-US", "US", "US:en"),
+                    ],
+                },
+                "schedule_link": "https://www.gt-world-challenge-america.com/calendar",
+                "standings_url": "https://www.gt-world-challenge-america.com/standings",
+            },
+            {
                 "key": "gt4_america",
                 "label": "Pirelli/Fanatec GT4 America(Silver Teams)",
                 "queries": {
@@ -128,6 +164,23 @@ REGIONS = {
         "label": "欧州",
         "flag": "🇪🇺",
         "series": [
+            {
+                "key": "gt_world_challenge_europe",
+                "label": "GT World Challenge Europe",
+                "queries": {
+                    "topics": [
+                        ("\"GR Supra GT4\" \"GT World Challenge Europe\"", "en-GB", "GB", "GB:en"),
+                    ],
+                    "results": [
+                        ("\"GR Supra GT4\" \"GT World Challenge Europe\" race result OR podium OR win", "en-GB", "GB", "GB:en"),
+                    ],
+                    "standings": [
+                        ("\"GT World Challenge Europe\" standings Toyota OR \"GR Supra\"", "en-GB", "GB", "GB:en"),
+                    ],
+                },
+                "schedule_link": "https://www.gt-world-challenge-europe.com/calendar",
+                "standings_url": "https://www.gt-world-challenge-europe.com/standings",
+            },
             {
                 "key": "gt4_european_series",
                 "label": "GT4 European Series",
@@ -257,6 +310,23 @@ REGIONS = {
         "flag": "🇦🇺",
         "series": [
             {
+                "key": "gt_world_challenge_australia",
+                "label": "GT World Challenge Australia",
+                "queries": {
+                    "topics": [
+                        ("\"GR Supra GT4\" \"GT World Challenge Australia\"", "en-AU", "AU", "AU:en"),
+                    ],
+                    "results": [
+                        ("\"GR Supra GT4\" \"GT World Challenge Australia\" race result OR podium OR win", "en-AU", "AU", "AU:en"),
+                    ],
+                    "standings": [
+                        ("\"GT World Challenge Australia\" standings Toyota OR \"GR Supra\"", "en-AU", "AU", "AU:en"),
+                    ],
+                },
+                "schedule_link": "https://www.gt-world-challenge-australia.com/calendar",
+                "standings_url": "https://www.gt-world-challenge-australia.com/standings",
+            },
+            {
                 "key": "gt4_australia",
                 "label": "Monochrome GT4 Australia Series",
                 "queries": {
@@ -318,6 +388,7 @@ def _build_series(series_cfg: dict) -> dict:
         "standings_url": series_cfg["standings_url"],
         "standings_chart": None,
         "standings_chart_note": None,
+        "standings_error": False,
         "schedule": [],
         "schedule_link": series_cfg.get("schedule_link"),
     }
@@ -347,6 +418,7 @@ def fetch() -> dict:
     for series in result["us"]["series"]:
         if series["key"] == "gt4_america":
             series["standings_chart"] = us_chart["standings"]
+            series["standings_error"] = bool(us_chart["error"])
             series["standings_chart_note"] = (
                 us_chart["error"]
                 or "GT4 America \"Silver Teams\" チームランキング(公式サイト実データ)。"

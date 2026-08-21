@@ -1,18 +1,24 @@
 {
   "updated": "2026-08-21",
-  "note": "SRO GT4 Manufacturer Ranking(gt4series.com)に現在参加している9メーカーの最新モデル。価格は各社発表・報道に基づく参考価格(オプション別、BoP/性能調整により出力等は変動)。写真はWikimedia Commonsのクリエイティブ・コモンズ・ライセンス画像を使用。",
+  "note": {
+    "ja": "SRO GT4 Manufacturer Ranking(gt4series.com)に現在参加している9メーカーの最新モデル。価格は各社発表・報道に基づく参考価格(オプション別、BoP/性能調整により出力等は変動)。写真はWikimedia Commonsのクリエイティブ・コモンズ・ライセンス画像を使用。",
+    "en": "The latest models from the nine manufacturers currently listed in the SRO GT4 Manufacturer Ranking (gt4series.com). Prices are reference figures based on each manufacturer's announcements and press coverage (options extra; power output etc. may vary under Balance of Performance). Photos are Creative Commons-licensed images from Wikimedia Commons."
+  },
   "cars": [
     {
       "manufacturer": "TOYOTA",
       "model": "GR Supra GT4 EVO2",
       "is_supra": true,
-      "price": "参考価格 約202,000ユーロ(欧州発表時)",
+      "price": {
+        "ja": "参考価格 約202,000ユーロ(欧州発表時)",
+        "en": "Reference price approx. €202,000 (as announced in Europe)"
+      },
       "specs": [
-        { "label": "エンジン", "value": "直列6気筒 3.0L 直噴ターボ(シングルツインスクロール)" },
-        { "label": "最高出力", "value": "430PS(320kW)※BoPにより変動" },
-        { "label": "最大トルク", "value": "650Nm" },
-        { "label": "車両重量", "value": "1,350kg" },
-        { "label": "トランスミッション", "value": "7速AT(パドルシフト)/ FR" }
+        { "key": "engine", "value": { "ja": "直列6気筒 3.0L 直噴ターボ(シングルツインスクロール)", "en": "Inline-6 3.0L turbo, direct injection (single twin-scroll)" } },
+        { "key": "power", "value": { "ja": "430PS(320kW)※BoPにより変動", "en": "430PS (320kW) *varies with BoP" } },
+        { "key": "torque", "value": { "ja": "650Nm", "en": "650Nm" } },
+        { "key": "weight", "value": { "ja": "1,350kg", "en": "1,350kg" } },
+        { "key": "transmission", "value": { "ja": "7速AT(パドルシフト)/ FR", "en": "7-speed automatic (paddle shift) / RWD" } }
       ],
       "official_url": "https://toyotagazooracing.com/gt4/cars/",
       "photo": {
@@ -26,12 +32,15 @@
       "manufacturer": "BMW",
       "model": "M4 GT4 Evo",
       "is_supra": false,
-      "price": "参考価格 219,000ユーロ(税別、EVOパッケージ)",
+      "price": {
+        "ja": "参考価格 219,000ユーロ(税別、EVOパッケージ)",
+        "en": "Reference price €219,000 (excl. tax, EVO package)"
+      },
       "specs": [
-        { "label": "エンジン", "value": "直列6気筒 3.0L ツインパワーターボ(S58型)" },
-        { "label": "最高出力", "value": "約518PS(431kW)※BoPにより変動" },
-        { "label": "車両重量", "value": "約1,530kg" },
-        { "label": "トランスミッション", "value": "7速セミオートマチック / FR" }
+        { "key": "engine", "value": { "ja": "直列6気筒 3.0L ツインパワーターボ(S58型)", "en": "Inline-6 3.0L TwinPower Turbo (S58)" } },
+        { "key": "power", "value": { "ja": "約518PS(431kW)※BoPにより変動", "en": "Approx. 518PS (431kW) *varies with BoP" } },
+        { "key": "weight", "value": { "ja": "約1,530kg", "en": "Approx. 1,530kg" } },
+        { "key": "transmission", "value": { "ja": "7速セミオートマチック / FR", "en": "7-speed semi-automatic / RWD" } }
       ],
       "official_url": "https://www.bmw-m.com/en/fastlane/motorsport/race-cars/bmw-m4-gt4-evo.html",
       "photo": {
@@ -45,13 +54,16 @@
       "manufacturer": "MERCEDES-AMG",
       "model": "GT4",
       "is_supra": false,
-      "price": "参考価格 198,850ユーロ(税別)",
+      "price": {
+        "ja": "参考価格 198,850ユーロ(税別)",
+        "en": "Reference price €198,850 (excl. tax)"
+      },
       "specs": [
-        { "label": "エンジン", "value": "V8 4.0L ツインターボ" },
-        { "label": "最高出力", "value": "約510PS(375kW)※BoPにより変動" },
-        { "label": "最大トルク", "value": "600Nm" },
-        { "label": "車両重量", "value": "1,390kg" },
-        { "label": "トランスミッション", "value": "AMG製6速シーケンシャル / FR" }
+        { "key": "engine", "value": { "ja": "V8 4.0L ツインターボ", "en": "V8 4.0L twin-turbo" } },
+        { "key": "power", "value": { "ja": "約510PS(375kW)※BoPにより変動", "en": "Approx. 510PS (375kW) *varies with BoP" } },
+        { "key": "torque", "value": { "ja": "600Nm", "en": "600Nm" } },
+        { "key": "weight", "value": { "ja": "1,390kg", "en": "1,390kg" } },
+        { "key": "transmission", "value": { "ja": "AMG製6速シーケンシャル / FR", "en": "AMG 6-speed sequential / RWD" } }
       ],
       "official_url": "https://www.mercedes-amg.com/en/mercedes-amg-gt4",
       "photo": {
@@ -65,12 +77,15 @@
       "manufacturer": "PORSCHE",
       "model": "718 Cayman GT4 RS Clubsport",
       "is_supra": false,
-      "price": "参考価格 229,000ドル",
+      "price": {
+        "ja": "参考価格 229,000ドル",
+        "en": "Reference price $229,000"
+      },
       "specs": [
-        { "label": "エンジン", "value": "水平対向6気筒 4.0L 自然吸気" },
-        { "label": "最高出力", "value": "500PS(373kW)※BoPにより変動" },
-        { "label": "最大トルク", "value": "465Nm" },
-        { "label": "トランスミッション", "value": "7速PDK(デュアルクラッチ)/ RR" }
+        { "key": "engine", "value": { "ja": "水平対向6気筒 4.0L 自然吸気", "en": "Flat-6 4.0L naturally aspirated" } },
+        { "key": "power", "value": { "ja": "500PS(373kW)※BoPにより変動", "en": "500PS (373kW) *varies with BoP" } },
+        { "key": "torque", "value": { "ja": "465Nm", "en": "465Nm" } },
+        { "key": "transmission", "value": { "ja": "7速PDK(デュアルクラッチ)/ RR", "en": "7-speed PDK dual-clutch / RR" } }
       ],
       "official_url": "https://racing.porsche.com/en-US/cars/718-cayman-gt4-rs-clubsport",
       "photo": {
@@ -82,14 +97,20 @@
     },
     {
       "manufacturer": "FORD",
-      "model": "Mustang GT4(Multimatic製)",
+      "model": {
+        "ja": "Mustang GT4(Multimatic製)",
+        "en": "Mustang GT4 (built by Multimatic)"
+      },
       "is_supra": false,
-      "price": "参考価格 約210,000〜250,000ドル",
+      "price": {
+        "ja": "参考価格 約210,000〜250,000ドル",
+        "en": "Reference price approx. $210,000–$250,000"
+      },
       "specs": [
-        { "label": "エンジン", "value": "V8 5.0L 自然吸気(Coyote型)" },
-        { "label": "最高出力", "value": "約500PS(373kW)※BoPにより変動" },
-        { "label": "最大トルク", "value": "582Nm" },
-        { "label": "トランスミッション", "value": "Holinger製6速シーケンシャル / FR" }
+        { "key": "engine", "value": { "ja": "V8 5.0L 自然吸気(Coyote型)", "en": "V8 5.0L naturally aspirated (Coyote)" } },
+        { "key": "power", "value": { "ja": "約500PS(373kW)※BoPにより変動", "en": "Approx. 500PS (373kW) *varies with BoP" } },
+        { "key": "torque", "value": { "ja": "582Nm", "en": "582Nm" } },
+        { "key": "transmission", "value": { "ja": "Holinger製6速シーケンシャル / FR", "en": "Holinger 6-speed sequential / RWD" } }
       ],
       "official_url": "https://www.ford.com/performance/mustang-gt4/",
       "photo": {
@@ -101,14 +122,17 @@
     },
     {
       "manufacturer": "AUDI",
-      "model": "R8 LMS GT4(evo II)",
+      "model": "R8 LMS GT4 (evo II)",
       "is_supra": false,
-      "price": "参考価格 198,000ユーロ(税別)",
+      "price": {
+        "ja": "参考価格 198,000ユーロ(税別)",
+        "en": "Reference price €198,000 (excl. tax)"
+      },
       "specs": [
-        { "label": "エンジン", "value": "V10 5.2L 自然吸気" },
-        { "label": "最高出力", "value": "495PS超(369kW)※BoPにより変動" },
-        { "label": "最大トルク", "value": "550Nm超" },
-        { "label": "トランスミッション", "value": "7速デュアルクラッチ / RR" }
+        { "key": "engine", "value": { "ja": "V10 5.2L 自然吸気", "en": "V10 5.2L naturally aspirated" } },
+        { "key": "power", "value": { "ja": "495PS超(369kW)※BoPにより変動", "en": "495PS+ (369kW) *varies with BoP" } },
+        { "key": "torque", "value": { "ja": "550Nm超", "en": "550Nm+" } },
+        { "key": "transmission", "value": { "ja": "7速デュアルクラッチ / RR", "en": "7-speed dual-clutch / RR" } }
       ],
       "official_url": "https://www.audi.com/en/sport/motorsport/audi-sport-customer-racing/r8-lms-gt4/",
       "photo": {
@@ -122,12 +146,15 @@
       "manufacturer": "McLAREN",
       "model": "Artura GT4",
       "is_supra": false,
-      "price": "参考価格 200,000ポンド〜",
+      "price": {
+        "ja": "参考価格 200,000ポンド〜",
+        "en": "Reference price from £200,000"
+      },
       "specs": [
-        { "label": "エンジン", "value": "V6 3.0L ツインターボ(ハイブリッド機構は非搭載)" },
-        { "label": "最高出力", "value": "585PS(436kW)※BoPにより変動" },
-        { "label": "車両重量", "value": "570S GT4比 約100kg軽量" },
-        { "label": "トランスミッション", "value": "7速シーケンシャル / RR" }
+        { "key": "engine", "value": { "ja": "V6 3.0L ツインターボ(ハイブリッド機構は非搭載)", "en": "V6 3.0L twin-turbo (hybrid system not fitted)" } },
+        { "key": "power", "value": { "ja": "585PS(436kW)※BoPにより変動", "en": "585PS (436kW) *varies with BoP" } },
+        { "key": "weight", "value": { "ja": "570S GT4比 約100kg軽量", "en": "Approx. 100kg lighter than the 570S GT4" } },
+        { "key": "transmission", "value": { "ja": "7速シーケンシャル / RR", "en": "7-speed sequential / RR" } }
       ],
       "official_url": "https://cars.mclaren.com/gl_en/customer-racing/models/artura-gt4",
       "photo": {
@@ -141,12 +168,15 @@
       "manufacturer": "ASTON MARTIN",
       "model": "Vantage GT4",
       "is_supra": false,
-      "price": "参考価格 225,000ポンド(税別)",
+      "price": {
+        "ja": "参考価格 225,000ポンド(税別)",
+        "en": "Reference price £225,000 (excl. tax)"
+      },
       "specs": [
-        { "label": "エンジン", "value": "V8 4.0L ツインターボ" },
-        { "label": "最高出力", "value": "約500PS(373kW)※BoPにより変動" },
-        { "label": "車両重量", "value": "約1,300kg(乾燥重量)" },
-        { "label": "トランスミッション", "value": "8速AT(パドルシフト)/ FR" }
+        { "key": "engine", "value": { "ja": "V8 4.0L ツインターボ", "en": "V8 4.0L twin-turbo" } },
+        { "key": "power", "value": { "ja": "約500PS(373kW)※BoPにより変動", "en": "Approx. 500PS (373kW) *varies with BoP" } },
+        { "key": "weight", "value": { "ja": "約1,300kg(乾燥重量)", "en": "Approx. 1,300kg (dry weight)" } },
+        { "key": "transmission", "value": { "ja": "8速AT(パドルシフト)/ FR", "en": "8-speed automatic (paddle shift) / RWD" } }
       ],
       "official_url": "https://media.astonmartin.com/new-aston-martin-vantage-gt4-completes-top-flight-line-up-of-production-based-gt-racers/",
       "photo": {
@@ -160,12 +190,15 @@
       "manufacturer": "GINETTA",
       "model": "G56 GT4 EVO",
       "is_supra": false,
-      "price": "参考価格 295,000ドル",
+      "price": {
+        "ja": "参考価格 295,000ドル",
+        "en": "Reference price $295,000"
+      },
       "specs": [
-        { "label": "エンジン", "value": "V8 6.2L 自然吸気(GM LS3ベース、Ginetta製)" },
-        { "label": "最高出力", "value": "約425PS(317kW、リストリクター装着時)" },
-        { "label": "車両重量", "value": "1,400kg(BoP前)" },
-        { "label": "トランスミッション", "value": "非公開 / FR" }
+        { "key": "engine", "value": { "ja": "V8 6.2L 自然吸気(GM LS3ベース、Ginetta製)", "en": "V8 6.2L naturally aspirated (GM LS3-based, built by Ginetta)" } },
+        { "key": "power", "value": { "ja": "約425PS(317kW、リストリクター装着時)", "en": "Approx. 425PS (317kW, with restrictor fitted)" } },
+        { "key": "weight", "value": { "ja": "1,400kg(BoP前)", "en": "1,400kg (pre-BoP)" } },
+        { "key": "transmission", "value": { "ja": "非公開 / FR", "en": "Undisclosed / RWD" } }
       ],
       "official_url": "https://www.ginetta.com/us/our-cars/g56/g56-gt4/",
       "photo": {

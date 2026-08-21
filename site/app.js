@@ -1,6 +1,8 @@
 (function () {
   "use strict";
 
+  var LANG_STORAGE_KEY = "supraGt4WatchLang";
+
   var ICONS = {
     flag:
       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v18"/><path d="M5 4h14l-3 3.5 3 3.5H5z"/></svg>',
@@ -25,13 +27,306 @@
     { key: "complaints", size: "full", icon: "alert" },
   ];
 
-  var SENTIMENT_LABEL_JA = { positive: "ポジティブ", negative: "ネガティブ", neutral: "中立" };
-  var REGION_GROUP_LABELS = { topics: "トピックス", results: "最新レース結果", standings: "ランキング関連ニュース" };
+  // ---- i18n --------------------------------------------------------------
+  // 画面の文言(パネル見出し・ボタン・注記・地域/シリーズ名等)はここで一元管理する。
+  // data/latest.json 側の label/note は日本語固定で生成されるため、表示には使わず
+  // 安定した key(section/region/series key)をもとにこの辞書から引く。
+  // ニュース記事・動画のタイトルなど集約コンテンツ自体は翻訳しない(原文のまま)。
+
+  var I18N = {
+    ja: {
+      loading: "データを取得しています…",
+      chipLabel: "JST 自動更新",
+      lastUpdatedPrefix: "最終更新: ",
+      lastUpdatedUnknown: "不明",
+      fetchErrorPrefix: "ダッシュボードデータの読み込みに失敗しました(",
+      fetchErrorSuffix: ")。",
+      statusFetchFailed: "更新情報を取得できませんでした",
+      footer:
+        "本ダッシュボードは公開情報源(Googleニュース検索・YouTube検索結果・各シリーズ公式サイト)を自動集計した非公式のモニタリングツールです。" +
+        "トヨタ自動車の公式発表とは異なる場合があります。X/Facebookの投稿本体、および社内クレームシステムのデータは含まれません。" +
+        "ポジティブ/ネガティブ表示は見出し文のみに基づく自動推定(簡易辞書・VADER)であり、参考値です。" +
+        "モータースポーツ(日本・アジア/米国/欧州/オセアニア/中東)のレース結果・ランキングはニュース記事ベースの速報、" +
+        "または各シリーズ公式サイトへのリンクです。正式な記録は各シリーズ公式サイトをご確認ください。",
+      statTotal: "本日の総情報件数",
+      statYoutube: "YouTube動画(Supra GT4・競合GT4)",
+      statMotorsports: "参戦レース関連話題(5地域・{n}シリーズ)",
+      unitItems: "件",
+      unitVideos: "本",
+      unitSeries: "シリーズ",
+      emptyGeneric: "現在、該当する情報はありません。",
+      emptyGroup: "該当情報なし",
+      emptySchedule: "日程情報を取得できませんでした。",
+      tabLatest: "最新順",
+      tabBuzz: "話題順",
+      groupTopics: "トピックス",
+      groupResults: "最新レース結果",
+      groupStandings: "ランキング関連ニュース",
+      groupSchedule: "レース日程",
+      groupRanking: "シリーズランキング",
+      nextRace: "次戦",
+      linkCalendar: "公式カレンダーを見る ↗",
+      linkStandings: "公式ランキングを見る ↗",
+      linkOfficial: "公式サイトを見る ↗",
+      scheduleLinkNote: "日程データの構造が不安定なため一覧化を見送っています。公式カレンダーは以下のリンクからご確認ください。",
+      standingsNoteSuperTaikyu:
+        "スーパー耐久 公式サイトのST-Zクラス別ランキング表は機械的な構造解釈が難しいため、グラフ化は行っていません。" +
+        "「公式ランキングを見る」からご確認ください。",
+      standingsNoteGt4America:
+        "GT4 America \"Silver Teams\" チームランキング(公式サイト実データ)。各レースの完全結果ページから使用車種を補完しており、" +
+        "Toyota GR Supra GT4で参戦するチームには目印を付けています。",
+      standingsNoteDefault:
+        "このシリーズの公式サイトは順位表の構造を安定的に解釈できないため、グラフ化は行っていません。" +
+        "「公式ランキングを見る」からご確認ください。",
+      standingsNoteError: "ランキングの取得中にエラーが発生しました。「公式ランキングを見る」からご確認ください。",
+      sentimentPositive: "ポジティブ",
+      sentimentNegative: "ネガティブ",
+      sentimentReasonsPrefix: "判定根拠: ",
+      sentimentSuffixPositive: " という語がポジティブと判定されました",
+      sentimentSuffixNegative: " という語がネガティブと判定されました",
+      titleUnknown: "(タイトル不明)",
+      photoCredit: "写真: ",
+      viaCommons: "、Wikimedia Commonsより",
+      sections: {
+        motorsports: {
+          title: "GR Supra GT4 参戦レース(地域別・全18シリーズ)",
+          note:
+            "トピックス/レース結果はニュース記事ベースで集約しています。スーパー耐久(日本・アジア)は年間スケジュール、" +
+            "米国のGT4 America(Silver Teams)はチームランキングを公式サイトの実データで取得しています" +
+            "(他シリーズを図示しない理由は各カード内に記載)。",
+        },
+        gt4_topics: {
+          title: "GT4カテゴリー最新トピックス",
+          note:
+            "GT4ホモロゲーション/レギュレーション、競合GT4(BMW・Mercedes-AMG・Porsche・Ford・Aston Martin・Audi・McLaren等)の" +
+            "開発・アップデート、技術情報、Supra GT4や競合車の不具合情報をカテゴリー別バッジ付きで集約しています。",
+        },
+        youtube_popular: { title: "YouTube 人気動画(Supra GT4・競合GT4)" },
+        youtube_new: { title: "YouTube 新着動画(Supra GT4・競合GT4)" },
+        social_buzz: {
+          title: "SNSでの話題(X/Facebook 代替指標)",
+          note:
+            "X/Facebookの公式APIキーが未設定のため、投稿本体は取得できません。ニュース・ブログでの言及数を話題性の代替指標として" +
+            "表示しています。「話題順」は検索結果内での上位表示度を注目度の代替指標として用いています" +
+            "(実際のSNS拡散数やエンゲージメント数ではありません)。",
+        },
+        complaints: {
+          title: "Supra GT4 お客様の声・クレーム関連情報",
+          note:
+            "社内クレーム管理システムとは未連携です。ニュース報道(リコール等)で公開されている情報のみを集約した簡易" +
+            "モニタリングです。「話題順」は検索結果内での上位表示度を注目度の代替指標として用いています" +
+            "(実際のSNS拡散数やエンゲージメント数ではありません)。",
+        },
+        gt4_cars: { title: "GT4参戦車両一覧" },
+      },
+      regions: {
+        japan_asia: "日本・アジア",
+        us: "米国",
+        europe: "欧州",
+        oceania: "オセアニア",
+        middle_east: "中東",
+      },
+      series: {
+        gt_world_challenge_asia: "GT World Challenge Asia",
+        super_taikyu: "スーパー耐久 ST-Zクラス(日本)",
+        sro_japan_cup: "SRO Japan Cup GT4クラス(日本)",
+        sro_gt_cup_china: "SRO GT Cup(中国)",
+        gt_world_challenge_america: "GT World Challenge America",
+        gt4_america: "Pirelli/Fanatec GT4 America(Silver Teams)",
+        imsa_michelin_pilot_challenge: "IMSA Michelin Pilot Challenge(GSクラス)",
+        gt_world_challenge_europe: "GT World Challenge Europe",
+        gt4_european_series: "GT4 European Series",
+        british_gt4: "British GT Championship(GT4クラス)",
+        french_gt4_cup: "French GT4 Cup",
+        gt4_italian_series: "GT4 Italian Series",
+        adac_gt4_germany: "ADAC GT4 Germany",
+        nls_nuerburgring: "ニュルブルクリンク NLS・24h(SP10クラス)",
+        gt4_winter_series: "GT4 Winter Series(イベリア半島)",
+        gt_world_challenge_australia: "GT World Challenge Australia",
+        gt4_australia: "Monochrome GT4 Australia Series",
+        "24h_series_middle_east": "24H Series Middle East(GT4クラス)",
+      },
+      categories: {
+        homologation: "ホモロゲーション",
+        regulation: "レギュレーション",
+        competitor: "競合GT4の開発",
+        technical: "技術情報",
+        issue: "不具合情報",
+      },
+      carSpecs: {
+        engine: "エンジン",
+        power: "最高出力",
+        torque: "最大トルク",
+        weight: "車両重量",
+        transmission: "トランスミッション",
+      },
+    },
+    en: {
+      loading: "Loading data…",
+      chipLabel: "JST auto-update",
+      lastUpdatedPrefix: "Last updated: ",
+      lastUpdatedUnknown: "unknown",
+      fetchErrorPrefix: "Failed to load dashboard data (",
+      fetchErrorSuffix: ").",
+      statusFetchFailed: "Could not fetch update status",
+      footer:
+        "This dashboard is an unofficial monitoring tool that automatically aggregates public sources " +
+        "(Google News search, YouTube search results, and each series' official site). It may differ from Toyota Motor " +
+        "Corporation's official announcements. It does not include actual X/Facebook posts or internal complaint-system data. " +
+        "Positive/negative labels are automatic estimates based on headline text only (a simple lexicon and VADER) and are " +
+        "reference values only. Motorsports race results and rankings (Japan/Asia, US, Europe, Oceania, Middle East) are " +
+        "either news-based bulletins or links to each series' official site. Please check each series' official site for the " +
+        "official record.",
+      statTotal: "Total items today",
+      statYoutube: "YouTube Videos (Supra GT4 & Rival GT4)",
+      statMotorsports: "Race-related topics (5 regions, {n} series)",
+      unitItems: "items",
+      unitVideos: "videos",
+      unitSeries: "series",
+      emptyGeneric: "No matching information right now.",
+      emptyGroup: "Nothing to show",
+      emptySchedule: "Could not fetch schedule information.",
+      tabLatest: "Latest",
+      tabBuzz: "Trending",
+      groupTopics: "Topics",
+      groupResults: "Latest Results",
+      groupStandings: "Ranking News",
+      groupSchedule: "Race Schedule",
+      groupRanking: "Series Ranking",
+      nextRace: "Next round",
+      linkCalendar: "View official calendar ↗",
+      linkStandings: "View official ranking ↗",
+      linkOfficial: "Visit official site ↗",
+      scheduleLinkNote: "The schedule data structure is unstable, so it isn't listed here. Please check the official calendar via the link below.",
+      standingsNoteSuperTaikyu:
+        "The Super Taikyu official site's ST-Z class ranking table is difficult to parse programmatically, so it isn't " +
+        "charted here. Please check via \"View official ranking.\"",
+      standingsNoteGt4America:
+        "GT4 America \"Silver Teams\" team ranking (live data from the official site). Car models are filled in from each " +
+        "race's full results page, and teams running the Toyota GR Supra GT4 are highlighted.",
+      standingsNoteDefault:
+        "This series' official site ranking table can't be parsed reliably, so it isn't charted here. Please check via " +
+        "\"View official ranking.\"",
+      standingsNoteError: "An error occurred while fetching the ranking. Please check via \"View official ranking.\"",
+      sentimentPositive: "Positive",
+      sentimentNegative: "Negative",
+      sentimentReasonsPrefix: "Detected words: ",
+      sentimentSuffixPositive: " — classified as positive",
+      sentimentSuffixNegative: " — classified as negative",
+      titleUnknown: "(untitled)",
+      photoCredit: "Photo: ",
+      viaCommons: ", via Wikimedia Commons",
+      sections: {
+        motorsports: {
+          title: "GR Supra GT4 Races (by Region, 18 Series)",
+          note:
+            "Topics and race results are aggregated from news articles. Super Taikyu (Japan/Asia) provides a real season " +
+            "schedule, and GT4 America (Silver Teams, US) provides a real team-ranking chart, both sourced directly from " +
+            "official sites (reasons other series aren't charted are noted on each card).",
+        },
+        gt4_topics: {
+          title: "Latest GT4 Category Topics",
+          note:
+            "Aggregates GT4 homologation/regulation news, rival GT4 development and updates (BMW, Mercedes-AMG, Porsche, " +
+            "Ford, Aston Martin, Audi, McLaren, etc.), technical information, and defect/issue reports for Supra GT4 and " +
+            "rivals, tagged with category badges.",
+        },
+        youtube_popular: { title: "YouTube Popular Videos (Supra GT4 & Rival GT4)" },
+        youtube_new: { title: "YouTube Latest Videos (Supra GT4 & Rival GT4)" },
+        social_buzz: {
+          title: "Social Media Buzz (X/Facebook Proxy)",
+          note:
+            "X/Facebook official API keys aren't configured, so posts themselves can't be retrieved. News/blog mention " +
+            "counts are shown as a proxy for buzz. \"Trending\" order uses search-result ranking as a proxy for attention " +
+            "(not actual share/engagement counts).",
+        },
+        complaints: {
+          title: "Supra GT4 Customer Feedback & Complaints",
+          note:
+            "Not connected to any internal complaint-management system. This is a lightweight monitor aggregating only " +
+            "publicly reported news (e.g. recalls). \"Trending\" order uses search-result ranking as a proxy for attention " +
+            "(not actual share/engagement counts).",
+        },
+        gt4_cars: { title: "GT4 Car Catalog" },
+      },
+      regions: {
+        japan_asia: "Japan / Asia",
+        us: "United States",
+        europe: "Europe",
+        oceania: "Oceania",
+        middle_east: "Middle East",
+      },
+      series: {
+        gt_world_challenge_asia: "GT World Challenge Asia",
+        super_taikyu: "Super Taikyu ST-Z Class (Japan)",
+        sro_japan_cup: "SRO Japan Cup GT4 Class (Japan)",
+        sro_gt_cup_china: "SRO GT Cup (China)",
+        gt_world_challenge_america: "GT World Challenge America",
+        gt4_america: "Pirelli/Fanatec GT4 America (Silver Teams)",
+        imsa_michelin_pilot_challenge: "IMSA Michelin Pilot Challenge (GS Class)",
+        gt_world_challenge_europe: "GT World Challenge Europe",
+        gt4_european_series: "GT4 European Series",
+        british_gt4: "British GT Championship (GT4 Class)",
+        french_gt4_cup: "French GT4 Cup",
+        gt4_italian_series: "GT4 Italian Series",
+        adac_gt4_germany: "ADAC GT4 Germany",
+        nls_nuerburgring: "Nürburgring NLS / 24h (SP10 Class)",
+        gt4_winter_series: "GT4 Winter Series (Iberian Peninsula)",
+        gt_world_challenge_australia: "GT World Challenge Australia",
+        gt4_australia: "Monochrome GT4 Australia Series",
+        "24h_series_middle_east": "24H Series Middle East (GT4 Class)",
+      },
+      categories: {
+        homologation: "Homologation",
+        regulation: "Regulations",
+        competitor: "Rival GT4 Development",
+        technical: "Technical",
+        issue: "Issues & Defects",
+      },
+      carSpecs: {
+        engine: "Engine",
+        power: "Max Power",
+        torque: "Max Torque",
+        weight: "Weight",
+        transmission: "Transmission",
+      },
+    },
+  };
+
+  var LANG = (function () {
+    try {
+      var saved = window.localStorage.getItem(LANG_STORAGE_KEY);
+      if (saved === "ja" || saved === "en") return saved;
+    } catch (e) {
+      /* localStorage unavailable */
+    }
+    return "ja";
+  })();
+
+  function t() {
+    return I18N[LANG] || I18N.ja;
+  }
+
+  // JSON側のバイリンガルフィールド({ja, en})、または通常の文字列(固有名詞等)を
+  // 現在の言語に応じて解決する。
+  function pick(value) {
+    if (value && typeof value === "object" && !Array.isArray(value)) {
+      return value[LANG] || value.ja || value.en || "";
+    }
+    return value || "";
+  }
 
   var board = document.getElementById("board");
   var statsEl = document.getElementById("stats");
   var lastUpdatedEl = document.getElementById("last-updated");
   var statusDot = document.getElementById("status-dot");
+  var chipLabelEl = document.getElementById("chip-label");
+  var loadingEl = document.getElementById("loading");
+  var footerTextEl = document.getElementById("footer-text");
+  var langToggleEl = document.getElementById("lang-toggle");
+
+  var lastData = null;
+  var lastCarsData = null;
 
   function el(tag, className, text) {
     var node = document.createElement(tag);
@@ -44,7 +339,8 @@
     if (!raw) return "";
     var parsed = new Date(raw);
     if (!isNaN(parsed.getTime()) && /\d{4}/.test(raw)) {
-      return parsed.toLocaleString("ja-JP", {
+      return parsed.toLocaleString(LANG === "en" ? "en-US" : "ja-JP", {
+        year: "numeric",
         month: "short",
         day: "numeric",
         hour: "2-digit",
@@ -56,18 +352,16 @@
 
   function sentimentPill(sentiment) {
     if (!sentiment || sentiment.label === "neutral") return null;
+    var s = t();
+    var isPositive = sentiment.label === "positive";
     var pill = el(
       "span",
       "sentiment-pill sentiment-pill--" + sentiment.label,
-      sentiment.label === "positive" ? "▲ " + SENTIMENT_LABEL_JA.positive : "▼ " + SENTIMENT_LABEL_JA.negative
+      (isPositive ? "▲ " : "▼ ") + (isPositive ? s.sentimentPositive : s.sentimentNegative)
     );
     var reasons = sentiment.reasons || [];
     if (reasons.length > 0) {
-      var tip =
-        "判定根拠: " +
-        reasons.join(" / ") +
-        (sentiment.label === "positive" ? " という語がポジティブ" : " という語がネガティブ") +
-        "と判定されました";
+      var tip = s.sentimentReasonsPrefix + reasons.join(" / ") + (isPositive ? s.sentimentSuffixPositive : s.sentimentSuffixNegative);
       pill.setAttribute("data-tip", tip);
       pill.tabIndex = 0;
     }
@@ -75,6 +369,7 @@
   }
 
   function buildItem(item) {
+    var s = t();
     var sentimentLabel = item.sentiment ? item.sentiment.label : "neutral";
     var a = el("a", "item item--" + sentimentLabel);
     a.href = item.url || "#";
@@ -94,11 +389,12 @@
     }
 
     var body = el("div", "item__body");
-    body.appendChild(el("span", "item__title", item.title || "(タイトル不明)"));
+    body.appendChild(el("span", "item__title", item.title || s.titleUnknown));
 
     var meta = el("div", "item__meta");
-    if (item.category_label) {
-      meta.appendChild(el("span", "topic-chip topic-chip--" + item.category, item.category_label));
+    if (item.category) {
+      var categoryLabel = s.categories[item.category];
+      if (categoryLabel) meta.appendChild(el("span", "topic-chip topic-chip--" + item.category, categoryLabel));
     }
     var pill = sentimentPill(item.sentiment);
     if (pill) meta.appendChild(pill);
@@ -130,35 +426,39 @@
     iconWrap.innerHTML = ICONS[icon] || "";
     header.appendChild(iconWrap);
     header.appendChild(el("h2", "panel__title", label));
-    if (count !== undefined) header.appendChild(el("span", "panel__count", count + " 件"));
+    if (count !== undefined) header.appendChild(el("span", "panel__count", count + " " + t().unitItems));
     return header;
   }
 
-  function buildGenericPanel(icon, section, size) {
+  function buildGenericPanel(icon, sectionKey, section, size) {
+    var s = t();
+    var meta = s.sections[sectionKey] || {};
     var panel = el("section", "panel panel--" + size);
     var items = section.items || [];
-    panel.appendChild(buildPanelHeader(icon, section.label, items.length));
+    panel.appendChild(buildPanelHeader(icon, meta.title || sectionKey, items.length));
 
-    if (section.note) panel.appendChild(el("p", "panel__note", section.note));
+    if (meta.note) panel.appendChild(el("p", "panel__note", meta.note));
 
     if (items.length === 0) {
-      panel.appendChild(el("p", "panel__empty", "現在、該当する情報はありません。"));
+      panel.appendChild(el("p", "panel__empty", s.emptyGeneric));
       return panel;
     }
     panel.appendChild(buildList(items));
     return panel;
   }
 
-  function buildTabbedPanel(icon, section, tabLabels) {
+  function buildTabbedPanel(icon, sectionKey, section) {
+    var s = t();
+    var meta = s.sections[sectionKey] || {};
     var panel = el("section", "panel panel--full");
     var latestItems = section.items || [];
     var buzzItems = section.items_buzz || [];
-    panel.appendChild(buildPanelHeader(icon, section.label, latestItems.length));
-    if (section.note) panel.appendChild(el("p", "panel__note", section.note));
+    panel.appendChild(buildPanelHeader(icon, meta.title || sectionKey, latestItems.length));
+    if (meta.note) panel.appendChild(el("p", "panel__note", meta.note));
 
     var tabs = el("div", "tab-group");
-    var tabLatest = el("button", "tab-group__btn is-active", tabLabels[0]);
-    var tabBuzz = el("button", "tab-group__btn", tabLabels[1]);
+    var tabLatest = el("button", "tab-group__btn is-active", s.tabLatest);
+    var tabBuzz = el("button", "tab-group__btn", s.tabBuzz);
     tabs.appendChild(tabLatest);
     tabs.appendChild(tabBuzz);
     panel.appendChild(tabs);
@@ -167,7 +467,7 @@
     function renderList(items) {
       listWrap.innerHTML = "";
       if (items.length === 0) {
-        listWrap.appendChild(el("p", "panel__empty", "現在、該当する情報はありません。"));
+        listWrap.appendChild(el("p", "panel__empty", s.emptyGeneric));
       } else {
         listWrap.appendChild(buildList(items));
       }
@@ -193,7 +493,7 @@
     var group = el("div", "series-card__group");
     group.appendChild(el("div", "series-card__group-title", title));
     if (items.length === 0) {
-      group.appendChild(el("p", "panel__empty", "該当情報なし"));
+      group.appendChild(el("p", "panel__empty", t().emptyGroup));
     } else {
       group.appendChild(buildList(items));
     }
@@ -233,18 +533,13 @@
   }
 
   function buildScheduleBlock(s) {
+    var i18n = t();
     var wrap = el("div", "series-card__group");
-    wrap.appendChild(el("div", "series-card__group-title", "レース日程"));
+    wrap.appendChild(el("div", "series-card__group-title", i18n.groupSchedule));
 
     if (s.schedule_link) {
-      wrap.appendChild(
-        el(
-          "p",
-          "panel__note series-card__chart-note",
-          "日程データの構造が不安定なため一覧化を見送っています。公式カレンダーは以下のリンクからご確認ください。"
-        )
-      );
-      var link = el("a", "series-card__link", "公式カレンダーを見る ↗");
+      wrap.appendChild(el("p", "panel__note series-card__chart-note", i18n.scheduleLinkNote));
+      var link = el("a", "series-card__link", i18n.linkCalendar);
       link.href = s.schedule_link;
       link.target = "_blank";
       link.rel = "noopener noreferrer";
@@ -254,14 +549,14 @@
 
     var rounds = s.schedule || [];
     if (rounds.length === 0) {
-      wrap.appendChild(el("p", "panel__empty", "日程情報を取得できませんでした。"));
+      wrap.appendChild(el("p", "panel__empty", i18n.emptySchedule));
       return wrap;
     }
 
     var nextRace = rounds.filter(function (round) { return round.status === "upcoming"; })[0];
     if (nextRace) {
       var next = el("div", "schedule-next");
-      next.appendChild(el("span", "schedule-next__label", "次戦"));
+      next.appendChild(el("span", "schedule-next__label", i18n.nextRace));
       next.appendChild(el("span", "schedule-next__date", nextRace.date_range));
       next.appendChild(
         el("span", "schedule-next__track", [nextRace.round, nextRace.name, nextRace.track].filter(Boolean).join(" · "))
@@ -282,30 +577,38 @@
     return wrap;
   }
 
+  function standingsNoteFor(s) {
+    var i18n = t();
+    if (s.key === "super_taikyu") return i18n.standingsNoteSuperTaikyu;
+    if (s.key === "gt4_america") return s.standings_error ? i18n.standingsNoteError : i18n.standingsNoteGt4America;
+    return i18n.standingsNoteDefault;
+  }
+
   function buildRankingBlock(s) {
+    var i18n = t();
     var wrap = el("div", "series-card__group");
-    wrap.appendChild(el("div", "series-card__group-title", "シリーズランキング"));
+    wrap.appendChild(el("div", "series-card__group-title", i18n.groupRanking));
     if (s.standings_chart && s.standings_chart.length > 0) {
       wrap.appendChild(buildStandingsChart(s.standings_chart));
     }
-    if (s.standings_chart_note) {
-      wrap.appendChild(el("p", "panel__note series-card__chart-note", s.standings_chart_note));
-    }
+    wrap.appendChild(el("p", "panel__note series-card__chart-note", standingsNoteFor(s)));
     return wrap;
   }
 
   function buildSeriesCard(regionKey, s) {
+    var i18n = t();
+    var label = i18n.series[s.key] || s.label || s.key;
     var card = el("div", "series-card series-card--" + regionKey);
     var header = el("div", "series-card__header");
-    header.appendChild(el("span", null, s.label));
+    header.appendChild(el("span", null, label));
     card.appendChild(header);
     card.appendChild(buildScheduleBlock(s));
     card.appendChild(buildRankingBlock(s));
-    card.appendChild(buildSeriesGroup(REGION_GROUP_LABELS.topics, s.topics));
-    card.appendChild(buildSeriesGroup(REGION_GROUP_LABELS.results, s.results));
-    card.appendChild(buildSeriesGroup(REGION_GROUP_LABELS.standings, s.standings));
+    card.appendChild(buildSeriesGroup(i18n.groupTopics, s.topics));
+    card.appendChild(buildSeriesGroup(i18n.groupResults, s.results));
+    card.appendChild(buildSeriesGroup(i18n.groupStandings, s.standings));
 
-    var link = el("a", "series-card__link", "公式ランキングを見る ↗");
+    var link = el("a", "series-card__link", i18n.linkStandings);
     link.href = s.standings_url;
     link.target = "_blank";
     link.rel = "noopener noreferrer";
@@ -315,6 +618,8 @@
   }
 
   function buildMotorsportsPanel(icon, section) {
+    var i18n = t();
+    var meta = i18n.sections.motorsports;
     var panel = el("section", "panel panel--full");
     var regions = section.regions || {};
     var totalCount = Object.values(regions).reduce(function (sum, r) {
@@ -325,8 +630,8 @@
         }, 0)
       );
     }, 0);
-    panel.appendChild(buildPanelHeader(icon, section.label, totalCount));
-    if (section.note) panel.appendChild(el("p", "panel__note", section.note));
+    panel.appendChild(buildPanelHeader(icon, meta.title, totalCount));
+    if (meta.note) panel.appendChild(el("p", "panel__note", meta.note));
 
     var container = el("div", "motorsports");
     Object.keys(regions).forEach(function (key) {
@@ -334,8 +639,8 @@
       var block = el("div", "motorsports-region");
       var heading = el("div", "motorsports-region__title");
       if (r.flag) heading.appendChild(el("span", "motorsports-region__flag", r.flag));
-      heading.appendChild(el("span", null, r.label));
-      heading.appendChild(el("span", "motorsports-region__count", r.series.length + " シリーズ"));
+      heading.appendChild(el("span", null, i18n.regions[key] || r.label || key));
+      heading.appendChild(el("span", "motorsports-region__count", r.series.length + " " + i18n.unitSeries));
       block.appendChild(heading);
 
       var grid = el("div", "motorsports-region__grid");
@@ -368,6 +673,7 @@
   }
 
   function buildStats(data) {
+    var i18n = t();
     statsEl.innerHTML = "";
 
     var sentimentItems = collectSentimentItems(data);
@@ -378,8 +684,10 @@
     }, 0);
 
     var motorsportsCount = 0;
+    var seriesCount = 0;
     if (data.sections.motorsports && data.sections.motorsports.regions) {
       Object.values(data.sections.motorsports.regions).forEach(function (r) {
+        seriesCount += r.series.length;
         r.series.forEach(function (series) {
           motorsportsCount += series.topics.length + series.results.length + series.standings.length;
         });
@@ -388,36 +696,38 @@
 
     // Tile 1: total
     var t1 = el("div", "stat-tile");
-    t1.appendChild(el("div", "stat-tile__label", "本日の総情報件数"));
+    t1.appendChild(el("div", "stat-tile__label", i18n.statTotal));
     var v1 = el("div", "stat-tile__value", String(totalCount));
-    v1.appendChild(el("small", null, "件"));
+    v1.appendChild(el("small", null, i18n.unitItems));
     t1.appendChild(v1);
     statsEl.appendChild(t1);
 
-    // Tile 3: youtube
+    // Tile 2: youtube
     var t3 = el("div", "stat-tile");
-    t3.appendChild(el("div", "stat-tile__label", "YouTube動画(Supra GT4・競合GT4)"));
+    t3.appendChild(el("div", "stat-tile__label", i18n.statYoutube));
     var v3 = el("div", "stat-tile__value", String(youtubeCount));
-    v3.appendChild(el("small", null, "本"));
+    v3.appendChild(el("small", null, i18n.unitVideos));
     t3.appendChild(v3);
     statsEl.appendChild(t3);
 
-    // Tile 4: motorsports
+    // Tile 3: motorsports
     var t4 = el("div", "stat-tile");
-    t4.appendChild(el("div", "stat-tile__label", "参戦レース関連話題(5地域・14シリーズ)"));
+    t4.appendChild(el("div", "stat-tile__label", i18n.statMotorsports.replace("{n}", String(seriesCount))));
     var v4 = el("div", "stat-tile__value", String(motorsportsCount));
-    v4.appendChild(el("small", null, "件"));
+    v4.appendChild(el("small", null, i18n.unitItems));
     t4.appendChild(v4);
     statsEl.appendChild(t4);
   }
 
   function buildCarCard(car) {
+    var i18n = t();
     var card = el("div", "car-card" + (car.is_supra ? " car-card--spotlight" : ""));
+    var model = pick(car.model);
 
     var figure = el("div", "car-card__photo");
     var img = el("img");
     img.src = car.photo.src;
-    img.alt = car.manufacturer + " " + car.model;
+    img.alt = car.manufacturer + " " + model;
     img.loading = "lazy";
     figure.appendChild(img);
     if (car.is_supra) figure.appendChild(el("span", "supra-tag car-card__badge", "SUPRA GT4"));
@@ -425,30 +735,30 @@
 
     var body = el("div", "car-card__body");
     body.appendChild(el("span", "car-card__manufacturer", car.manufacturer));
-    body.appendChild(el("h3", "car-card__model", car.model));
-    body.appendChild(el("div", "car-card__price", car.price));
+    body.appendChild(el("h3", "car-card__model", model));
+    body.appendChild(el("div", "car-card__price", pick(car.price)));
 
     var specList = el("dl", "car-card__specs");
     (car.specs || []).forEach(function (spec) {
-      specList.appendChild(el("dt", null, spec.label));
-      specList.appendChild(el("dd", null, spec.value));
+      specList.appendChild(el("dt", null, i18n.carSpecs[spec.key] || spec.key));
+      specList.appendChild(el("dd", null, pick(spec.value)));
     });
     body.appendChild(specList);
 
-    var link = el("a", "series-card__link", "公式サイトを見る ↗");
+    var link = el("a", "series-card__link", i18n.linkOfficial);
     link.href = car.official_url;
     link.target = "_blank";
     link.rel = "noopener noreferrer";
     body.appendChild(link);
 
     var credit = el("p", "car-card__credit");
-    credit.appendChild(document.createTextNode("Photo: "));
+    credit.appendChild(document.createTextNode(i18n.photoCredit));
     var creditLink = el("a", null, car.photo.credit + " (" + car.photo.license + ")");
     creditLink.href = car.photo.source_url;
     creditLink.target = "_blank";
     creditLink.rel = "noopener noreferrer";
     credit.appendChild(creditLink);
-    credit.appendChild(document.createTextNode(", via Wikimedia Commons"));
+    credit.appendChild(document.createTextNode(i18n.viaCommons));
     body.appendChild(credit);
 
     card.appendChild(body);
@@ -456,10 +766,12 @@
   }
 
   function buildCarsPanel(carsData) {
+    var i18n = t();
     var panel = el("section", "panel panel--full");
     var cars = carsData.cars || [];
-    panel.appendChild(buildPanelHeader("car", "GT4参戦車両一覧", cars.length));
-    if (carsData.note) panel.appendChild(el("p", "panel__note", carsData.note));
+    panel.appendChild(buildPanelHeader("car", i18n.sections.gt4_cars.title, cars.length));
+    var note = pick(carsData.note);
+    if (note) panel.appendChild(el("p", "panel__note", note));
 
     var grid = el("div", "car-grid");
     cars.forEach(function (car) {
@@ -469,7 +781,22 @@
     return panel;
   }
 
+  function applyStaticText() {
+    var i18n = t();
+    document.documentElement.lang = LANG;
+    if (chipLabelEl) chipLabelEl.textContent = i18n.chipLabel;
+    if (footerTextEl) footerTextEl.textContent = i18n.footer;
+    if (langToggleEl) {
+      Array.prototype.forEach.call(langToggleEl.querySelectorAll(".lang-toggle__btn"), function (btn) {
+        btn.classList.toggle("is-active", btn.getAttribute("data-lang") === LANG);
+      });
+    }
+  }
+
   function render(data, carsData) {
+    lastData = data;
+    lastCarsData = carsData;
+    applyStaticText();
     buildStats(data);
 
     board.innerHTML = "";
@@ -479,12 +806,10 @@
       var panel;
       if (entry.key === "motorsports") {
         panel = buildMotorsportsPanel(entry.icon, section);
-      } else if (entry.key === "complaints") {
-        panel = buildTabbedPanel(entry.icon, section, ["最新順", "話題順"]);
-      } else if (entry.key === "social_buzz") {
-        panel = buildTabbedPanel(entry.icon, section, ["最新順", "話題順"]);
+      } else if (entry.key === "complaints" || entry.key === "social_buzz") {
+        panel = buildTabbedPanel(entry.icon, entry.key, section);
       } else {
-        panel = buildGenericPanel(entry.icon, section, entry.size);
+        panel = buildGenericPanel(entry.icon, entry.key, section, entry.size);
       }
       board.appendChild(panel);
       if (entry.key === "motorsports" && carsData) {
@@ -492,7 +817,8 @@
       }
     });
 
-    lastUpdatedEl.textContent = "最終更新: " + (data.generated_at_jst || "不明");
+    var i18n = t();
+    lastUpdatedEl.textContent = i18n.lastUpdatedPrefix + (data.generated_at_jst || i18n.lastUpdatedUnknown);
 
     var generatedAt = data.generated_at_utc ? new Date(data.generated_at_utc) : null;
     if (generatedAt) {
@@ -502,12 +828,41 @@
   }
 
   function renderError(message) {
+    applyStaticText();
     statsEl.innerHTML = "";
     board.innerHTML = "";
     board.appendChild(el("p", "board__error", message));
-    lastUpdatedEl.textContent = "更新情報を取得できませんでした";
+    lastUpdatedEl.textContent = t().statusFetchFailed;
     statusDot.classList.add("is-error");
   }
+
+  function setLang(lang) {
+    if (lang !== "ja" && lang !== "en") return;
+    if (lang === LANG) return;
+    LANG = lang;
+    try {
+      window.localStorage.setItem(LANG_STORAGE_KEY, lang);
+    } catch (e) {
+      /* localStorage unavailable */
+    }
+    if (lastData) {
+      render(lastData, lastCarsData);
+    } else {
+      applyStaticText();
+      if (loadingEl) loadingEl.textContent = t().loading;
+    }
+  }
+
+  if (langToggleEl) {
+    langToggleEl.addEventListener("click", function (evt) {
+      var btn = evt.target.closest(".lang-toggle__btn");
+      if (!btn) return;
+      setLang(btn.getAttribute("data-lang"));
+    });
+  }
+
+  applyStaticText();
+  if (loadingEl) loadingEl.textContent = t().loading;
 
   function fetchJson(path) {
     return fetch(path, { cache: "no-store" }).then(function (res) {
@@ -527,6 +882,6 @@
         });
     })
     .catch(function (err) {
-      renderError("ダッシュボードデータの読み込みに失敗しました(" + err.message + ")。");
+      renderError(t().fetchErrorPrefix + err.message + t().fetchErrorSuffix);
     });
 })();

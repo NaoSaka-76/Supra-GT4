@@ -37,7 +37,7 @@ def _motorsports_section() -> dict:
             series["results"] = _with_sentiment(series["results"])
             series["standings"] = _with_sentiment(series["standings"])
     return {
-        "label": "GR Supra GT4 参戦レース(地域別・全14シリーズ)",
+        "label": "GR Supra GT4 参戦レース(地域別・全18シリーズ)",
         "regions": regions,
         "note": (
             "トピックス/レース結果はニュース記事ベースで集約しています。スーパー耐久(日本・"

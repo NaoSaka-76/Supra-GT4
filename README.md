@@ -33,12 +33,12 @@ Toyota GR Supra GT4に関する情報を1か所に集約するモニタリング
 
 | 地域 | シリーズ | 実データ取得 |
 | --- | --- | --- |
-| 日本・アジア | GT World Challenge Asia(GT3主体・参考掲載) | 公式カレンダー/ランキングへのリンクのみ |
-| 日本・アジア | スーパー耐久 ST-Zクラス | 年間スケジュールを実データ取得 |
-| 日本・アジア | インタープロトシリーズ SUPRAクラス(GR Supra GT4 EVOのワンメイククラス) | 公式カレンダー/ランキングへのリンクのみ |
+| 日本・アジア | GT World Challenge Asia(GT3主体・参考掲載) | 日程・GT3 Teams Championshipランキングを実データ取得 |
+| 日本・アジア | スーパー耐久 ST-Zクラス | 日程・チームランキングを実データ取得(Supra GT4ハイライト) |
+| 日本・アジア | インタープロトシリーズ SUPRAクラス(GR Supra GT4 EVOのワンメイククラス) | 日程・SUPRA[PROFESSIONAL]クラスランキングを実データ取得 |
 | 日本・アジア | SRO Japan Cup(GT4クラス) | 公式カレンダー/ランキングへのリンクのみ |
 | 日本・アジア | SRO GT Cup(中国) | 公式サイト未確定のため検索リンク |
-| 米国 | GT World Challenge America(GT3主体・参考掲載) | 公式カレンダー/ランキングへのリンクのみ |
+| 米国 | GT World Challenge America(GT3主体・参考掲載) | 日程・Pro-Am Teamsランキングを実データ取得 |
 | 米国 | Pirelli/Fanatec GT4 America(Silver Teams) | チームランキングを実データ取得(Supra GT4ハイライト) |
 | 米国 | IMSA Michelin Pilot Challenge(GSクラス) | 公式カレンダー/ランキングへのリンクのみ |
 | 欧州 | GT World Challenge Europe(GT3主体・参考掲載) | 公式カレンダー/ランキングへのリンクのみ |
@@ -56,17 +56,25 @@ Toyota GR Supra GT4に関する情報を1か所に集約するモニタリング
 GT World Challenge各地域シリーズは、GT4クラスと同一大会ウィークエンドで開催されるGT3主体の
 上位カテゴリーとして参考掲載している(Supra GT4自体はGT4クラスの各シリーズに参戦)。
 
-- **スーパー耐久(日本・アジア)**: 公式レース一覧ページ(supertaikyu.com)から年間スケジュールを
-  実データで取得している。全クラス共通日程のためST-Zクラス(GR Supra GT4)にもそのまま適用される。
-  順位表はクラス別の機械的解釈が難しいため、公式ランキングページへの直接リンクのみ。
+- **スーパー耐久(日本・アジア)**: 公式レース一覧ページ(supertaikyu.com)から年間スケジュールを、
+  順位表ページ(race/standing.html)からST-Zクラスのチームランキングを、いずれも実データで
+  取得している。使用車種にSupraを含むチームをハイライト表示する(判定方法は
+  `st_supra_teams.py` の `fetch_st_z_full_standings()` 参照)。
 - **GT4 America(米国)**: gt4-america.comはTC America(tcamerica.us)と同じSRO Motorsports
   America系列の共通CMSで運用されており、"Silver Teams"クラスの順位表を実データで取得し、
   各レースの完全結果ページから補完した使用車種でGR Supra GT4参戦チームをハイライト表示している。
+- **GT World Challenge Asia・GT World Challenge America(GT3主体・参考掲載)**:
+  gt-world-challenge-asia.com/gt-world-challenge-america.comもGT4 Americaと同じSRO系列の
+  共通CMSで運用されていることを確認したため、`sro_platform.py` の汎用スクレイパーで日程
+  (calendar)とチームランキング(Asiaは"GT3 Teams Championship"、Americaは"Pro-Am Teams")を
+  実データ取得している。いずれもGT3主体のシリーズのためSupra GT4(GT4クラス)のハイライトは
+  対象外。
 - **インタープロトシリーズ SUPRAクラス(日本・アジア)**: 富士スピードウェイで開催される
-  ワンメイクレース。「SUPRAクラス」はGR Supra GT4 EVOのみで争われるクラスで、公式サイト
-  (interprotoseries.jp)にドライバーランキングが掲載されている。順位表の構造を安定的に
-  解釈できていないためグラフ化は行わず、公式サイトへの直接リンクのみを表示している。
-- **上記3つ以外の13シリーズ**: 順位表のクラス別フィルター構造やチーム別使用車種の確定方法を
+  ワンメイクレース。トップページの年間日程と、ランキングページ(/ranking/)の
+  SUPRA[PROFESSIONAL]クラス順位表(`<table class="stali_ranktable">`)を、いずれも
+  `inter_proto_series.py` で実データ取得している。全車GR Supra GT4 EVOのワンメイククラスの
+  ため、特定チームのハイライトは行わない。
+- **上記5つ以外の14シリーズ**: 順位表のクラス別フィルター構造やチーム別使用車種の確定方法を
   安定的に確認できていないため、誤表示リスクを避けグラフ化は行わず、公式カレンダー/ランキング
   ページへの直接リンクのみを表示している(URLは実装時に実在を確認済み。ただしFrench GT4 Cup・
   SRO GT Cup中国・ニュルブルクリンクNLS標準順位表・GT4 Winter Seriesの4シリーズは安定した
@@ -145,6 +153,8 @@ scripts/
     standings.py            # GT4 America公式サイトの実データランキング取得
     schedule.py              # スーパー耐久の年間レース日程取得
     st_supra_teams.py         # スーパー耐久ST-Zクラス Supra GT4参戦チーム(ドライバー・順位を実データ取得)
+    sro_platform.py            # SROモータースポーツ系公式サイト(GT World Challenge Asia/America等)共通の日程・ランキング取得
+    inter_proto_series.py       # インタープロトシリーズ公式サイトのSUPRAクラス日程・ランキング取得
     gt4_topics.py             # GT4カテゴリー全体のトピックス(ホモロゲーション/技術/不具合等)
     youtube.py                 # YouTube人気/新着動画
     social_buzz.py              # SNS話題の代替指標(最新順/話題順)

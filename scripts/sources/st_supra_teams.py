@@ -171,8 +171,11 @@ def _session() -> requests.Session:
     return s
 
 
-def fetch_st_z_standings() -> dict[str, dict]:
-    """ST-Zクラスの現在のシリーズ順位/ポイントを car_no -> {rank, points} で返す。"""
+def fetch_st_z_full_standings(limit: int = 15) -> dict:
+    """ST-Zクラスの現在の順位表全体(順位/チーム名/使用車種/ポイント)を実データで取得する。
+
+    Supra GT4(is_supra_gt4)は使用車種の文字列に"Supra"を含むかで判定する。
+    """
     session = _session()
     try:
         resp = session.get(STANDINGS_URL, timeout=REQUEST_TIMEOUT)
@@ -182,20 +185,46 @@ def fetch_st_z_standings() -> dict[str, dict]:
 
         block_match = re.search(r'<li class="mix st2">.*?</table>', html_text, re.S)
         if not block_match:
-            return {}
+            return {"standings": [], "error": "ST-Zクラスの順位表が見つかりませんでした"}
         rows = re.findall(r"<tr>(.*?)</tr>", block_match.group(0), re.S)
-        result: dict[str, dict] = {}
+        results: list[dict] = []
         for row in rows[1:]:
             cells = re.findall(r"<t[dh][^>]*>(.*?)</t[dh]>", row, re.S)
             cells = [re.sub(r"<[^>]+>", "", c).strip() for c in cells]
-            if len(cells) < 3 or not cells[0].isdigit():
+            if len(cells) < 4 or not cells[0].isdigit():
                 continue
-            car_no = cells[1].lstrip("0") or "0"  # 表側は先頭ゼロなし表記("052"ではなく"52")
+            car_no, team, car = cells[1], cells[2], cells[3]
             points_raw = re.sub(r"[^\d.]", "", cells[-1]) or "0"
-            result[car_no] = {"rank": int(cells[0]), "points": float(points_raw)}
-        return result
-    except Exception:  # noqa: BLE001
-        return {}
+            results.append(
+                {
+                    "position": int(cells[0]),
+                    "car_no": car_no,
+                    "name": team,
+                    "car": car,
+                    "points": float(points_raw),
+                    "is_supra_gt4": "supra" in car.lower(),
+                }
+            )
+        rows_limited = results[:limit]
+        return {
+            "standings": rows_limited,
+            "error": None if rows_limited else "現在、順位データが空です(シーズン開幕前などの可能性があります)",
+        }
+    except Exception as exc:  # noqa: BLE001
+        return {"standings": [], "error": f"取得エラー: {exc}"}
+
+
+def fetch_st_z_standings() -> dict[str, dict]:
+    """ST-Zクラスの現在のシリーズ順位/ポイントを car_no -> {rank, points} で返す。
+
+    参戦チーム一覧パネル(TEAMS)向けのcar_no引き当て用。実データ本体は
+    fetch_st_z_full_standings() で取得し、ここではそれを car_no キーの辞書に変換する。
+    """
+    full = fetch_st_z_full_standings(limit=100)
+    return {
+        row["car_no"]: {"rank": row["position"], "points": row["points"]}
+        for row in full["standings"]
+    }
 
 
 _SLOT_LABELS = ["A.driver", "B.driver", "C.driver", "D.driver", "E.driver", "F.driver"]

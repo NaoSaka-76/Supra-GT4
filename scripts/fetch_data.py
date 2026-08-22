@@ -40,9 +40,11 @@ def _motorsports_section() -> dict:
         "label": "GR Supra GT4 参戦レース(地域別・全19シリーズ)",
         "regions": regions,
         "note": (
-            "トピックス/レース結果はニュース記事ベースで集約しています。スーパー耐久(日本・"
-            "アジア)は年間スケジュール、米国のGT4 America(Silver Teams)はチームランキングを"
-            "公式サイトの実データで取得しています(他シリーズを図示しない理由は各カード内に記載)。"
+            "トピックス/レース結果はニュース記事ベースで集約しています。スーパー耐久・"
+            "GT World Challenge Asia・GT World Challenge America・インタープロトシリーズは"
+            "日程とランキングを、米国のGT4 America(Silver Teams)はチームランキングを、"
+            "それぞれ公式サイトの実データで取得しています(他シリーズを図示しない理由は"
+            "各カード内に記載)。"
         ),
     }
 

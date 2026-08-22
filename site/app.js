@@ -74,11 +74,20 @@
       linkOfficial: "公式サイトを見る ↗",
       scheduleLinkNote: "日程データの構造が不安定なため一覧化を見送っています。公式カレンダーは以下のリンクからご確認ください。",
       standingsNoteSuperTaikyu:
-        "スーパー耐久 公式サイトのST-Zクラス別ランキング表は機械的な構造解釈が難しいため、グラフ化は行っていません。" +
-        "「公式ランキングを見る」からご確認ください。",
+        "スーパー耐久 ST-Zクラス チームランキング(公式サイト実データ)。GR Supra GT4で参戦するチームには" +
+        "目印を付けています。",
       standingsNoteGt4America:
         "GT4 America \"Silver Teams\" チームランキング(公式サイト実データ)。各レースの完全結果ページから使用車種を補完しており、" +
         "Toyota GR Supra GT4で参戦するチームには目印を付けています。",
+      standingsNoteGtWorldChallengeAsia:
+        "GT World Challenge Asia GT3 Teams Championship(公式サイト実データ)。GT3主体のシリーズのため" +
+        "Supra GT4(GT4クラス)のハイライトは対象外です。",
+      standingsNoteGtWorldChallengeAmerica:
+        "GT World Challenge America Pro-Am Teams(公式サイト実データ)。GT3主体のシリーズのため" +
+        "Supra GT4(GT4クラス)のハイライトは対象外です。",
+      standingsNoteInterProtoSeries:
+        "SUPRA[PROFESSIONAL]クラス ドライバーランキング(公式サイト実データ)。全車GR Supra GT4 EVOの" +
+        "ワンメイククラスのため、特定車両のハイライトはありません。",
       standingsNoteDefault:
         "このシリーズの公式サイトは順位表の構造を安定的に解釈できないため、グラフ化は行っていません。" +
         "「公式ランキングを見る」からご確認ください。",
@@ -280,11 +289,20 @@
       linkOfficial: "Visit official site ↗",
       scheduleLinkNote: "The schedule data structure is unstable, so it isn't listed here. Please check the official calendar via the link below.",
       standingsNoteSuperTaikyu:
-        "The Super Taikyu official site's ST-Z class ranking table is difficult to parse programmatically, so it isn't " +
-        "charted here. Please check via \"View official ranking.\"",
+        "Super Taikyu ST-Z class team ranking (live data from the official site). Teams running the Toyota GR Supra " +
+        "GT4 are highlighted.",
       standingsNoteGt4America:
         "GT4 America \"Silver Teams\" team ranking (live data from the official site). Car models are filled in from each " +
         "race's full results page, and teams running the Toyota GR Supra GT4 are highlighted.",
+      standingsNoteGtWorldChallengeAsia:
+        "GT World Challenge Asia GT3 Teams Championship (live data from the official site). Since this is a " +
+        "GT3-based series, there's no Supra GT4 (GT4-class) highlighting.",
+      standingsNoteGtWorldChallengeAmerica:
+        "GT World Challenge America Pro-Am Teams (live data from the official site). Since this is a GT3-based " +
+        "series, there's no Supra GT4 (GT4-class) highlighting.",
+      standingsNoteInterProtoSeries:
+        "SUPRA [PROFESSIONAL] class driver ranking (live data from the official site). Since every car is a GR " +
+        "Supra GT4 EVO in this one-make class, there's no single-car highlighting.",
       standingsNoteDefault:
         "This series' official site ranking table can't be parsed reliably, so it isn't charted here. Please check via " +
         "\"View official ranking.\"",
@@ -735,10 +753,18 @@
     return wrap;
   }
 
+  var REAL_STANDINGS_NOTE_KEYS = {
+    super_taikyu: "standingsNoteSuperTaikyu",
+    gt4_america: "standingsNoteGt4America",
+    gt_world_challenge_asia: "standingsNoteGtWorldChallengeAsia",
+    gt_world_challenge_america: "standingsNoteGtWorldChallengeAmerica",
+    inter_proto_series: "standingsNoteInterProtoSeries",
+  };
+
   function standingsNoteFor(s) {
     var i18n = t();
-    if (s.key === "super_taikyu") return i18n.standingsNoteSuperTaikyu;
-    if (s.key === "gt4_america") return s.standings_error ? i18n.standingsNoteError : i18n.standingsNoteGt4America;
+    var noteKey = REAL_STANDINGS_NOTE_KEYS[s.key];
+    if (noteKey) return s.standings_error ? i18n.standingsNoteError : i18n[noteKey];
     return i18n.standingsNoteDefault;
   }
 

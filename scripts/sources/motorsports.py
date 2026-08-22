@@ -6,9 +6,14 @@ GT World Challenge各地域シリーズ4つを含む、同一大会ウィーク�
 公式サイトの結果・ランキング表は構造がそれぞれ異なり安定したスクレイピングが難しいため、
 基本はニュース記事(Google News RSS)ベースでトピックス・レース結果・ランキング関連の
 話題を集約し、公式サイトのスケジュール/ランキングページへの直接リンクを添える
-(URLは実装時に実在を確認済み)。例外的に、日本・アジアのスーパー耐久は年間スケジュールを、
-米国のGT4 America(Silver Teams)はチームランキングを、それぞれ公式サイトから実データで
-取得している(理由は schedule.py / standings.py 参照)。
+(URLは実装時に実在を確認済み)。例外的に、以下5シリーズは日程・ランキングとも
+公式サイトから実データで取得している。
+  - スーパー耐久(日本・アジア、ST-Zクラス) : schedule.py / st_supra_teams.py
+  - GT World Challenge Asia、GT World Challenge America(いずれもGT3主体、参考掲載) :
+    sro_platform.py(SRO系公式サイト共通の日程・ランキング取得モジュール)
+  - インタープロトシリーズ(SUPRA[PROFESSIONAL]クラス) : inter_proto_series.py
+また米国のGT4 America(Silver Teams)はチームランキングのみ公式サイトから実データで
+取得している(理由は standings.py 参照)。
 
 各シリーズの"topics"クエリは、"GR Supra GT4"との共起を要求する狭いクエリに加えて、
 シリーズ名単独の一般クエリも必ず1つ以上含めている。Supra GT4個別の話題が少ない
@@ -21,7 +26,12 @@ from __future__ import annotations
 import urllib.parse
 
 from .common import dedupe_by_url, fetch_google_news_rss, sort_by_recency
+from .inter_proto_series import fetch_schedule as fetch_ips_schedule
+from .inter_proto_series import fetch_supra_standings as fetch_ips_standings
 from .schedule import fetch_super_taikyu_schedule
+from .sro_platform import fetch_calendar as fetch_sro_calendar
+from .sro_platform import fetch_standings as fetch_sro_standings
+from .st_supra_teams import fetch_st_z_full_standings
 from .standings import fetch_gt4_america_team_standings
 
 
@@ -444,28 +454,99 @@ def fetch() -> dict:
             "series": [_build_series(s) for s in region["series"]],
         }
 
-    # スーパー耐久(日本・アジア)は公式サイトから年間スケジュールを実データ取得する。
-    taikyu_schedule = fetch_super_taikyu_schedule()
-    for series in result["japan_asia"]["series"]:
-        if series["key"] == "super_taikyu":
-            series["schedule"] = taikyu_schedule
-            series["standings_chart_note"] = (
-                "スーパー耐久 公式サイトのST-Zクラス別ランキング表は機械的な構造解釈が難しいため、"
-                "グラフ化は行っていません。「公式ランキングを見る」からご確認ください。"
-            )
+    def _set(region_key: str, series_key: str, **fields: object) -> None:
+        for series in result[region_key]["series"]:
+            if series["key"] == series_key:
+                series.update(fields)
+                return
 
-    # 米国のGT4 America(Silver Teams)は公式サイトからチームランキングを実データ取得する。
+    # 日本・アジア: スーパー耐久(ST-Z)は年間スケジュール・順位表とも公式サイトから
+    # 実データ取得する(順位表のパース方法は st_supra_teams.py 参照)。
+    taikyu_chart = fetch_st_z_full_standings(limit=15)
+    _set(
+        "japan_asia",
+        "super_taikyu",
+        schedule=fetch_super_taikyu_schedule(),
+        standings_chart=taikyu_chart["standings"],
+        standings_error=bool(taikyu_chart["error"]),
+        standings_chart_note=(
+            taikyu_chart["error"]
+            or "スーパー耐久 ST-Zクラス チームランキング(公式サイト実データ)。"
+            "GR Supra GT4で参戦するチームには目印を付けています。"
+        ),
+    )
+
+    # 日本・アジア: GT World Challenge Asiaは、米国GT4 America等と同じSRO系列の共通
+    # プラットフォームのため、日程・順位表(GT3 Teams Championship)とも実データ取得できる。
+    # GT3主体のシリーズのためSupra GT4のハイライトは対象外。
+    gtwca_chart = fetch_sro_standings(
+        "https://www.gt-world-challenge-asia.com/standings", "GT3 Teams Championship", limit=15
+    )
+    _set(
+        "japan_asia",
+        "gt_world_challenge_asia",
+        schedule_link=None,
+        schedule=fetch_sro_calendar("https://www.gt-world-challenge-asia.com/calendar"),
+        standings_chart=gtwca_chart["standings"],
+        standings_error=bool(gtwca_chart["error"]),
+        standings_chart_note=(
+            gtwca_chart["error"]
+            or "GT World Challenge Asia GT3 Teams Championship(公式サイト実データ)。"
+            "GT3主体のシリーズのためSupra GT4(GT4クラス)のハイライトは対象外です。"
+        ),
+    )
+
+    # 日本・アジア: インタープロトシリーズ SUPRAクラスも、日程・順位表(SUPRA
+    # [PROFESSIONAL]クラス)とも公式サイトから実データ取得できる。全車GR Supra GT4 EVOの
+    # ワンメイククラスのため、Supra GT4のハイライトは意味を持たない。
+    ips_chart = fetch_ips_standings(limit=15)
+    _set(
+        "japan_asia",
+        "inter_proto_series",
+        schedule_link=None,
+        schedule=fetch_ips_schedule(),
+        standings_chart=ips_chart["standings"],
+        standings_error=bool(ips_chart["error"]),
+        standings_chart_note=(
+            ips_chart["error"]
+            or "SUPRA[PROFESSIONAL]クラス ドライバーランキング(公式サイト実データ)。"
+            "全車GR Supra GT4 EVOのワンメイククラスのため、特定車両のハイライトはありません。"
+        ),
+    )
+
+    # 米国: GT4 America(Silver Teams)は公式サイトからチームランキングを実データ取得する。
     us_chart = fetch_gt4_america_team_standings(limit=15)
-    for series in result["us"]["series"]:
-        if series["key"] == "gt4_america":
-            series["standings_chart"] = us_chart["standings"]
-            series["standings_error"] = bool(us_chart["error"])
-            series["standings_chart_note"] = (
-                us_chart["error"]
-                or "GT4 America \"Silver Teams\" チームランキング(公式サイト実データ)。"
-                "各レースの完全結果ページから使用車種を補完しており、Toyota GR Supra GT4で"
-                "参戦するチームには目印を付けています。"
-            )
+    _set(
+        "us",
+        "gt4_america",
+        standings_chart=us_chart["standings"],
+        standings_error=bool(us_chart["error"]),
+        standings_chart_note=(
+            us_chart["error"]
+            or "GT4 America \"Silver Teams\" チームランキング(公式サイト実データ)。"
+            "各レースの完全結果ページから使用車種を補完しており、Toyota GR Supra GT4で"
+            "参戦するチームには目印を付けています。"
+        ),
+    )
+
+    # 米国: GT World Challenge Americaも同じSRO系列プラットフォームのため実データ取得できる。
+    # GT3主体のシリーズのためSupra GT4のハイライトは対象外。
+    gtwcam_chart = fetch_sro_standings(
+        "https://www.gt-world-challenge-america.com/standings", "Pro-Am Teams", limit=15
+    )
+    _set(
+        "us",
+        "gt_world_challenge_america",
+        schedule_link=None,
+        schedule=fetch_sro_calendar("https://www.gt-world-challenge-america.com/calendar"),
+        standings_chart=gtwcam_chart["standings"],
+        standings_error=bool(gtwcam_chart["error"]),
+        standings_chart_note=(
+            gtwcam_chart["error"]
+            or "GT World Challenge America Pro-Am Teams(公式サイト実データ)。"
+            "GT3主体のシリーズのためSupra GT4(GT4クラス)のハイライトは対象外です。"
+        ),
+    )
 
     # それ以外のシリーズは、順位表のクラス別フィルター構造やチーム別使用車種の確定方法を
     # 安定的に確認できていないため、誤表示リスクを避けグラフ化は行わず、公式ランキング

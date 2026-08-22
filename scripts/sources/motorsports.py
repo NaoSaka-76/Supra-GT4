@@ -1,6 +1,6 @@
 """GR Supra GT4を含むGT4カテゴリーのレース情報を地域別・シリーズ別に集約する。
 
-日本・アジア、米国、欧州、オセアニア、中東の5地域、計18シリーズ(GT3主体の
+日本・アジア、米国、欧州、オセアニア、中東の5地域、計19シリーズ(GT3主体の
 GT World Challenge各地域シリーズ4つを含む、同一大会ウィークエンドの上位カテゴリーとして
 掲載)に整理。各シリーズ
 公式サイトの結果・ランキング表は構造がそれぞれ異なり安定したスクレイピングが難しいため、
@@ -71,6 +71,24 @@ REGIONS = {
                 "schedule_link": None,  # 公式サイトから実データ取得(has_real_schedule)
                 "has_real_schedule": True,
                 "standings_url": "https://supertaikyu.com/race/standing.html",
+            },
+            {
+                "key": "inter_proto_series",
+                "label": "インタープロトシリーズ SUPRAクラス(日本)",
+                "queries": {
+                    "topics": [
+                        ("インタープロトシリーズ スープラクラス OR GRスープラGT4", "ja", "JP", "JP:ja"),
+                        ("インタープロトシリーズ", "ja", "JP", "JP:ja"),
+                    ],
+                    "results": [
+                        ("インタープロトシリーズ スープラクラス 決勝 OR レース結果 OR 表彰台 OR 優勝", "ja", "JP", "JP:ja"),
+                    ],
+                    "standings": [
+                        ("インタープロトシリーズ スープラクラス ランキング OR ポイントランキング", "ja", "JP", "JP:ja"),
+                    ],
+                },
+                "schedule_link": "https://interprotoseries.jp/",
+                "standings_url": "https://interprotoseries.jp/ranking/",
             },
             {
                 "key": "sro_japan_cup",

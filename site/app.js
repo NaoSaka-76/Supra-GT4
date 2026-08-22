@@ -93,7 +93,7 @@
       viaCommons: "、Wikimedia Commonsより",
       sections: {
         motorsports: {
-          title: "GR Supra GT4 参戦レース(地域別・全18シリーズ)",
+          title: "GR Supra GT4 参戦レース(地域別・全19シリーズ)",
           note:
             "トピックス/レース結果はニュース記事ベースで集約しています。スーパー耐久(日本・アジア)は年間スケジュール、" +
             "米国のGT4 America(Silver Teams)はチームランキングを公式サイトの実データで取得しています" +
@@ -138,6 +138,10 @@
         super_taikyu: {
           label: "スーパー耐久 ST-Zクラス(日本)",
           desc: "日本の人気耐久レースシリーズ。GT4規定車両が属するST-Zクラスがあり、GR Supra GT4は2023年にクラスチャンピオンを獲得するなど高い戦闘力を発揮している。",
+        },
+        inter_proto_series: {
+          label: "インタープロトシリーズ SUPRAクラス(日本)",
+          desc: "富士スピードウェイを舞台にプロとジェントルマンドライバーがマシンをシェアして戦うワンメイクレース。GR Supra GT4 EVOを使用する「SUPRAクラス」が設置されている。",
         },
         sro_japan_cup: {
           label: "SRO Japan Cup GT4クラス(日本)",
@@ -277,7 +281,7 @@
       viaCommons: ", via Wikimedia Commons",
       sections: {
         motorsports: {
-          title: "GR Supra GT4 Races (by Region, 18 Series)",
+          title: "GR Supra GT4 Races (by Region, 19 Series)",
           note:
             "Topics and race results are aggregated from news articles. Super Taikyu (Japan/Asia) provides a real season " +
             "schedule, and GT4 America (Silver Teams, US) provides a real team-ranking chart, both sourced directly from " +
@@ -323,6 +327,10 @@
         super_taikyu: {
           label: "Super Taikyu ST-Z Class (Japan)",
           desc: "Japan's popular endurance racing series. GT4-spec cars compete in the ST-Z class, where the GR Supra GT4 won the class championship in 2023, showing strong competitiveness.",
+        },
+        inter_proto_series: {
+          label: "Inter Proto Series SUPRA Class (Japan)",
+          desc: "A one-make race at Fuji Speedway where a pro driver and a gentleman driver share the same car. Its \"SUPRA class\" is run exclusively with GR Supra GT4 EVO cars.",
         },
         sro_japan_cup: {
           label: "SRO Japan Cup GT4 Class (Japan)",

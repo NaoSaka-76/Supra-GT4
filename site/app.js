@@ -96,10 +96,11 @@
           title: "スーパー耐久 ST-Zクラス Supra GT4参戦チーム",
           note:
             "2026年シーズンのスーパー耐久ST-Zクラスに参戦する、GR Supra GT4を使用する全チームを掲載。" +
-            "順位/ポイントとドライバー名は公式サイト(supertaikyu.com)から毎回実データで取得しています。" +
-            "ドライバーの区分は、ST-Zクラスのレギュレーション上A driverにジェントルマン(アマチュア)登録が" +
-            "義務付けられていることに基づく推定であり、個々のライセンスグレードを公式に確認したものでは" +
-            "ありません。ドライバー未発表のチームは取得できた時点で空欄になります。",
+            "順位/ポイントは公式サイト(supertaikyu.com)から毎回実データで取得しています。ドライバーは、" +
+            "開幕戦から直近の開催済みラウンドまでの全公式エントリーリストを集計し、今シーズンここまでに" +
+            "参戦した全ドライバーを重複なく掲載しています。区分は、ST-Zクラスのレギュレーション上A driver" +
+            "にジェントルマン(アマチュア)登録が義務付けられていることに基づく推定であり(1度でもA driver" +
+            "登録があればジェントルマンと表示)、個々のライセンスグレードを公式に確認したものではありません。",
         },
         motorsports: {
           title: "GR Supra GT4 参戦レース(地域別・全19シリーズ)",
@@ -300,10 +301,12 @@
         st_supra_teams: {
           title: "Super Taikyu ST-Z Class — Supra GT4 Teams",
           note:
-            "All teams running a GR Supra GT4 in the 2026 Super Taikyu ST-Z class. Standings/points and driver names " +
-            "are fetched live from the official site (supertaikyu.com) on every update. Driver grading is inferred " +
-            "from the ST-Z regulation requiring a Gentleman (amateur) driver in the A-driver slot — it is not an " +
-            "officially confirmed individual license grade. Teams with drivers not yet announced will show none.",
+            "All teams running a GR Supra GT4 in the 2026 Super Taikyu ST-Z class. Standings/points are fetched live " +
+            "from the official site (supertaikyu.com) on every update. Drivers are aggregated from every official " +
+            "entry list published so far this season (round 1 through the latest completed round), listing everyone " +
+            "who has raced for that car with no duplicates. Grading is inferred from the ST-Z regulation requiring a " +
+            "Gentleman (amateur) driver in the A-driver slot (anyone registered as A-driver in any round is shown as " +
+            "Gentleman) — it is not an officially confirmed individual license grade.",
         },
         motorsports: {
           title: "GR Supra GT4 Races (by Region, 19 Series)",
@@ -985,7 +988,7 @@
       var driverList = el("ul", "team-driver-list");
       drivers.forEach(function (driver) {
         var li = el("li", "team-driver-list__item");
-        li.appendChild(el("span", "team-driver-list__name", driver.slot + " " + driver.name));
+        li.appendChild(el("span", "team-driver-list__name", driver.name));
         var gradeLabel = driver.grade === "gentleman" ? i18n.driverGradeGentleman : i18n.driverGradeExpertPlatinum;
         li.appendChild(el("span", "team-driver-list__grade team-driver-list__grade--" + driver.grade, gradeLabel));
         driverList.appendChild(li);

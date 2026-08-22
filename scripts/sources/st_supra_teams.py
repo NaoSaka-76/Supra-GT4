@@ -5,9 +5,17 @@ TEAMS定数に保持する(公式サイトに構造化データがないため)�
 ポイント/順位、およびドライバー名は公式サイト(supertaikyu.com)から毎回実データで
 取得する。
 
-ドライバーのプロ/アマ区分について: 公式サイトのチームページには個々のドライバーの
-ライセンスグレード(プラチナ/エキスパート/ジェントルマン)は掲載されていない。
-ただしスーパー耐久のレギュレーション上、ST-Zクラスは「A driverとして最低1名の
+ドライバー名は、直近開催されたラウンドの公式エントリーリストページ
+(race/round_XX.html内のST-Zクラス表)から取得する。当初はチーム個別ページ
+(teams/2026_XXX.html)を情報源にしていたが、そちらは一部チームでドライバー名が
+伏字("※※※※※")のまま更新されないケースがあり、実際にはラウンドのエントリー
+リスト側に確定済みの氏名が掲載されていることを確認したため切り替えた
+(決勝正式結果PDFはフォントの文字コードマッピングが非標準で文字化けし信頼できる
+抽出ができなかったため使用していない)。
+
+ドライバーのプロ/アマ区分について: 公式サイトには個々のドライバーのライセンス
+グレード(プラチナ/エキスパート/ジェントルマン)は掲載されていない。ただし
+スーパー耐久のレギュレーション上、ST-Zクラスは「A driverとして最低1名の
 ジェントルマンドライバー登録」が義務付けられているため、この規則に基づき
 A driverを「ジェントルマン(アマチュア)」、B/C/D driverを「エキスパート/プラチナ
 (プロを含む上位ライセンス)」として区分する。個々のドライバーの正式なグレードでは
@@ -17,14 +25,33 @@ A driverを「ジェントルマン(アマチュア)」、B/C/D driverを「エ�
 from __future__ import annotations
 
 import re
-import html as html_module
+from datetime import date
 
 import requests
 
 from .common import REQUEST_TIMEOUT, USER_AGENT
 
 STANDINGS_URL = "https://supertaikyu.com/race/standing.html"
-TEAM_PAGE_URL = "https://supertaikyu.com/teams/2026_{num}.html"
+ROUND_ENTRY_LIST_URL = "https://supertaikyu.com/race/round_{num:02d}.html"
+
+# 2026年シーズンの各ラウンド最終日(この日を過ぎたら「開催済み」とみなす)。
+# 直近の開催済みラウンドのエントリーリストを、現時点で確定しているドライバー
+# 名簿とみなして使用する。
+ROUND_END_DATES = [
+    (1, date(2026, 3, 22)),
+    (2, date(2026, 4, 19)),
+    (3, date(2026, 6, 7)),
+    (4, date(2026, 7, 5)),
+    (5, date(2026, 7, 26)),
+    (6, date(2026, 10, 25)),
+    (7, date(2026, 11, 15)),
+]
+
+
+def _latest_completed_round(today: date | None = None) -> int | None:
+    today = today or date.today()
+    completed = [n for n, end in ROUND_END_DATES if today >= end]
+    return max(completed) if completed else None
 
 TEAMS = [
     {
@@ -79,14 +106,6 @@ TEAMS = [
             "visiting team from Malaysia.",
         },
         "official_url": "https://supertaikyu.com/teams/2026_338.html",
-        # 公式サイトのチームページは記事作成時点で伏字("※※※※※")のため、2026年参戦体制発表時の
-        # 報道(autosport web)を情報源とした静的フォールバック。公式ページが更新され次第、
-        # fetch_team_drivers() の実データが優先される。
-        "fallback_drivers": [
-            {"slot": "A.driver", "name": "前嶋 秀司", "grade": "gentleman"},
-            {"slot": "B.driver", "name": "Azlan Naquib", "grade": "expert_platinum"},
-            {"slot": "C.driver", "name": "Amer Harris", "grade": "expert_platinum"},
-        ],
     },
     {
         "key": "aoyama_gakuin_university",
@@ -179,41 +198,90 @@ def fetch_st_z_standings() -> dict[str, dict]:
         return {}
 
 
-def fetch_team_drivers(car_no: str) -> list[dict]:
-    """チームページからドライバー名を取得し、A/B/C/D driverの並びで返す。
+_SLOT_LABELS = ["A.driver", "B.driver", "C.driver", "D.driver", "E.driver", "F.driver"]
+_TBN_MARKERS = ("tbn", "※", "&nbsp;", "")
 
-    公式サイトが未発表(「※※※※※」等の伏字)の場合はそのドライバーを除外する。
-    """
+
+def fetch_round_st_z_drivers(round_no: int) -> dict[str, list[dict]]:
+    """指定ラウンドの公式エントリーリストから、ST-Zクラスの car_no -> ドライバー一覧 を返す。"""
     session = _session()
     try:
-        resp = session.get(TEAM_PAGE_URL.format(num=car_no), timeout=REQUEST_TIMEOUT)
+        resp = session.get(ROUND_ENTRY_LIST_URL.format(num=round_no), timeout=REQUEST_TIMEOUT)
         resp.raise_for_status()
         resp.encoding = resp.apparent_encoding or "utf-8"
         html_text = resp.text
 
-        slots = re.findall(r'Team_Add_Dr_TXT">\s*([^<]*)<', html_text)
-        names = re.findall(r'Team_Add_Dr_Name">([^<]*)<', html_text)
-        drivers: list[dict] = []
-        for slot, name in zip(slots, names):
-            slot = slot.strip()
-            name = html_module.unescape(name.strip())
-            if not name or "※" in name:
+        block_match = re.search(r'Standing_Class"> ST-Z.*?</table>', html_text, re.S)
+        if not block_match:
+            return {}
+        rows = re.findall(r"<tr>(.*?)</tr>", block_match.group(0), re.S)
+        result: dict[str, list[dict]] = {}
+        for row in rows[1:]:
+            cells = re.findall(r"<t[dh][^>]*>(.*?)</t[dh]>", row, re.S)
+            cells = [re.sub(r"<[^>]+>", "", c).strip() for c in cells]
+            if len(cells) < 5:
                 continue
-            is_a_driver = slot.upper().startswith("A")
-            drivers.append(
-                {
-                    "slot": slot,
-                    "name": name,
-                    "grade": "gentleman" if is_a_driver else "expert_platinum",
-                }
-            )
-        return drivers
+            car_no = cells[1].lstrip("0") or "0"
+            driver_names = cells[4:]
+            drivers: list[dict] = []
+            for i, name in enumerate(driver_names):
+                if i >= len(_SLOT_LABELS):
+                    break
+                if name.strip().lower() in _TBN_MARKERS:
+                    continue
+                drivers.append(
+                    {
+                        "slot": _SLOT_LABELS[i],
+                        "name": name.strip(),
+                        "grade": "gentleman" if i == 0 else "expert_platinum",
+                    }
+                )
+            if drivers:
+                result[car_no] = drivers
+        return result
     except Exception:  # noqa: BLE001
-        return []
+        return {}
+
+
+def fetch_season_st_z_drivers() -> dict[str, list[dict]]:
+    """開幕(第1戦)から直近の開催済みラウンドまでの全エントリーリストを集計し、
+    car_no -> 今シーズンここまでに参戦した全ドライバー(重複除去済み)を返す。
+
+    同一人物が複数ラウンドでA driver(ジェントルマン)として登録されていれば
+    ジェントルマン、一度もA driverでなければエキスパート/プラチナとして区分する。
+    """
+    latest = _latest_completed_round()
+    if latest is None:
+        return {}
+
+    seen: dict[str, dict[str, dict]] = {}  # car_no -> {name: driver_dict}
+    for round_no in range(1, latest + 1):
+        round_drivers = fetch_round_st_z_drivers(round_no)
+        for car_no, drivers in round_drivers.items():
+            bucket = seen.setdefault(car_no, {})
+            for driver in drivers:
+                existing = bucket.get(driver["name"])
+                if existing is None:
+                    bucket[driver["name"]] = dict(driver)
+                elif driver["grade"] == "gentleman":
+                    # 一度でもA driver(ジェントルマン)として登録されていれば、その区分を優先する。
+                    existing["grade"] = "gentleman"
+
+    result: dict[str, list[dict]] = {}
+    for car_no, bucket in seen.items():
+        # ジェントルマン→エキスパート/プラチナの順に並べる。season集計のためA/B/C/Dの
+        # ラウンド毎スロットは意味を持たないので、表示用のslotは付与しない。
+        drivers = sorted(bucket.values(), key=lambda d: 0 if d["grade"] == "gentleman" else 1)
+        for driver in drivers:
+            driver.pop("slot", None)
+        result[car_no] = drivers
+    return result
 
 
 def fetch() -> list[dict]:
     standings = fetch_st_z_standings()
+    season_drivers = fetch_season_st_z_drivers()
+
     result: list[dict] = []
     for team in TEAMS:
         entry = dict(team)
@@ -222,8 +290,7 @@ def fetch() -> list[dict]:
         st = standings.get(lookup_no, {})
         entry["rank"] = st.get("rank")
         entry["points"] = st.get("points")
-        drivers = fetch_team_drivers(team["car_no"])
-        entry["drivers"] = drivers or team.get("fallback_drivers", [])
+        entry["drivers"] = season_drivers.get(lookup_no) or team.get("fallback_drivers", [])
         entry.pop("fallback_drivers", None)
         result.append(entry)
     return result

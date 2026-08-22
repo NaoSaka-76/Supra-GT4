@@ -79,6 +79,14 @@ TEAMS = [
             "visiting team from Malaysia.",
         },
         "official_url": "https://supertaikyu.com/teams/2026_338.html",
+        # 公式サイトのチームページは記事作成時点で伏字("※※※※※")のため、2026年参戦体制発表時の
+        # 報道(autosport web)を情報源とした静的フォールバック。公式ページが更新され次第、
+        # fetch_team_drivers() の実データが優先される。
+        "fallback_drivers": [
+            {"slot": "A.driver", "name": "前嶋 秀司", "grade": "gentleman"},
+            {"slot": "B.driver", "name": "Azlan Naquib", "grade": "expert_platinum"},
+            {"slot": "C.driver", "name": "Amer Harris", "grade": "expert_platinum"},
+        ],
     },
     {
         "key": "aoyama_gakuin_university",
@@ -214,6 +222,8 @@ def fetch() -> list[dict]:
         st = standings.get(lookup_no, {})
         entry["rank"] = st.get("rank")
         entry["points"] = st.get("points")
-        entry["drivers"] = fetch_team_drivers(team["car_no"])
+        drivers = fetch_team_drivers(team["car_no"])
+        entry["drivers"] = drivers or team.get("fallback_drivers", [])
+        entry.pop("fallback_drivers", None)
         result.append(entry)
     return result

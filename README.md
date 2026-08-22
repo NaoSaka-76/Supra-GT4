@@ -1,8 +1,7 @@
 # Supra GT4 Watch
 
 Toyota GR Supra GT4に関する情報を1か所に集約するモニタリングダッシュボード。GitHub Actionsで
-1日3回(JST 07:00 / 12:00 / 17:00、GR Corolla Watchと同一の更新周期)自動的にデータを収集し、
-GitHub Pagesで公開する。
+30分毎(毎時00分・30分)に自動的にデータを収集し、GitHub Pagesで公開する。
 
 **公開ページ:** Settings > Pages で有効化後、`https://<owner>.github.io/Supra-GT4/`
 
@@ -12,14 +11,16 @@ GitHub Pagesで公開する。
 
 ## 掲載している情報
 
-| セクション | 内容 | 取得方法 |
-| --- | --- | --- |
-| GR Supra GT4 参戦レース(地域別・全18シリーズ) | 日本・アジア(GT World Challenge Asia/スーパー耐久 ST-Zクラス/SRO Japan Cup/SRO GT Cup中国)、米国(GT World Challenge America/GT4 America/IMSA Michelin Pilot Challenge)、欧州(GT World Challenge Europe/GT4 European Series/British GT/French GT4 Cup/GT4 Italian Series/ADAC GT4 Germany/ニュルブルクリンク NLS・24h/GT4 Winter Series)、オセアニア(GT World Challenge Australia/Monochrome GT4 Australia)、中東(24H Series Middle East)の5地域・18シリーズに整理。各地域のGT World Challenge(GT3主体の上位カテゴリー、同一大会ウィークエンド)も含めて掲載。各シリーズの今年度スケジュール・ランキング(Supra GT4をハイライト)・最新トピックスを表示 | Google News RSS(トピックス/結果/ランキング話題) + 各シリーズ公式サイト(スーパー耐久は日程、GT4 Americaはチームランキングを実データ取得。他シリーズは公式カレンダー/ランキングページへの直接リンク) |
-| GT4参戦車両一覧 | 現在SRO GT4 Manufacturer Rankingに参加している9メーカー(Toyota・BMW・Mercedes-AMG・Porsche・Ford・Audi・McLaren・Aston Martin・Ginetta)の最新モデルを写真付きでリスト化。メーカー・車名・参考価格・エンジン/出力/トルク/車重/トランスミッション等のスペックと、各社公式サイトへのリンクを掲載。Supra GT4のみハイライト表示 | 各社公式発表・報道の参考価格(手動収集、静的データ)+ 写真はWikimedia Commonsのクリエイティブ・コモンズ・ライセンス画像(撮影者・ライセンスを明記) |
-| GT4カテゴリー最新トピックス | GT4ホモロゲーション/レギュレーション、競合GT4(BMW M4 GT4・Mercedes-AMG GT4・Porsche Cayman GT4・Ford Mustang GT4・Aston Martin Vantage GT4・Audi R8 LMS GT4・McLaren Artura GT4等)の開発・アップデート、技術情報、Supra GT4や競合車の不具合情報をカテゴリー別バッジ付きで新着順に表示 | Google News RSS(日英) |
-| YouTube 人気動画/新着動画 | Supra GT4・競合GT4の動画を20本ずつ整理(サムネイル付き、日英クエリを統合)。人気動画は再生数順、新着動画は投稿日時順 | YouTube検索結果ページのベストエフォート・スクレイピング |
-| SNSでの話題 | X/Facebookの投稿の代替として、Supra GT4・競合GT4に関するニュース・ブログでの話題言及。「最新順」「話題順」をタブで切り替え表示 | Google News RSS |
-| Supra GT4 お客様の声・クレーム関連情報 | リコール・不具合報道など公開情報(Supra GT4限定、競合車は含まない)。「最新順」「話題順」をタブで切り替え表示 | Google News RSS |
+画面上部から以下の順に表示される。
+
+| 表示順 | セクション | 内容 | 取得方法 |
+| --- | --- | --- | --- |
+| 1 | GT4参戦車両一覧 | 現在SRO GT4 Manufacturer Rankingに参加している9メーカー(Toyota・BMW・Mercedes-AMG・Porsche・Ford・Audi・McLaren・Aston Martin・Ginetta)の最新モデルを写真付きでリスト化。車名直下に特徴・戦闘力の説明、参考価格、エンジン/出力/トルク/車重/トランスミッション等のスペックと、各社公式サイトへのリンクを掲載。Supra GT4のみハイライト表示 | 各社公式発表・報道の参考価格(手動収集、静的データ)+ 写真はWikimedia Commonsのクリエイティブ・コモンズ・ライセンス画像(撮影者・ライセンスを明記) |
+| 2 | GT4カテゴリー最新トピックス | GT4ホモロゲーション/レギュレーション、競合GT4(BMW M4 GT4・Mercedes-AMG GT4・Porsche Cayman GT4・Ford Mustang GT4・Aston Martin Vantage GT4・Audi R8 LMS GT4・McLaren Artura GT4等)の開発・アップデート、技術情報、Supra GT4や競合車の不具合情報をカテゴリー別バッジ付きで新着順に表示 | Google News RSS(日英) |
+| 3 | YouTube 人気動画/新着動画 | Supra GT4・競合GT4の動画を20本ずつ整理(サムネイル付き、日英クエリを統合)。人気動画は再生数順、新着動画は投稿日時順 | YouTube検索結果ページのベストエフォート・スクレイピング |
+| 4 | SNSでの話題 | X/Facebookの投稿の代替として、Supra GT4・競合GT4に関するニュース・ブログでの話題言及。「最新順」「話題順」をタブで切り替え表示 | Google News RSS |
+| 5 | Supra GT4 お客様の声・クレーム関連情報 | リコール・不具合報道など公開情報(Supra GT4限定、競合車は含まない)。「最新順」「話題順」をタブで切り替え表示 | Google News RSS |
+| 6 | GR Supra GT4 参戦レース(地域別・全18シリーズ) | 日本・アジア(GT World Challenge Asia/スーパー耐久 ST-Zクラス/SRO Japan Cup/SRO GT Cup中国)、米国(GT World Challenge America/GT4 America/IMSA Michelin Pilot Challenge)、欧州(GT World Challenge Europe/GT4 European Series/British GT/French GT4 Cup/GT4 Italian Series/ADAC GT4 Germany/ニュルブルクリンク NLS・24h/GT4 Winter Series)、オセアニア(GT World Challenge Australia/Monochrome GT4 Australia)、中東(24H Series Middle East)の5地域・18シリーズに整理。各シリーズカードのヘッダー直下にシリーズの特徴を説明。各地域のGT World Challenge(GT3主体の上位カテゴリー、同一大会ウィークエンド)も含めて掲載。各シリーズの今年度スケジュール・ランキング(Supra GT4をハイライト)・最新トピックスを表示 | Google News RSS(トピックス/結果/ランキング話題。各シリーズ名単独の一般クエリも含め、Supra GT4個別の話題が少ない時期でもレースウィークエンド毎の話題を拾えるようにしている) + 各シリーズ公式サイト(スーパー耐久は日程、GT4 Americaはチームランキングを実データ取得。他シリーズは公式カレンダー/ランキングページへの直接リンク) |
 
 「人気動画」以外の全セクションは新しい順/話題順に並び替えている。トヨタ公式発表以外の
 全セクションには、見出し文からの簡易センチメント判定(ポジティブ/ネガティブ)を付与している
@@ -76,6 +77,11 @@ GT World Challenge各地域シリーズは、GT4クラスと同一大会ウィ�
 - **クレーム情報は社内システム未連携**: 公開されている報道・SNS言及のみを集約した簡易モニタリング。
 - **YouTube検索スクレイピングの脆弱性**: YouTube側のページ構造変更により取得に失敗する
   可能性がある。失敗時はダッシュボード上に取得エラーとして表示される。
+- **30分毎の高頻度更新によるレート制限リスク**: 1日3回から30分毎(1日48回)への更新頻度
+  引き上げにより、Google News RSS・YouTube検索・各シリーズ公式サイトへのアクセス総量が
+  大幅に増加している。GitHub Actions共有IPからの頻繁なアクセスは、特にYouTube側のボット対策
+  (429エラー等)に引っかかるリスクが従来より高まる。失敗時は各セクションが空/取得エラー表示に
+  なるのみで、他セクションやサイト全体には影響しない設計になっている。
 - **GT4 Americaランキングは"Silver Teams"クラスのみ**: Toyota GR Supra GT4は複数クラス
   (Pro-Am/Am等)にも参戦し得るが、機械的に安定して取得できるのはSilver Teamsクラスのみのため
   そのクラスのみをグラフ表示している。
@@ -85,7 +91,7 @@ GT World Challenge各地域シリーズは、GT4クラスと同一大会ウィ�
 - **センチメント判定は見出し文のみの自動推定**: 判定根拠語が1つ以下の場合は中立とする
   2語ゲート(英語のみ)により、単語1つで結論が引っ張られる誤判定を抑えている。判定機能自体は
   内部的に維持しているが、画面上の集計表示(「評判」タイル)は削除している。
-- **GT4参戦車両一覧は静的データ**: `site/data/gt4_cars.json` は1日3回の自動更新の対象外で、
+- **GT4参戦車両一覧は静的データ**: `site/data/gt4_cars.json` は30分毎の自動更新の対象外で、
   手動収集した参考価格・スペックを元にした静的ファイル(`{ja, en}` 形式のバイリンガルデータ)。
   価格・スペックは為替やオプション、BoP(性能調整)により変動するため参考値として扱うこと。
   更新する場合は同ファイルを直接編集する。
@@ -113,7 +119,7 @@ site/
   index.html / style.css / app.js   # ダッシュボード本体(静的サイト)
   data/latest.json                  # 自動生成される最新データ(コミット対象外)
   data/gt4_cars.json                # GT4参戦車両一覧(手動更新・コミット対象)
-.github/workflows/update-dashboard.yml  # 1日3回の自動更新 + GitHub Pagesデプロイ
+.github/workflows/update-dashboard.yml  # 30分毎の自動更新 + GitHub Pagesデプロイ
 ```
 
 ## ローカルでの動作確認

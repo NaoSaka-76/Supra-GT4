@@ -18,13 +18,16 @@
       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16.5V12l1.8-5A2 2 0 017.7 5.5h8.6a2 2 0 011.9 1.5l1.8 5v4.5"/><path d="M4 16.5h16"/><path d="M4 16.5v2.3a1 1 0 001 1h1.2a1 1 0 001-1v-2.3"/><path d="M16.8 16.5v2.3a1 1 0 001 1H19a1 1 0 001-1v-2.3"/><circle cx="7.5" cy="13.2" r="1.1" fill="currentColor" stroke="none"/><circle cx="16.5" cy="13.2" r="1.1" fill="currentColor" stroke="none"/></svg>',
   };
 
+  // 表示順: GT4参戦車両一覧 → GT4カテゴリー最新トピックス → YouTube → SNS → お客様の声/クレーム
+  // → GR Supra GT4参戦レース(この順にboard内へ並ぶ)。gt4_carsはdata.sections経由ではなく
+  // 別JSON(gt4_cars.json)から読み込むため、render()内で先頭に個別配置する。
   var LAYOUT = [
-    { key: "motorsports", size: "full", icon: "flag" },
     { key: "gt4_topics", size: "full", icon: "gear" },
     { key: "youtube_popular", size: "half", icon: "play" },
     { key: "youtube_new", size: "half", icon: "play" },
     { key: "social_buzz", size: "full", icon: "chat" },
     { key: "complaints", size: "full", icon: "alert" },
+    { key: "motorsports", size: "full", icon: "flag" },
   ];
 
   // ---- i18n --------------------------------------------------------------
@@ -36,7 +39,8 @@
   var I18N = {
     ja: {
       loading: "データを取得しています…",
-      chipLabel: "JST 自動更新",
+      updateInterval: "30分毎",
+      chipLabel: "自動更新",
       lastUpdatedPrefix: "最終更新: ",
       lastUpdatedUnknown: "不明",
       fetchErrorPrefix: "ダッシュボードデータの読み込みに失敗しました(",
@@ -217,7 +221,8 @@
     },
     en: {
       loading: "Loading data…",
-      chipLabel: "JST auto-update",
+      updateInterval: "Every 30 min",
+      chipLabel: "auto-update",
       lastUpdatedPrefix: "Last updated: ",
       lastUpdatedUnknown: "unknown",
       fetchErrorPrefix: "Failed to load dashboard data (",
@@ -429,6 +434,7 @@
   var lastUpdatedEl = document.getElementById("last-updated");
   var statusDot = document.getElementById("status-dot");
   var chipLabelEl = document.getElementById("chip-label");
+  var updateIntervalChipEl = document.getElementById("update-interval-chip");
   var loadingEl = document.getElementById("loading");
   var footerTextEl = document.getElementById("footer-text");
   var langToggleEl = document.getElementById("lang-toggle");
@@ -898,6 +904,7 @@
     var i18n = t();
     document.documentElement.lang = LANG;
     if (chipLabelEl) chipLabelEl.textContent = i18n.chipLabel;
+    if (updateIntervalChipEl) updateIntervalChipEl.textContent = i18n.updateInterval;
     if (footerTextEl) footerTextEl.textContent = i18n.footer;
     if (langToggleEl) {
       Array.prototype.forEach.call(langToggleEl.querySelectorAll(".lang-toggle__btn"), function (btn) {
@@ -913,6 +920,7 @@
     buildStats(data);
 
     board.innerHTML = "";
+    if (carsData) board.appendChild(buildCarsPanel(carsData));
     LAYOUT.forEach(function (entry) {
       var section = data.sections && data.sections[entry.key];
       if (!section) return;
@@ -925,9 +933,6 @@
         panel = buildGenericPanel(entry.icon, entry.key, section, entry.size);
       }
       board.appendChild(panel);
-      if (entry.key === "motorsports" && carsData) {
-        board.appendChild(buildCarsPanel(carsData));
-      }
     });
 
     var i18n = t();
@@ -936,7 +941,7 @@
     var generatedAt = data.generated_at_utc ? new Date(data.generated_at_utc) : null;
     if (generatedAt) {
       var hoursSince = (Date.now() - generatedAt.getTime()) / 36e5;
-      statusDot.classList.toggle("is-stale", hoursSince > 8);
+      statusDot.classList.toggle("is-stale", hoursSince > 2);
     }
   }
 

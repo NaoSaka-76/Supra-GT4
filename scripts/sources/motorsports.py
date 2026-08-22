@@ -9,6 +9,11 @@ GT World Challenge各地域シリーズ4つを含む、同一大会ウィーク�
 (URLは実装時に実在を確認済み)。例外的に、日本・アジアのスーパー耐久は年間スケジュールを、
 米国のGT4 America(Silver Teams)はチームランキングを、それぞれ公式サイトから実データで
 取得している(理由は schedule.py / standings.py 参照)。
+
+各シリーズの"topics"クエリは、"GR Supra GT4"との共起を要求する狭いクエリに加えて、
+シリーズ名単独の一般クエリも必ず1つ以上含めている。Supra GT4個別の話題が少ない
+シリーズでもレースウィークエンド毎の一般的な話題(プレビュー/リザルト速報/日程発表等)が
+拾えるようにし、トピックスが長期間更新されないことを防ぐ狙い。
 """
 
 from __future__ import annotations
@@ -35,6 +40,7 @@ REGIONS = {
                 "queries": {
                     "topics": [
                         ("\"GR Supra GT4\" \"GT World Challenge Asia\"", "en-US", "US", "US:en"),
+                        ("\"GT World Challenge Asia\"", "en-US", "US", "US:en"),
                     ],
                     "results": [
                         ("\"GR Supra GT4\" \"GT World Challenge Asia\" race result OR podium OR win", "en-US", "US", "US:en"),
@@ -53,6 +59,7 @@ REGIONS = {
                     "topics": [
                         ("GRスープラ GT4 OR \"GR Supra GT4\" スーパー耐久 OR ST-Z", "ja", "JP", "JP:ja"),
                         ("\"GR Supra GT4\" \"Super Taikyu\" OR \"ST-Z\"", "en-US", "US", "US:en"),
+                        ("スーパー耐久 ST-Z", "ja", "JP", "JP:ja"),
                     ],
                     "results": [
                         ("スーパー耐久 ST-Z GRスープラ OR スープラGT4 決勝 OR レース結果 OR 表彰台 OR 優勝", "ja", "JP", "JP:ja"),
@@ -71,6 +78,7 @@ REGIONS = {
                 "queries": {
                     "topics": [
                         ("\"GR Supra GT4\" \"SRO Japan Cup\" OR SROジャパンカップ", "ja", "JP", "JP:ja"),
+                        ("SROジャパンカップ OR \"SRO Japan Cup\"", "ja", "JP", "JP:ja"),
                     ],
                     "results": [
                         ("SROジャパンカップ GT4クラス GRスープラ OR スープラGT4 決勝 OR 表彰台 OR 優勝", "ja", "JP", "JP:ja"),
@@ -88,6 +96,7 @@ REGIONS = {
                 "queries": {
                     "topics": [
                         ("\"GR Supra GT4\" \"SRO GT Cup\" China", "en-US", "US", "US:en"),
+                        ("\"SRO GT Cup\" China", "en-US", "US", "US:en"),
                     ],
                     "results": [
                         ("\"GR Supra GT4\" \"SRO GT Cup\" race result OR podium OR win", "en-US", "US", "US:en"),
@@ -111,6 +120,7 @@ REGIONS = {
                 "queries": {
                     "topics": [
                         ("\"GR Supra GT4\" \"GT World Challenge America\"", "en-US", "US", "US:en"),
+                        ("\"GT World Challenge America\"", "en-US", "US", "US:en"),
                     ],
                     "results": [
                         ("\"GR Supra GT4\" \"GT World Challenge America\" race result OR podium OR win", "en-US", "US", "US:en"),
@@ -129,6 +139,7 @@ REGIONS = {
                     "topics": [
                         ("\"GR Supra GT4\" \"GT4 America\"", "en-US", "US", "US:en"),
                         ("\"GR Supra GT4\" \"GT World Challenge America\"", "en-US", "US", "US:en"),
+                        ("\"GT4 America\" OR \"Pirelli GT4 America\"", "en-US", "US", "US:en"),
                     ],
                     "results": [
                         ("\"GR Supra GT4\" GT4 America race result OR podium OR win OR finish", "en-US", "US", "US:en"),
@@ -147,6 +158,7 @@ REGIONS = {
                 "queries": {
                     "topics": [
                         ("\"GR Supra GT4\" \"Michelin Pilot Challenge\"", "en-US", "US", "US:en"),
+                        ("\"Michelin Pilot Challenge\"", "en-US", "US", "US:en"),
                     ],
                     "results": [
                         ("\"GR Supra GT4\" \"Michelin Pilot Challenge\" race result OR podium OR win", "en-US", "US", "US:en"),
@@ -170,6 +182,7 @@ REGIONS = {
                 "queries": {
                     "topics": [
                         ("\"GR Supra GT4\" \"GT World Challenge Europe\"", "en-GB", "GB", "GB:en"),
+                        ("\"GT World Challenge Europe\"", "en-GB", "GB", "GB:en"),
                     ],
                     "results": [
                         ("\"GR Supra GT4\" \"GT World Challenge Europe\" race result OR podium OR win", "en-GB", "GB", "GB:en"),
@@ -187,6 +200,7 @@ REGIONS = {
                 "queries": {
                     "topics": [
                         ("\"GR Supra GT4\" \"GT4 European Series\"", "en-GB", "GB", "GB:en"),
+                        ("\"GT4 European Series\"", "en-GB", "GB", "GB:en"),
                     ],
                     "results": [
                         ("\"GR Supra GT4\" \"GT4 European Series\" race result OR podium OR win", "en-GB", "GB", "GB:en"),
@@ -204,6 +218,7 @@ REGIONS = {
                 "queries": {
                     "topics": [
                         ("\"GR Supra GT4\" \"British GT\"", "en-GB", "GB", "GB:en"),
+                        ("\"British GT\" GT4", "en-GB", "GB", "GB:en"),
                     ],
                     "results": [
                         ("\"GR Supra GT4\" \"British GT\" race result OR podium OR win", "en-GB", "GB", "GB:en"),
@@ -222,6 +237,7 @@ REGIONS = {
                     "topics": [
                         ("\"GR Supra GT4\" \"French GT4 Cup\"", "en-US", "US", "US:en"),
                         ("GRスープラ GT4 OR \"GR Supra GT4\" \"French GT4 Cup\"", "fr", "FR", "FR:fr"),
+                        ("\"French GT4 Cup\"", "fr", "FR", "FR:fr"),
                     ],
                     "results": [
                         ("\"GR Supra GT4\" \"French GT4 Cup\" race result OR podium OR win", "en-US", "US", "US:en"),
@@ -239,6 +255,7 @@ REGIONS = {
                 "queries": {
                     "topics": [
                         ("\"GR Supra GT4\" \"GT4 Italian Series\"", "en-US", "US", "US:en"),
+                        ("\"GT4 Italian Series\"", "en-US", "US", "US:en"),
                     ],
                     "results": [
                         ("\"GR Supra GT4\" \"GT4 Italian Series\" race result OR podium OR win", "en-US", "US", "US:en"),
@@ -257,6 +274,7 @@ REGIONS = {
                     "topics": [
                         ("\"GR Supra GT4\" \"ADAC GT4 Germany\"", "en-US", "US", "US:en"),
                         ("\"GR Supra GT4\" \"ADAC GT4 Germany\"", "de-DE", "DE", "DE:de"),
+                        ("\"ADAC GT4 Germany\"", "de-DE", "DE", "DE:de"),
                     ],
                     "results": [
                         ("\"GR Supra GT4\" \"ADAC GT4 Germany\" race result OR podium OR win", "en-US", "US", "US:en"),
@@ -275,6 +293,7 @@ REGIONS = {
                     "topics": [
                         ("GR Supra GT4 Nürburgring Langstreckenserie OR NLS OR SP10", "de-DE", "DE", "DE:de"),
                         ("\"GR Supra GT4\" Nürburgring 24 Hours OR NLS", "en-US", "US", "US:en"),
+                        ("Nürburgring Langstreckenserie OR NLS", "de-DE", "DE", "DE:de"),
                     ],
                     "results": [
                         ("\"GR Supra GT4\" Nürburgring race result OR podium OR win OR Sieg", "en-US", "US", "US:en"),
@@ -292,6 +311,7 @@ REGIONS = {
                 "queries": {
                     "topics": [
                         ("\"GR Supra GT4\" \"GT4 Winter Series\"", "en-US", "US", "US:en"),
+                        ("\"GT4 Winter Series\"", "en-US", "US", "US:en"),
                     ],
                     "results": [
                         ("\"GR Supra GT4\" \"GT4 Winter Series\" race result OR podium OR win", "en-US", "US", "US:en"),
@@ -315,6 +335,7 @@ REGIONS = {
                 "queries": {
                     "topics": [
                         ("\"GR Supra GT4\" \"GT World Challenge Australia\"", "en-AU", "AU", "AU:en"),
+                        ("\"GT World Challenge Australia\"", "en-AU", "AU", "AU:en"),
                     ],
                     "results": [
                         ("\"GR Supra GT4\" \"GT World Challenge Australia\" race result OR podium OR win", "en-AU", "AU", "AU:en"),
@@ -332,6 +353,7 @@ REGIONS = {
                 "queries": {
                     "topics": [
                         ("\"GR Supra GT4\" \"GT4 Australia\" OR \"Monochrome GT4\"", "en-AU", "AU", "AU:en"),
+                        ("\"Monochrome GT4 Australia\" OR \"GT4 Australia\"", "en-AU", "AU", "AU:en"),
                     ],
                     "results": [
                         ("\"GR Supra GT4\" GT4 Australia race result OR podium OR win", "en-AU", "AU", "AU:en"),
@@ -355,6 +377,7 @@ REGIONS = {
                 "queries": {
                     "topics": [
                         ("\"GR Supra GT4\" \"24H Series\" Middle East OR Dubai OR \"Abu Dhabi\"", "en-US", "US", "US:en"),
+                        ("\"24H Series\" Middle East", "en-US", "US", "US:en"),
                     ],
                     "results": [
                         ("\"GR Supra GT4\" Dubai OR \"Abu Dhabi\" race result OR podium OR win", "en-US", "US", "US:en"),

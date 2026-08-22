@@ -2,8 +2,8 @@ name: Update Supra GT4 Dashboard
 
 on:
   schedule:
-    # JST 07:00 / 12:00 / 17:00 = UTC 22:00(前日) / 03:00 / 08:00
-    - cron: "0 22,3,8 * * *"
+    # 30分毎に自動更新(00分・30分)
+    - cron: "0,30 * * * *"
   workflow_dispatch: {}
 
 permissions:

@@ -92,6 +92,15 @@
       photoCredit: "写真: ",
       viaCommons: "、Wikimedia Commonsより",
       sections: {
+        st_supra_teams: {
+          title: "スーパー耐久 ST-Zクラス Supra GT4参戦チーム",
+          note:
+            "2026年シーズンのスーパー耐久ST-Zクラスに参戦する、GR Supra GT4を使用する全チームを掲載。" +
+            "順位/ポイントとドライバー名は公式サイト(supertaikyu.com)から毎回実データで取得しています。" +
+            "ドライバーの区分は、ST-Zクラスのレギュレーション上A driverにジェントルマン(アマチュア)登録が" +
+            "義務付けられていることに基づく推定であり、個々のライセンスグレードを公式に確認したものでは" +
+            "ありません。ドライバー未発表のチームは取得できた時点で空欄になります。",
+        },
         motorsports: {
           title: "GR Supra GT4 参戦レース(地域別・全19シリーズ)",
           note:
@@ -222,6 +231,14 @@
         weight: "車両重量",
         transmission: "トランスミッション",
       },
+      teamDrivers: "ドライバー",
+      teamResults: "ST-Zクラス戦績",
+      teamResultsRank: "現在{rank}位 / {points}pt(全12台中)",
+      teamResultsUnknown: "順位データを取得できませんでした",
+      teamDriversUnannounced: "ドライバー未発表",
+      driverGradeGentleman: "ジェントルマン(アマ)",
+      driverGradeExpertPlatinum: "エキスパート/プラチナ",
+      carNoLabel: "No.",
     },
     en: {
       loading: "Loading data…",
@@ -280,6 +297,14 @@
       photoCredit: "Photo: ",
       viaCommons: ", via Wikimedia Commons",
       sections: {
+        st_supra_teams: {
+          title: "Super Taikyu ST-Z Class — Supra GT4 Teams",
+          note:
+            "All teams running a GR Supra GT4 in the 2026 Super Taikyu ST-Z class. Standings/points and driver names " +
+            "are fetched live from the official site (supertaikyu.com) on every update. Driver grading is inferred " +
+            "from the ST-Z regulation requiring a Gentleman (amateur) driver in the A-driver slot — it is not an " +
+            "officially confirmed individual license grade. Teams with drivers not yet announced will show none.",
+        },
         motorsports: {
           title: "GR Supra GT4 Races (by Region, 19 Series)",
           note:
@@ -411,6 +436,14 @@
         weight: "Weight",
         transmission: "Transmission",
       },
+      teamDrivers: "Drivers",
+      teamResults: "ST-Z Class Results",
+      teamResultsRank: "Currently P{rank} / {points}pt (of 12 cars)",
+      teamResultsUnknown: "Standings unavailable",
+      teamDriversUnannounced: "Drivers not yet announced",
+      driverGradeGentleman: "Gentleman (Am)",
+      driverGradeExpertPlatinum: "Expert/Platinum",
+      carNoLabel: "No.",
     },
   };
 
@@ -908,6 +941,96 @@
     return panel;
   }
 
+  function buildStTeamCard(team) {
+    var i18n = t();
+    var card = el("div", "car-card" + (team.rank === 1 ? " car-card--spotlight" : ""));
+
+    var figure = el("div", "car-card__photo");
+    if (team.photo) {
+      var img = el("img");
+      img.src = team.photo.src;
+      img.alt = team.team_name;
+      img.loading = "lazy";
+      figure.appendChild(img);
+    } else {
+      figure.classList.add("car-card__photo--placeholder");
+      var placeholderIcon = el("div", "car-card__photo-icon");
+      placeholderIcon.innerHTML = ICONS.car;
+      figure.appendChild(placeholderIcon);
+    }
+    figure.appendChild(el("span", "supra-tag car-card__badge", i18n.carNoLabel + team.car_no));
+    card.appendChild(figure);
+
+    var body = el("div", "car-card__body");
+    body.appendChild(el("span", "car-card__manufacturer", "ST-Z"));
+    body.appendChild(el("h3", "car-card__model", team.team_name));
+    var description = pick(team.description);
+    if (description) body.appendChild(el("p", "car-card__desc", description));
+
+    var results = el("div", "car-card__price");
+    if (typeof team.rank === "number" && typeof team.points === "number") {
+      results.textContent =
+        i18n.teamResultsRank.replace("{rank}", String(team.rank)).replace("{points}", String(team.points));
+    } else {
+      results.textContent = i18n.teamResultsUnknown;
+    }
+    body.appendChild(el("div", "car-card__specs-title", i18n.teamResults));
+    body.appendChild(results);
+
+    body.appendChild(el("div", "car-card__specs-title", i18n.teamDrivers));
+    var drivers = team.drivers || [];
+    if (drivers.length === 0) {
+      body.appendChild(el("p", "panel__empty", i18n.teamDriversUnannounced));
+    } else {
+      var driverList = el("ul", "team-driver-list");
+      drivers.forEach(function (driver) {
+        var li = el("li", "team-driver-list__item");
+        li.appendChild(el("span", "team-driver-list__name", driver.slot + " " + driver.name));
+        var gradeLabel = driver.grade === "gentleman" ? i18n.driverGradeGentleman : i18n.driverGradeExpertPlatinum;
+        li.appendChild(el("span", "team-driver-list__grade team-driver-list__grade--" + driver.grade, gradeLabel));
+        driverList.appendChild(li);
+      });
+      body.appendChild(driverList);
+    }
+
+    var link = el("a", "series-card__link", i18n.linkOfficial);
+    link.href = team.official_url;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    body.appendChild(link);
+
+    if (team.photo) {
+      var credit = el("p", "car-card__credit");
+      credit.appendChild(document.createTextNode(i18n.photoCredit));
+      var creditLink = el("a", null, team.photo.credit + " (" + team.photo.license + ")");
+      creditLink.href = team.photo.source_url;
+      creditLink.target = "_blank";
+      creditLink.rel = "noopener noreferrer";
+      credit.appendChild(creditLink);
+      credit.appendChild(document.createTextNode(i18n.viaCommons));
+      body.appendChild(credit);
+    }
+
+    card.appendChild(body);
+    return card;
+  }
+
+  function buildStTeamsPanel(section) {
+    var i18n = t();
+    var meta = i18n.sections.st_supra_teams;
+    var panel = el("section", "panel panel--full");
+    var teams = section.teams || [];
+    panel.appendChild(buildPanelHeader("flag", meta.title, teams.length));
+    if (meta.note) panel.appendChild(el("p", "panel__note", meta.note));
+
+    var grid = el("div", "car-grid");
+    teams.forEach(function (team) {
+      grid.appendChild(buildStTeamCard(team));
+    });
+    panel.appendChild(grid);
+    return panel;
+  }
+
   function applyStaticText() {
     var i18n = t();
     document.documentElement.lang = LANG;
@@ -929,6 +1052,9 @@
 
     board.innerHTML = "";
     if (carsData) board.appendChild(buildCarsPanel(carsData));
+    if (data.sections && data.sections.st_supra_teams) {
+      board.appendChild(buildStTeamsPanel(data.sections.st_supra_teams));
+    }
     LAYOUT.forEach(function (entry) {
       var section = data.sections && data.sections[entry.key];
       if (!section) return;

@@ -1,8 +1,8 @@
 {
   "updated": "2026-08-21",
   "note": {
-    "ja": "SRO GT4 Manufacturer Ranking(gt4series.com)に現在参加している9メーカーの最新モデル。価格は各社発表・報道に基づく参考価格(オプション別、BoP/性能調整により出力等は変動)。写真はWikimedia Commonsのクリエイティブ・コモンズ・ライセンス画像を使用。",
-    "en": "The latest models from the nine manufacturers currently listed in the SRO GT4 Manufacturer Ranking (gt4series.com). Prices are reference figures based on each manufacturer's announcements and press coverage (options extra; power output etc. may vary under Balance of Performance). Photos are Creative Commons-licensed images from Wikimedia Commons."
+    "ja": "SRO GT4 Manufacturer Ranking(gt4series.com)に現在参加している9メーカーに加え、日本のスーパー耐久ST-Zクラス等で参戦するNissan Z GT4を含めた10メーカーの最新モデル。価格は各社発表・報道に基づく参考価格(オプション別、BoP/性能調整により出力等は変動)。写真はWikimedia Commonsのクリエイティブ・コモンズ・ライセンス画像を使用。",
+    "en": "The latest models from the nine manufacturers currently listed in the SRO GT4 Manufacturer Ranking (gt4series.com), plus the Nissan Z GT4 which races in Japan's Super Taikyu ST-Z class and elsewhere — 10 manufacturers in total. Prices are reference figures based on each manufacturer's announcements and press coverage (options extra; power output etc. may vary under Balance of Performance). Photos are Creative Commons-licensed images from Wikimedia Commons."
   },
   "cars": [
     {
@@ -242,6 +242,33 @@
         "credit": "Calreyn88",
         "license": "CC BY-SA 4.0",
         "source_url": "https://commons.wikimedia.org/wiki/File:Ginetta_G56_GT4_1.jpg"
+      }
+    },
+    {
+      "manufacturer": "NISSAN",
+      "model": "Z GT4(NISMO)",
+      "is_supra": false,
+      "description": {
+        "ja": "新型フェアレディZをベースにNISMO/NMCが開発したGT4マシン。北米のSRO Pirelli GT4 America、日本のスーパー耐久ST-Zクラス(TEAM ZEROONE、TEAM IMPUL等)に供給されており、パワフルなツインターボV6が武器。",
+        "en": "A GT4 machine developed by NISMO/NMC from the new Nissan Z. Supplied to teams in SRO's Pirelli GT4 America and Japan's Super Taikyu ST-Z class (TEAM ZEROONE, TEAM IMPUL, etc.), with a powerful twin-turbo V6 as its main weapon."
+      },
+      "price": {
+        "ja": "参考価格 約229,000ドル(スターターキット込み)",
+        "en": "Reference price approx. $229,000 (incl. starter kit)"
+      },
+      "specs": [
+        { "key": "engine", "value": { "ja": "V6 3.0L ツインターボ(VR30型)", "en": "V6 3.0L twin-turbo (VR30)" } },
+        { "key": "power", "value": { "ja": "約450PS(336kW)※BoPにより変動", "en": "Approx. 450PS (336kW) *varies with BoP" } },
+        { "key": "torque", "value": { "ja": "約600Nm", "en": "Approx. 600Nm" } },
+        { "key": "weight", "value": { "ja": "約1,410kg", "en": "Approx. 1,410kg" } },
+        { "key": "transmission", "value": { "ja": "非公開 / FR", "en": "Undisclosed / RWD" } }
+      ],
+      "official_url": "https://www.nismo.co.jp/news_list/2022/motorsports_news/22028.html",
+      "photo": {
+        "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/No.25_raffin%C3%A9e_NISSAN_MECHANIC_CHALLENGE_Z_NISMO_GT4_after_ENEOS_Super_Taikyu_Series_2024_Empowered_by_BRIDGESTONE_Rd.5_SUZUKA_S-tai.jpg/960px-No.25_raffin%C3%A9e_NISSAN_MECHANIC_CHALLENGE_Z_NISMO_GT4_after_ENEOS_Super_Taikyu_Series_2024_Empowered_by_BRIDGESTONE_Rd.5_SUZUKA_S-tai.jpg",
+        "credit": "Tokumeigakarinoaoshima",
+        "license": "CC BY-SA 4.0",
+        "source_url": "https://commons.wikimedia.org/wiki/File:No.25_raffin%C3%A9e_NISSAN_MECHANIC_CHALLENGE_Z_NISMO_GT4_after_ENEOS_Super_Taikyu_Series_2024_Empowered_by_BRIDGESTONE_Rd.5_SUZUKA_S-tai.jpg"
       }
     }
   ]

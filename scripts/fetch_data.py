@@ -9,7 +9,7 @@ import json
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
 
-from sources import complaints, gt4_topics, motorsports, sentiment, social_buzz, youtube
+from sources import complaints, gt4_topics, motorsports, sentiment, social_buzz, st_supra_teams, youtube
 
 JST = timezone(timedelta(hours=9))
 OUTPUT_PATH = Path(__file__).resolve().parent.parent / "site" / "data" / "latest.json"
@@ -78,11 +78,16 @@ def build_dashboard() -> dict:
 
     buzz_data = social_buzz.fetch()
     complaint_data = complaints.fetch()
+    st_teams = st_supra_teams.fetch()
 
     return {
         "generated_at_utc": now_utc.isoformat(),
         "generated_at_jst": now_jst.strftime("%Y-%m-%d %H:%M JST"),
         "sections": {
+            "st_supra_teams": {
+                "label": "スーパー耐久 ST-Zクラス Supra GT4参戦チーム",
+                "teams": st_teams,
+            },
             "motorsports": _motorsports_section(),
             "gt4_topics": {
                 "label": "GT4カテゴリー最新トピックス",

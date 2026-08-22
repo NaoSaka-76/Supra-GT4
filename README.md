@@ -15,12 +15,13 @@ Toyota GR Supra GT4に関する情報を1か所に集約するモニタリング
 
 | 表示順 | セクション | 内容 | 取得方法 |
 | --- | --- | --- | --- |
-| 1 | GT4参戦車両一覧 | 現在SRO GT4 Manufacturer Rankingに参加している9メーカー(Toyota・BMW・Mercedes-AMG・Porsche・Ford・Audi・McLaren・Aston Martin・Ginetta)の最新モデルを写真付きでリスト化。車名直下に特徴・戦闘力の説明、参考価格、エンジン/出力/トルク/車重/トランスミッション等のスペックと、各社公式サイトへのリンクを掲載。Supra GT4のみハイライト表示 | 各社公式発表・報道の参考価格(手動収集、静的データ)+ 写真はWikimedia Commonsのクリエイティブ・コモンズ・ライセンス画像(撮影者・ライセンスを明記) |
-| 2 | GT4カテゴリー最新トピックス | GT4ホモロゲーション/レギュレーション、競合GT4(BMW M4 GT4・Mercedes-AMG GT4・Porsche Cayman GT4・Ford Mustang GT4・Aston Martin Vantage GT4・Audi R8 LMS GT4・McLaren Artura GT4等)の開発・アップデート、技術情報、Supra GT4や競合車の不具合情報をカテゴリー別バッジ付きで新着順に表示 | Google News RSS(日英) |
-| 3 | YouTube 人気動画/新着動画 | Supra GT4・競合GT4の動画を20本ずつ整理(サムネイル付き、日英クエリを統合)。人気動画は再生数順、新着動画は投稿日時順 | YouTube検索結果ページのベストエフォート・スクレイピング |
-| 4 | SNSでの話題 | X/Facebookの投稿の代替として、Supra GT4・競合GT4に関するニュース・ブログでの話題言及。「最新順」「話題順」をタブで切り替え表示 | Google News RSS |
-| 5 | Supra GT4 お客様の声・クレーム関連情報 | リコール・不具合報道など公開情報(Supra GT4限定、競合車は含まない)。「最新順」「話題順」をタブで切り替え表示 | Google News RSS |
-| 6 | GR Supra GT4 参戦レース(地域別・全19シリーズ) | 日本・アジア(GT World Challenge Asia/スーパー耐久 ST-Zクラス/インタープロトシリーズ SUPRAクラス/SRO Japan Cup/SRO GT Cup中国)、米国(GT World Challenge America/GT4 America/IMSA Michelin Pilot Challenge)、欧州(GT World Challenge Europe/GT4 European Series/British GT/French GT4 Cup/GT4 Italian Series/ADAC GT4 Germany/ニュルブルクリンク NLS・24h/GT4 Winter Series)、オセアニア(GT World Challenge Australia/Monochrome GT4 Australia)、中東(24H Series Middle East)の5地域・19シリーズに整理。各シリーズカードのヘッダー直下にシリーズの特徴を説明。各地域のGT World Challenge(GT3主体の上位カテゴリー、同一大会ウィークエンド)も含めて掲載。各シリーズの今年度スケジュール・ランキング(Supra GT4をハイライト)・最新トピックスを表示 | Google News RSS(トピックス/結果/ランキング話題。各シリーズ名単独の一般クエリも含め、Supra GT4個別の話題が少ない時期でもレースウィークエンド毎の話題を拾えるようにしている) + 各シリーズ公式サイト(スーパー耐久は日程、GT4 Americaはチームランキングを実データ取得。他シリーズは公式カレンダー/ランキングページへの直接リンク) |
+| 1 | GT4参戦車両一覧 | 現在SRO GT4 Manufacturer Rankingに参加している9メーカー(Toyota・BMW・Mercedes-AMG・Porsche・Ford・Audi・McLaren・Aston Martin・Ginetta)に、日本のスーパー耐久ST-Zクラス等で参戦するNissanを加えた10メーカーの最新モデルを写真付きでリスト化。車名直下に特徴・戦闘力の説明、参考価格、エンジン/出力/トルク/車重/トランスミッション等のスペックと、各社公式サイトへのリンクを掲載。Supra GT4のみハイライト表示 | 各社公式発表・報道の参考価格(手動収集、静的データ)+ 写真はWikimedia Commonsのクリエイティブ・コモンズ・ライセンス画像(撮影者・ライセンスを明記) |
+| 2 | スーパー耐久 ST-Zクラス Supra GT4参戦チーム | 2026年シーズンにGR Supra GT4で参戦する全7チーム(埼玉Green Brave・SHADE RACING・WING HIN MOTORSPORTS JAPAN・青山学院大学自動車部・チームノア・TRACY SPORTS・OKABEJIDOSHA motorsport)をGT4参戦車両一覧と同じカード形式で表示。チーム名・運営母体/オーナーの説明、現在の参戦ドライバー(A/B/C/D driverの区分とジェントルマン/エキスパート・プラチナの推定表示)、ST-Zクラス内の現在順位・ポイントを掲載 | チーム背景は手動収集の静的データ。ドライバー名と順位/ポイントは公式サイト(supertaikyu.com)から毎回実データ取得。写真は取得できたチーム(3/7)のみWikimedia CommonsのCCライセンス画像を使用 |
+| 3 | GT4カテゴリー最新トピックス | GT4ホモロゲーション/レギュレーション、競合GT4(BMW M4 GT4・Mercedes-AMG GT4・Porsche Cayman GT4・Ford Mustang GT4・Aston Martin Vantage GT4・Audi R8 LMS GT4・McLaren Artura GT4等)の開発・アップデート、技術情報、Supra GT4や競合車の不具合情報をカテゴリー別バッジ付きで新着順に表示 | Google News RSS(日英) |
+| 4 | YouTube 人気動画/新着動画 | Supra GT4・競合GT4の動画を20本ずつ整理(サムネイル付き、日英クエリを統合)。人気動画は再生数順、新着動画は投稿日時順 | YouTube検索結果ページのベストエフォート・スクレイピング |
+| 5 | SNSでの話題 | X/Facebookの投稿の代替として、Supra GT4・競合GT4に関するニュース・ブログでの話題言及。「最新順」「話題順」をタブで切り替え表示 | Google News RSS |
+| 6 | Supra GT4 お客様の声・クレーム関連情報 | リコール・不具合報道など公開情報(Supra GT4限定、競合車は含まない)。「最新順」「話題順」をタブで切り替え表示 | Google News RSS |
+| 7 | GR Supra GT4 参戦レース(地域別・全19シリーズ) | 日本・アジア(GT World Challenge Asia/スーパー耐久 ST-Zクラス/インタープロトシリーズ SUPRAクラス/SRO Japan Cup/SRO GT Cup中国)、米国(GT World Challenge America/GT4 America/IMSA Michelin Pilot Challenge)、欧州(GT World Challenge Europe/GT4 European Series/British GT/French GT4 Cup/GT4 Italian Series/ADAC GT4 Germany/ニュルブルクリンク NLS・24h/GT4 Winter Series)、オセアニア(GT World Challenge Australia/Monochrome GT4 Australia)、中東(24H Series Middle East)の5地域・19シリーズに整理。各シリーズカードのヘッダー直下にシリーズの特徴を説明。各地域のGT World Challenge(GT3主体の上位カテゴリー、同一大会ウィークエンド)も含めて掲載。各シリーズの今年度スケジュール・ランキング(Supra GT4をハイライト)・最新トピックスを表示 | Google News RSS(トピックス/結果/ランキング話題。各シリーズ名単独の一般クエリも含め、Supra GT4個別の話題が少ない時期でもレースウィークエンド毎の話題を拾えるようにしている) + 各シリーズ公式サイト(スーパー耐久は日程、GT4 Americaはチームランキングを実データ取得。他シリーズは公式カレンダー/ランキングページへの直接リンク) |
 
 「人気動画」以外の全セクションは新しい順/話題順に並び替えている。トヨタ公式発表以外の
 全セクションには、見出し文からの簡易センチメント判定(ポジティブ/ネガティブ)を付与している
@@ -104,6 +105,18 @@ GT World Challenge各地域シリーズは、GT4クラスと同一大会ウィ�
   生成されるが、フロントエンドは表示に使わず、`site/app.js` の `I18N` 辞書を section/region/
   series の安定したkeyで参照して日英を出し分けている。新しいセクション/地域/シリーズを追加した
   場合は、Python側のkeyと `I18N.ja` / `I18N.en` 双方のエントリを対応させること。
+- **Supra GT4参戦チームのドライバー区分は推定**: スーパー耐久ST-Zクラスのレギュレーション上、
+  A driverはジェントルマン(アマチュア)登録が義務付けられているためA driverを「ジェントルマン」、
+  B/C/D driverを「エキスパート/プラチナ」と区分表示しているが、これは規則に基づく推定であり、
+  公式サイトに個々のドライバーのライセンスグレード(プラチナ/エキスパート/ジェントルマン)が
+  掲載されているわけではない。
+- **Supra GT4参戦チームの写真は一部のみ**: Wikimedia Commonsで実車写真を確認できたのは
+  埼玉Green Brave・SHADE RACING・チームノアの3チームのみ。残り4チーム
+  (WING HIN MOTORSPORTS JAPAN・青山学院大学自動車部・TRACY SPORTS・OKABEJIDOSHA motorsport)は
+  適切なライセンス画像が見つからなかったため、プレースホルダー表示としている。
+- **一部チームはドライバー未発表**: チームノア・WING HIN MOTORSPORTS JAPAN・
+  OKABEJIDOSHA motorsportは、記事作成時点で公式サイト上のドライバー名が伏字("※※※※※")の
+  ため取得できていない(公式発表され次第、次回更新で自動的に反映される)。
 
 ## 構成
 
@@ -116,6 +129,7 @@ scripts/
     motorsports.py         # 地域別(日本・アジア/米国/欧州/オセアニア/中東)・全19シリーズのレース情報集約
     standings.py            # GT4 America公式サイトの実データランキング取得
     schedule.py              # スーパー耐久の年間レース日程取得
+    st_supra_teams.py         # スーパー耐久ST-Zクラス Supra GT4参戦チーム(ドライバー・順位を実データ取得)
     gt4_topics.py             # GT4カテゴリー全体のトピックス(ホモロゲーション/技術/不具合等)
     youtube.py                 # YouTube人気/新着動画
     social_buzz.py              # SNS話題の代替指標(最新順/話題順)

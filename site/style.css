@@ -912,6 +912,42 @@ a { color: inherit; }
   padding: 9px 14px 4px;
 }
 
+.series-card__toggle {
+  border-top: 1px solid var(--line);
+}
+
+.series-card__toggle-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 9px 14px;
+  background: none;
+  border: none;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  color: var(--ink-muted);
+  cursor: pointer;
+  text-align: left;
+}
+
+.series-card__toggle-btn:hover { color: var(--ink); }
+
+.series-card__toggle-btn::after {
+  content: "\25B8";
+  font-size: 0.7rem;
+  color: var(--ink-muted);
+  transition: transform 0.15s ease;
+  flex-shrink: 0;
+}
+
+.series-card__toggle-btn.is-active::after { transform: rotate(90deg); }
+
+.series-card__toggle-body.is-collapsed { display: none; }
+
 .series-card__group .panel__list {
   padding: 2px 6px 6px;
   max-height: 220px;
@@ -936,6 +972,38 @@ a { color: inherit; }
 .series-card__link:hover { background: var(--region-color-soft, var(--accent-soft)); }
 
 /* ---- GT4 car catalog ---- */
+
+.car-analysis {
+  margin: 14px 20px 4px;
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--accent-soft);
+  background: var(--accent-soft);
+}
+
+.car-analysis__title {
+  margin: 0 0 8px;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  color: var(--accent-ink);
+}
+
+.car-analysis__text {
+  margin: 0 0 8px;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--ink);
+}
+
+.car-analysis__text:last-of-type { margin-bottom: 0; }
+
+.car-analysis__updated {
+  margin: 10px 0 0;
+  font-size: 0.72rem;
+  color: var(--ink-muted);
+}
 
 .car-grid {
   padding: 16px 20px 20px;

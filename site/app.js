@@ -23,8 +23,7 @@
   // 別JSON(gt4_cars.json)から読み込むため、render()内で先頭に個別配置する。
   var LAYOUT = [
     { key: "gt4_topics", size: "full", icon: "gear" },
-    { key: "youtube_popular", size: "half", icon: "play" },
-    { key: "youtube_new", size: "half", icon: "play" },
+    { key: "youtube", size: "full", icon: "play" },
     { key: "social_buzz", size: "full", icon: "chat" },
     { key: "complaints", size: "full", icon: "alert" },
     { key: "motorsports", size: "full", icon: "flag" },
@@ -63,6 +62,8 @@
       emptySchedule: "日程情報を取得できませんでした。",
       tabLatest: "最新順",
       tabBuzz: "話題順",
+      tabYoutubeNew: "新着順",
+      tabYoutubePopular: "話題順",
       groupTopics: "トピックス",
       groupResults: "最新レース結果",
       groupStandings: "ランキング関連ニュース",
@@ -100,6 +101,7 @@
       titleUnknown: "(タイトル不明)",
       photoCredit: "写真: ",
       viaCommons: "、Wikimedia Commonsより",
+      analysisUpdatedPrefix: "分析更新: ",
       sections: {
         st_supra_teams: {
           title: "スーパー耐久 ST-Zクラス Supra GT4参戦チーム",
@@ -126,6 +128,7 @@
         },
         youtube_popular: { title: "YouTube 人気動画(Supra GT4・競合GT4)" },
         youtube_new: { title: "YouTube 新着動画(Supra GT4・競合GT4)" },
+        youtube: { title: "YouTube動画(Supra GT4・競合GT4)" },
         social_buzz: {
           title: "SNSでの話題(X/Facebook 代替指標)",
           note:
@@ -140,7 +143,7 @@
             "モニタリングです。「話題順」は検索結果内での上位表示度を注目度の代替指標として用いています" +
             "(実際のSNS拡散数やエンゲージメント数ではありません)。",
         },
-        gt4_cars: { title: "GT4参戦車両一覧" },
+        gt4_cars: { title: "GT4参戦車両一覧", analysisTitle: "GT4グローバル戦況・BOP動向分析" },
       },
       regions: {
         japan_asia: "日本・アジア",
@@ -278,6 +281,8 @@
       emptySchedule: "Could not fetch schedule information.",
       tabLatest: "Latest",
       tabBuzz: "Trending",
+      tabYoutubeNew: "Newest",
+      tabYoutubePopular: "Trending",
       groupTopics: "Topics",
       groupResults: "Latest Results",
       groupStandings: "Ranking News",
@@ -315,6 +320,7 @@
       titleUnknown: "(untitled)",
       photoCredit: "Photo: ",
       viaCommons: ", via Wikimedia Commons",
+      analysisUpdatedPrefix: "Analysis updated: ",
       sections: {
         st_supra_teams: {
           title: "Super Taikyu ST-Z Class — Supra GT4 Teams",
@@ -342,6 +348,7 @@
         },
         youtube_popular: { title: "YouTube Popular Videos (Supra GT4 & Rival GT4)" },
         youtube_new: { title: "YouTube Latest Videos (Supra GT4 & Rival GT4)" },
+        youtube: { title: "YouTube Videos (Supra GT4 & Rival GT4)" },
         social_buzz: {
           title: "Social Media Buzz (X/Facebook Proxy)",
           note:
@@ -356,7 +363,7 @@
             "publicly reported news (e.g. recalls). \"Trending\" order uses search-result ranking as a proxy for attention " +
             "(not actual share/engagement counts).",
         },
-        gt4_cars: { title: "GT4 Car Catalog" },
+        gt4_cars: { title: "GT4 Car Catalog", analysisTitle: "Global GT4 Landscape & BOP Trend Analysis" },
       },
       regions: {
         japan_asia: "Japan / Asia",
@@ -665,6 +672,47 @@
     return panel;
   }
 
+  function buildYoutubePanel(icon, data) {
+    var s = t();
+    var meta = s.sections.youtube || {};
+    var newItems = (data.sections.youtube_new && data.sections.youtube_new.items) || [];
+    var popularItems = (data.sections.youtube_popular && data.sections.youtube_popular.items) || [];
+    var panel = el("section", "panel panel--full");
+    panel.appendChild(buildPanelHeader(icon, meta.title, newItems.length));
+
+    var tabs = el("div", "tab-group");
+    var tabNew = el("button", "tab-group__btn is-active", s.tabYoutubeNew);
+    var tabPopular = el("button", "tab-group__btn", s.tabYoutubePopular);
+    tabs.appendChild(tabNew);
+    tabs.appendChild(tabPopular);
+    panel.appendChild(tabs);
+
+    var listWrap = el("div");
+    function renderList(items) {
+      listWrap.innerHTML = "";
+      if (items.length === 0) {
+        listWrap.appendChild(el("p", "panel__empty", s.emptyGeneric));
+      } else {
+        listWrap.appendChild(buildList(items));
+      }
+    }
+    renderList(newItems);
+    panel.appendChild(listWrap);
+
+    tabNew.addEventListener("click", function () {
+      tabNew.classList.add("is-active");
+      tabPopular.classList.remove("is-active");
+      renderList(newItems);
+    });
+    tabPopular.addEventListener("click", function () {
+      tabPopular.classList.add("is-active");
+      tabNew.classList.remove("is-active");
+      renderList(popularItems);
+    });
+
+    return panel;
+  }
+
   function buildSeriesGroup(title, items) {
     var group = el("div", "series-card__group");
     group.appendChild(el("div", "series-card__group-title", title));
@@ -710,8 +758,7 @@
 
   function buildScheduleBlock(s) {
     var i18n = t();
-    var wrap = el("div", "series-card__group");
-    wrap.appendChild(el("div", "series-card__group-title", i18n.groupSchedule));
+    var wrap = el("div", "series-card__toggle-content");
 
     if (s.schedule_link) {
       wrap.appendChild(el("p", "panel__note series-card__chart-note", i18n.scheduleLinkNote));
@@ -769,14 +816,25 @@
   }
 
   function buildRankingBlock(s) {
-    var i18n = t();
-    var wrap = el("div", "series-card__group");
-    wrap.appendChild(el("div", "series-card__group-title", i18n.groupRanking));
+    var wrap = el("div", "series-card__toggle-content");
     if (s.standings_chart && s.standings_chart.length > 0) {
       wrap.appendChild(buildStandingsChart(s.standings_chart));
     }
     wrap.appendChild(el("p", "panel__note series-card__chart-note", standingsNoteFor(s)));
     return wrap;
+  }
+
+  function buildToggleSection(label, contentEl) {
+    var section = el("div", "series-card__toggle");
+    var btn = el("button", "series-card__toggle-btn", label);
+    contentEl.classList.add("series-card__toggle-body", "is-collapsed");
+    btn.addEventListener("click", function () {
+      var collapsed = contentEl.classList.toggle("is-collapsed");
+      btn.classList.toggle("is-active", !collapsed);
+    });
+    section.appendChild(btn);
+    section.appendChild(contentEl);
+    return section;
   }
 
   function buildSeriesCard(regionKey, s) {
@@ -789,8 +847,8 @@
     header.appendChild(el("span", null, label));
     card.appendChild(header);
     if (desc) card.appendChild(el("p", "series-card__desc", desc));
-    card.appendChild(buildScheduleBlock(s));
-    card.appendChild(buildRankingBlock(s));
+    card.appendChild(buildToggleSection(i18n.groupSchedule, buildScheduleBlock(s)));
+    card.appendChild(buildToggleSection(i18n.groupRanking, buildRankingBlock(s)));
     card.appendChild(buildSeriesGroup(i18n.groupTopics, s.topics));
     card.appendChild(buildSeriesGroup(i18n.groupResults, s.results));
     card.appendChild(buildSeriesGroup(i18n.groupStandings, s.standings));
@@ -959,6 +1017,23 @@
     var panel = el("section", "panel panel--full");
     var cars = carsData.cars || [];
     panel.appendChild(buildPanelHeader("car", i18n.sections.gt4_cars.title, cars.length));
+
+    var analysis = carsData.trend_analysis;
+    if (analysis) {
+      var analysisBox = el("div", "car-analysis");
+      analysisBox.appendChild(el("h3", "car-analysis__title", i18n.sections.gt4_cars.analysisTitle));
+      pick(analysis)
+        .split("\n")
+        .filter(Boolean)
+        .forEach(function (para) {
+          analysisBox.appendChild(el("p", "car-analysis__text", para));
+        });
+      if (analysis.updated) {
+        analysisBox.appendChild(el("p", "car-analysis__updated", i18n.analysisUpdatedPrefix + analysis.updated));
+      }
+      panel.appendChild(analysisBox);
+    }
+
     var note = pick(carsData.note);
     if (note) panel.appendChild(el("p", "panel__note", note));
 
@@ -1085,6 +1160,10 @@
       board.appendChild(buildStTeamsPanel(data.sections.st_supra_teams));
     }
     LAYOUT.forEach(function (entry) {
+      if (entry.key === "youtube") {
+        board.appendChild(buildYoutubePanel(entry.icon, data));
+        return;
+      }
       var section = data.sections && data.sections[entry.key];
       if (!section) return;
       var panel;

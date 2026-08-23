@@ -89,6 +89,24 @@
       standingsNoteInterProtoSeries:
         "SUPRA[PROFESSIONAL]クラス ドライバーランキング(公式サイト実データ)。全車GR Supra GT4 EVOの" +
         "ワンメイククラスのため、特定車両のハイライトはありません。",
+      standingsNoteSroJapanCup:
+        "SRO Japan Cup GT4 Teams Championship(公式サイト実データ)。順位表に使用車種の記載がないため、" +
+        "Supra GT4のハイライトは行っていません。",
+      standingsNoteBritishGt4:
+        "British GT Championship GT4 Teams Championship(公式サイト実データ)。順位表に使用車種の記載がないため、" +
+        "Supra GT4のハイライトは行っていません。",
+      standingsNoteGt4EuropeanSeries:
+        "GT4 European Series PRO-AMクラス ランキング(公式サイト実データ)。順位表に使用車種の記載がないため、" +
+        "Supra GT4のハイライトは行っていません。",
+      standingsNoteFrenchGt4Cup:
+        "French GT4 Cup(FFSA GT)ランキング(公式サイト実データ)。順位表に使用車種の記載がないため、" +
+        "Supra GT4のハイライトは行っていません。",
+      standingsNoteGtWorldChallengeAustralia:
+        "GT World Challenge Australia Overall Teams Championship(公式サイト実データ)。GT3主体のシリーズのため" +
+        "Supra GT4(GT4クラス)のハイライトは対象外です。",
+      standingsNoteGt4Australia:
+        "Monochrome GT4 Australia Series Overall Teams Championship(公式サイト実データ)。順位表に使用車種の記載がないため、" +
+        "Supra GT4のハイライトは行っていません。",
       standingsNoteDefault:
         "このシリーズの公式サイトは順位表の構造を安定的に解釈できないため、グラフ化は行っていません。" +
         "「公式ランキングを見る」からご確認ください。",
@@ -308,6 +326,24 @@
       standingsNoteInterProtoSeries:
         "SUPRA [PROFESSIONAL] class driver ranking (live data from the official site). Since every car is a GR " +
         "Supra GT4 EVO in this one-make class, there's no single-car highlighting.",
+      standingsNoteSroJapanCup:
+        "SRO Japan Cup GT4 Teams Championship (live data from the official site). Car models aren't listed in the " +
+        "standings table, so there's no Supra GT4 highlighting.",
+      standingsNoteBritishGt4:
+        "British GT Championship GT4 Teams Championship (live data from the official site). Car models aren't " +
+        "listed in the standings table, so there's no Supra GT4 highlighting.",
+      standingsNoteGt4EuropeanSeries:
+        "GT4 European Series PRO-AM class ranking (live data from the official site). Car models aren't listed in " +
+        "the standings table, so there's no Supra GT4 highlighting.",
+      standingsNoteFrenchGt4Cup:
+        "French GT4 Cup (FFSA GT) ranking (live data from the official site). Car models aren't listed in the " +
+        "standings table, so there's no Supra GT4 highlighting.",
+      standingsNoteGtWorldChallengeAustralia:
+        "GT World Challenge Australia Overall Teams Championship (live data from the official site). Since this " +
+        "is a GT3-based series, there's no Supra GT4 (GT4-class) highlighting.",
+      standingsNoteGt4Australia:
+        "Monochrome GT4 Australia Series Overall Teams Championship (live data from the official site). Car models " +
+        "aren't listed in the standings table, so there's no Supra GT4 highlighting.",
       standingsNoteDefault:
         "This series' official site ranking table can't be parsed reliably, so it isn't charted here. Please check via " +
         "\"View official ranking.\"",
@@ -806,6 +842,12 @@
     gt_world_challenge_asia: "standingsNoteGtWorldChallengeAsia",
     gt_world_challenge_america: "standingsNoteGtWorldChallengeAmerica",
     inter_proto_series: "standingsNoteInterProtoSeries",
+    sro_japan_cup: "standingsNoteSroJapanCup",
+    british_gt4: "standingsNoteBritishGt4",
+    gt4_european_series: "standingsNoteGt4EuropeanSeries",
+    french_gt4_cup: "standingsNoteFrenchGt4Cup",
+    gt_world_challenge_australia: "standingsNoteGtWorldChallengeAustralia",
+    gt4_australia: "standingsNoteGt4Australia",
   };
 
   function standingsNoteFor(s) {

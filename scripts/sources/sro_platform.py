@@ -42,7 +42,12 @@ def _session() -> requests.Session:
 
 
 def _month_num(text: str) -> int:
-    return _MONTH_NUM.get(text.strip()[:3].upper(), 0)
+    text = text.strip()
+    # japancup.co等、日本語ローカライズされたSRO系サイトは月を"8月"のように表記する。
+    jp_m = re.match(r"(\d{1,2})\s*月", text)
+    if jp_m:
+        return int(jp_m.group(1))
+    return _MONTH_NUM.get(text[:3].upper(), 0)
 
 
 def _status(sort_key: int) -> str:
@@ -54,7 +59,9 @@ def _extract_select_options(html_text: str, select_name: str) -> list[tuple[str,
     block = re.search(rf'<select[^>]*name="{select_name}"[^>]*>(.*?)</select>', html_text, re.S)
     if not block:
         return []
-    options = re.findall(r'<option\s+value="([^"]*)"[^>]*>([^<]*)</option>', block.group(1))
+    # デフォルト選択中のoptionには value="..." の前に selected='selected' 等の属性が
+    # 挟まることがあるため、value属性の位置を固定せず任意の属性列の後方一致で拾う。
+    options = re.findall(r"<option\b[^>]*?\svalue=\"([^\"]*)\"[^>]*>([^<]*)</option>", block.group(1))
     return [(value, html_module.unescape(label.strip())) for value, label in options]
 
 
@@ -138,7 +145,7 @@ def fetch_calendar(calendar_url: str) -> list[dict]:
 
         date_block_re = re.compile(
             r'"calendar__date-number">(\d+)</span>\s*'
-            r'<span class="calendar__date-month">([A-Z]+)</span>\s*'
+            r'<span class="calendar__date-month">([A-Za-z]+|\d{1,2}\s*月)</span>\s*'
             r'<span class="calendar__date-year">(\d+)</span>',
             re.S,
         )
@@ -151,8 +158,22 @@ def fetch_calendar(calendar_url: str) -> list[dict]:
             if not dates or not track_m:
                 continue
             s_day, s_month, s_year = dates[0]
-            sort_key = int(s_year) * 10000 + _month_num(s_month) * 100 + int(s_day)
-            if len(dates) >= 2:
+            s_month_num = _month_num(s_month)
+            sort_key = int(s_year) * 10000 + s_month_num * 100 + int(s_day)
+            # japancup.co等、月が日本語表記("8月")のサイトは英語月名の日付表示と混在すると
+            # 不自然なため、スーパー耐久の日程表示("2026.08.28-30")と揃えた数値形式にする。
+            if "月" in s_month:
+                if len(dates) >= 2:
+                    e_day, e_month, e_year = dates[1]
+                    e_month_num = _month_num(e_month)
+                    date_range = (
+                        f"{e_year}.{s_month_num:02d}.{s_day}-{e_day}"
+                        if s_month_num == e_month_num
+                        else f"{e_year}.{s_month_num:02d}.{s_day}-{e_month_num:02d}.{e_day}"
+                    )
+                else:
+                    date_range = f"{s_year}.{s_month_num:02d}.{s_day}"
+            elif len(dates) >= 2:
                 e_day, e_month, e_year = dates[1]
                 date_range = (
                     f"{s_month} {s_day}–{e_day}, {e_year}"

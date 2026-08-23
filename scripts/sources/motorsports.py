@@ -6,14 +6,24 @@ GT World Challenge各地域シリーズ4つを含む、同一大会ウィーク�
 公式サイトの結果・ランキング表は構造がそれぞれ異なり安定したスクレイピングが難しいため、
 基本はニュース記事(Google News RSS)ベースでトピックス・レース結果・ランキング関連の
 話題を集約し、公式サイトのスケジュール/ランキングページへの直接リンクを添える
-(URLは実装時に実在を確認済み)。例外的に、以下5シリーズは日程・ランキングとも
+(URLは実装時に実在を確認済み)。例外的に、以下11シリーズは日程・ランキングとも
 公式サイトから実データで取得している。
   - スーパー耐久(日本・アジア、ST-Zクラス) : schedule.py / st_supra_teams.py
-  - GT World Challenge Asia、GT World Challenge America(いずれもGT3主体、参考掲載) :
-    sro_platform.py(SRO系公式サイト共通の日程・ランキング取得モジュール)
   - インタープロトシリーズ(SUPRA[PROFESSIONAL]クラス) : inter_proto_series.py
+  - 以下9シリーズはSRO Motorsports Group系列共通のCMSプラットフォームのため
+    sro_platform.py(SRO系公式サイト共通の日程・ランキング取得モジュール)で取得:
+    GT World Challenge Asia・GT World Challenge America・GT World Challenge Australia
+    (いずれもGT3主体、参考掲載)、SRO Japan Cup、GT4 European Series、
+    British GT Championship(GT4クラス)、French GT4 Cup(FFSA GT)、
+    Monochrome GT4 Australia Series(いずれもGT4クラス、順位表に使用車種の記載が
+    ないためSupra GT4ハイライトなし)
 また米国のGT4 America(Silver Teams)はチームランキングのみ公式サイトから実データで
 取得している(理由は standings.py 参照)。
+残るシリーズ(SRO GT Cup China、IMSA Michelin Pilot Challenge、GT4 Italian Series、
+ADAC GT4 Germany、ニュルブルクリンクNLS、GT4 Winter Series、24H Series Middle East)は、
+公式サイト自体は特定できているものの、Cloudflareボット対策・PDF専用配布・共通季間
+順位表の非存在などにより安定したスクレイピングができないため、公式サイトへの直接
+リンクのみを掲載している(2026年8月時点で全リンクの実在を再確認済み)。
 
 各シリーズの"topics"クエリは、"GR Supra GT4"との共起を要求する狭いクエリに加えて、
 シリーズ名単独の一般クエリも必ず1つ以上含めている。Supra GT4個別の話題が少ない
@@ -115,8 +125,9 @@ REGIONS = {
                         ("SROジャパンカップ GT4クラス ランキング スープラ", "ja", "JP", "JP:ja"),
                     ],
                 },
-                "schedule_link": "https://www.gt-world-challenge-asia.com/calendar",
-                "standings_url": "https://www.gt-world-challenge-asia.com/standings",
+                "schedule_link": None,  # 公式サイトから実データ取得(has_real_schedule)
+                "has_real_schedule": True,
+                "standings_url": "https://japancup.co/standings",
             },
             {
                 "key": "sro_gt_cup_china",
@@ -237,8 +248,9 @@ REGIONS = {
                         ("\"GT4 European Series\" championship standings Toyota OR \"GR Supra\"", "en-GB", "GB", "GB:en"),
                     ],
                 },
-                "schedule_link": "https://www.gt4series.com/calendar",
-                "standings_url": "https://www.gt4series.com/standings",
+                "schedule_link": None,  # 公式サイトから実データ取得(has_real_schedule)
+                "has_real_schedule": True,
+                "standings_url": "https://www.gt4europeanseries.com/standings",
             },
             {
                 "key": "british_gt4",
@@ -255,8 +267,9 @@ REGIONS = {
                         ("\"British GT\" GT4 championship standings Toyota OR \"GR Supra\"", "en-GB", "GB", "GB:en"),
                     ],
                 },
-                "schedule_link": "https://www.britishgt.com/calendar",
-                "standings_url": "https://www.britishgt.com/standings?filter_standing_type=0_2_teams",
+                "schedule_link": None,  # 公式サイトから実データ取得(has_real_schedule)
+                "has_real_schedule": True,
+                "standings_url": "https://www.britishgt.com/standings",
             },
             {
                 "key": "french_gt4_cup",
@@ -274,8 +287,9 @@ REGIONS = {
                         ("\"French GT4 Cup\" championship standings Toyota OR \"GR Supra\"", "en-US", "US", "US:en"),
                     ],
                 },
-                "schedule_link": _search_link("French GT4 Cup 2026 calendar official SRO"),
-                "standings_url": _search_link("French GT4 Cup 2026 standings official SRO"),
+                "schedule_link": None,  # 公式サイトから実データ取得(has_real_schedule)
+                "has_real_schedule": True,
+                "standings_url": "https://ffsagt.gt4series.com/standings",
             },
             {
                 "key": "gt4_italian_series",
@@ -292,8 +306,8 @@ REGIONS = {
                         ("\"GT4 Italian Series\" championship standings Toyota OR \"GR Supra\"", "en-US", "US", "US:en"),
                     ],
                 },
-                "schedule_link": "https://www.gt4series.com/calendar",
-                "standings_url": "https://www.gt4series.com/standings",
+                "schedule_link": "https://www.acisport.it/it/CIGT/calendario-e-risultati/2026/1045/GT4-Italy-Series",
+                "standings_url": "https://www.acisport.it/it/CIGT/classifiche/2026",
             },
             {
                 "key": "adac_gt4_germany",
@@ -331,7 +345,7 @@ REGIONS = {
                     ],
                 },
                 "schedule_link": "https://www.nuerburgring-langstrecken-serie.de/language/en/calendar-nurburgring-langstrecken-serie-2026/",
-                "standings_url": _search_link("NLS Nürburgring Langstreckenserie SP10 standings 2026"),
+                "standings_url": "https://www.nuerburgring-langstrecken-serie.de/language/en/class-winners/",
             },
             {
                 "key": "gt4_winter_series",
@@ -348,8 +362,8 @@ REGIONS = {
                         ("\"GT4 Winter Series\" championship standings Toyota OR \"GR Supra\"", "en-US", "US", "US:en"),
                     ],
                 },
-                "schedule_link": "https://gedlich-racing.com/en/winter-series/gt4-winter-series/",
-                "standings_url": _search_link("GT4 Winter Series 2026 standings results"),
+                "schedule_link": "https://winter-series.racing/gt4-winter-series/",
+                "standings_url": "https://winter-series.racing/gt4-winter-series/results/",
             },
         ],
     },
@@ -372,7 +386,8 @@ REGIONS = {
                         ("\"GT World Challenge Australia\" standings Toyota OR \"GR Supra\"", "en-AU", "AU", "AU:en"),
                     ],
                 },
-                "schedule_link": "https://www.gt-world-challenge-australia.com/calendar",
+                "schedule_link": None,  # 公式サイトから実データ取得(has_real_schedule)
+                "has_real_schedule": True,
                 "standings_url": "https://www.gt-world-challenge-australia.com/standings",
             },
             {
@@ -390,7 +405,8 @@ REGIONS = {
                         ("\"GT4 Australia\" championship standings Toyota OR \"GR Supra\"", "en-AU", "AU", "AU:en"),
                     ],
                 },
-                "schedule_link": "https://gt4australia.com.au/calendar",
+                "schedule_link": None,  # 公式サイトから実データ取得(has_real_schedule)
+                "has_real_schedule": True,
                 "standings_url": "https://gt4australia.com.au/standings",
             },
         ],
@@ -514,6 +530,25 @@ def fetch() -> dict:
         ),
     )
 
+    # 日本・アジア: SRO Japan Cup(GT4クラス)は、2024年にGT World Challenge AsiaのGT4クラスを
+    # 引き継いだ際に専用の公式サイト(japancup.co)が新設されており、同じSRO系列プラットフォームの
+    # ため日程・順位表(GT4 Teams Championship)とも実データ取得できる。順位表に使用車種の記載が
+    # ないため、Supra GT4のハイライトは行わない。
+    sjc_chart = fetch_sro_standings("https://japancup.co/standings", "GT4 Teams Championship", limit=15)
+    _set(
+        "japan_asia",
+        "sro_japan_cup",
+        schedule_link=None,
+        schedule=fetch_sro_calendar("https://japancup.co/calendar"),
+        standings_chart=sjc_chart["standings"],
+        standings_error=bool(sjc_chart["error"]),
+        standings_chart_note=(
+            sjc_chart["error"]
+            or "SRO Japan Cup GT4 Teams Championship(公式サイト実データ)。"
+            "順位表に使用車種の記載がないため、Supra GT4のハイライトは行っていません。"
+        ),
+    )
+
     # 米国: GT4 America(Silver Teams)は公式サイトからチームランキングを実データ取得する。
     us_chart = fetch_gt4_america_team_standings(limit=15)
     _set(
@@ -545,6 +580,97 @@ def fetch() -> dict:
             gtwcam_chart["error"]
             or "GT World Challenge America Pro-Am Teams(公式サイト実データ)。"
             "GT3主体のシリーズのためSupra GT4(GT4クラス)のハイライトは対象外です。"
+        ),
+    )
+
+    # 欧州: British GT ChampionshipのGT4クラスも同じSRO系列プラットフォームのため実データ
+    # 取得できる。順位表に使用車種の記載がないため、Supra GT4のハイライトは行わない。
+    bgt4_chart = fetch_sro_standings("https://www.britishgt.com/standings", "GT4 Teams Championship", limit=15)
+    _set(
+        "europe",
+        "british_gt4",
+        schedule_link=None,
+        schedule=fetch_sro_calendar("https://www.britishgt.com/calendar"),
+        standings_chart=bgt4_chart["standings"],
+        standings_error=bool(bgt4_chart["error"]),
+        standings_chart_note=(
+            bgt4_chart["error"]
+            or "British GT Championship GT4 Teams Championship(公式サイト実データ)。"
+            "順位表に使用車種の記載がないため、Supra GT4のハイライトは行っていません。"
+        ),
+    )
+
+    # 欧州: GT4 European Seriesは、gt4series.com(GT4メーカーランキング集計サイト、別法人)とは
+    # 別に専用の公式サイト(gt4europeanseries.com)を持ち、同じSRO系列プラットフォームのため
+    # 実データ取得できる。クラスはAM/PRO-AM/SILVERの3つに分かれ、PRO-AMを代表値として採用。
+    # 順位表に使用車種の記載がないため、Supra GT4のハイライトは行わない。
+    gt4eu_chart = fetch_sro_standings("https://www.gt4europeanseries.com/standings", "PRO-AM", limit=15)
+    _set(
+        "europe",
+        "gt4_european_series",
+        schedule_link=None,
+        schedule=fetch_sro_calendar("https://www.gt4europeanseries.com/calendar"),
+        standings_chart=gt4eu_chart["standings"],
+        standings_error=bool(gt4eu_chart["error"]),
+        standings_chart_note=(
+            gt4eu_chart["error"]
+            or "GT4 European Series PRO-AMクラス ランキング(公式サイト実データ)。"
+            "順位表に使用車種の記載がないため、Supra GT4のハイライトは行っていません。"
+        ),
+    )
+
+    # 欧州: French GT4 Cup(FFSA GT)も同じSRO系列プラットフォーム(gt4series.com系サブドメイン)
+    # のため実データ取得できる。順位表に使用車種の記載がないため、Supra GT4のハイライトは行わない。
+    fgt4_chart = fetch_sro_standings("https://ffsagt.gt4series.com/standings", "GT4 Général", limit=15)
+    _set(
+        "europe",
+        "french_gt4_cup",
+        schedule_link=None,
+        schedule=fetch_sro_calendar("https://ffsagt.gt4series.com/calendar"),
+        standings_chart=fgt4_chart["standings"],
+        standings_error=bool(fgt4_chart["error"]),
+        standings_chart_note=(
+            fgt4_chart["error"]
+            or "French GT4 Cup(FFSA GT)ランキング(公式サイト実データ)。"
+            "順位表に使用車種の記載がないため、Supra GT4のハイライトは行っていません。"
+        ),
+    )
+
+    # オセアニア: GT World Challenge Australiaも同じSRO系列プラットフォームのため実データ
+    # 取得できる。GT3主体のシリーズのためSupra GT4のハイライトは対象外。
+    gtwcau_chart = fetch_sro_standings(
+        "https://www.gt-world-challenge-australia.com/standings", "Overall Teams Championship", limit=15
+    )
+    _set(
+        "oceania",
+        "gt_world_challenge_australia",
+        schedule_link=None,
+        schedule=fetch_sro_calendar("https://www.gt-world-challenge-australia.com/calendar"),
+        standings_chart=gtwcau_chart["standings"],
+        standings_error=bool(gtwcau_chart["error"]),
+        standings_chart_note=(
+            gtwcau_chart["error"]
+            or "GT World Challenge Australia Overall Teams Championship(公式サイト実データ)。"
+            "GT3主体のシリーズのためSupra GT4(GT4クラス)のハイライトは対象外です。"
+        ),
+    )
+
+    # オセアニア: Monochrome GT4 Australia Seriesも同じSRO系列プラットフォームのため実データ
+    # 取得できる。順位表に使用車種の記載がないため、Supra GT4のハイライトは行わない。
+    gt4au_chart = fetch_sro_standings(
+        "https://gt4australia.com.au/standings", "Overall Teams Championship", limit=15
+    )
+    _set(
+        "oceania",
+        "gt4_australia",
+        schedule_link=None,
+        schedule=fetch_sro_calendar("https://gt4australia.com.au/calendar"),
+        standings_chart=gt4au_chart["standings"],
+        standings_error=bool(gt4au_chart["error"]),
+        standings_chart_note=(
+            gt4au_chart["error"]
+            or "Monochrome GT4 Australia Series Overall Teams Championship(公式サイト実データ)。"
+            "順位表に使用車種の記載がないため、Supra GT4のハイライトは行っていません。"
         ),
     )
 

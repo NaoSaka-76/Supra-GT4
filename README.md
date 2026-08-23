@@ -21,7 +21,7 @@ Toyota GR Supra GT4に関する情報を1か所に集約するモニタリング
 | 4 | YouTube 人気動画/新着動画 | Supra GT4・競合GT4の動画を20本ずつ整理(サムネイル付き、日英クエリを統合)。人気動画は再生数順、新着動画は投稿日時順 | YouTube検索結果ページのベストエフォート・スクレイピング |
 | 5 | SNSでの話題 | X/Facebookの投稿の代替として、Supra GT4・競合GT4に関するニュース・ブログでの話題言及。「最新順」「話題順」をタブで切り替え表示 | Google News RSS |
 | 6 | Supra GT4 お客様の声・クレーム関連情報 | リコール・不具合報道など公開情報(Supra GT4限定、競合車は含まない)。「最新順」「話題順」をタブで切り替え表示 | Google News RSS |
-| 7 | GR Supra GT4 参戦レース(地域別・全19シリーズ) | 日本・アジア(GT World Challenge Asia/スーパー耐久 ST-Zクラス/インタープロトシリーズ SUPRAクラス/SRO Japan Cup/SRO GT Cup中国)、米国(GT World Challenge America/GT4 America/IMSA Michelin Pilot Challenge)、欧州(GT World Challenge Europe/GT4 European Series/British GT/French GT4 Cup/GT4 Italian Series/ADAC GT4 Germany/ニュルブルクリンク NLS・24h/GT4 Winter Series)、オセアニア(GT World Challenge Australia/Monochrome GT4 Australia)、中東(24H Series Middle East)の5地域・19シリーズに整理。各シリーズカードのヘッダー直下にシリーズの特徴を説明。各地域のGT World Challenge(GT3主体の上位カテゴリー、同一大会ウィークエンド)も含めて掲載。各シリーズの今年度スケジュール・ランキング(Supra GT4をハイライト)・最新トピックスを表示 | Google News RSS(トピックス/結果/ランキング話題。各シリーズ名単独の一般クエリも含め、Supra GT4個別の話題が少ない時期でもレースウィークエンド毎の話題を拾えるようにしている) + 各シリーズ公式サイト(スーパー耐久は日程、GT4 Americaはチームランキングを実データ取得。他シリーズは公式カレンダー/ランキングページへの直接リンク) |
+| 7 | GR Supra GT4 参戦レース(地域別・全19シリーズ) | 日本・アジア(GT World Challenge Asia/スーパー耐久 ST-Zクラス/インタープロトシリーズ SUPRAクラス/SRO Japan Cup/SRO GT Cup中国)、米国(GT World Challenge America/GT4 America/IMSA Michelin Pilot Challenge)、欧州(GT World Challenge Europe/GT4 European Series/British GT/French GT4 Cup/GT4 Italian Series/ADAC GT4 Germany/ニュルブルクリンク NLS・24h/GT4 Winter Series)、オセアニア(GT World Challenge Australia/Monochrome GT4 Australia)、中東(24H Series Middle East)の5地域・19シリーズに整理。各シリーズカードのヘッダー直下にシリーズの特徴を説明。各地域のGT World Challenge(GT3主体の上位カテゴリー、同一大会ウィークエンド)も含めて掲載。日程・ランキングはボタンを押すと展開表示。各シリーズの今年度スケジュール・ランキング(Supra GT4をハイライト)・最新トピックスを表示 | Google News RSS(トピックス/結果/ランキング話題。各シリーズ名単独の一般クエリも含め、Supra GT4個別の話題が少ない時期でもレースウィークエンド毎の話題を拾えるようにしている) + 各シリーズ公式サイト(11シリーズは日程・ランキングを実データ取得。他シリーズは公式カレンダー/ランキングページへの直接リンク) |
 
 「人気動画」以外の全セクションは新しい順/話題順に並び替えている。トヨタ公式発表以外の
 全セクションには、見出し文からの簡易センチメント判定(ポジティブ/ネガティブ)を付与している
@@ -36,22 +36,22 @@ Toyota GR Supra GT4に関する情報を1か所に集約するモニタリング
 | 日本・アジア | GT World Challenge Asia(GT3主体・参考掲載) | 日程・GT3 Teams Championshipランキングを実データ取得 |
 | 日本・アジア | スーパー耐久 ST-Zクラス | 日程・チームランキングを実データ取得(Supra GT4ハイライト) |
 | 日本・アジア | インタープロトシリーズ SUPRAクラス(GR Supra GT4 EVOのワンメイククラス) | 日程・SUPRA[PROFESSIONAL]クラスランキングを実データ取得 |
-| 日本・アジア | SRO Japan Cup(GT4クラス) | 公式カレンダー/ランキングへのリンクのみ |
+| 日本・アジア | SRO Japan Cup(GT4クラス) | 日程・GT4 Teams Championshipランキングを実データ取得(japancup.co) |
 | 日本・アジア | SRO GT Cup(中国) | 公式サイト未確定のため検索リンク |
 | 米国 | GT World Challenge America(GT3主体・参考掲載) | 日程・Pro-Am Teamsランキングを実データ取得 |
 | 米国 | Pirelli/Fanatec GT4 America(Silver Teams) | チームランキングを実データ取得(Supra GT4ハイライト) |
-| 米国 | IMSA Michelin Pilot Challenge(GSクラス) | 公式カレンダー/ランキングへのリンクのみ |
+| 米国 | IMSA Michelin Pilot Challenge(GSクラス) | 公式カレンダー/ランキングへのリンクのみ(Cloudflareボット対策のため取得不可) |
 | 欧州 | GT World Challenge Europe(GT3主体・参考掲載) | 公式カレンダー/ランキングへのリンクのみ |
-| 欧州 | GT4 European Series | 公式カレンダー/ランキングへのリンクのみ |
-| 欧州 | British GT Championship(GT4クラス) | 公式カレンダー/ランキングへのリンクのみ |
-| 欧州 | French GT4 Cup | 公式サイト未確定のため検索リンク |
-| 欧州 | GT4 Italian Series | 公式カレンダー/ランキングへのリンクのみ |
+| 欧州 | GT4 European Series | 日程・PRO-AMクラスランキングを実データ取得(gt4europeanseries.com) |
+| 欧州 | British GT Championship(GT4クラス) | 日程・GT4 Teams Championshipランキングを実データ取得 |
+| 欧州 | French GT4 Cup(FFSA GT) | 日程・GT4クラスランキングを実データ取得(ffsagt.gt4series.com) |
+| 欧州 | GT4 Italian Series | 公式カレンダーへのリンク(acisport.it)、ランキングはPDF配布のみのためリンクのみ |
 | 欧州 | ADAC GT4 Germany | 公式カレンダー/ランキングへのリンクのみ |
-| 欧州 | ニュルブルクリンク NLS・24h(SP10クラス) | 公式カレンダーへのリンク、ランキングは検索リンク |
-| 欧州 | GT4 Winter Series(イベリア半島) | 主催者(GEDLICH Racing)公式ページへのリンク、ランキングは検索リンク |
-| オセアニア | GT World Challenge Australia(GT3主体・参考掲載) | 公式カレンダー/ランキングへのリンクのみ |
-| オセアニア | Monochrome GT4 Australia Series | 公式カレンダー/ランキングへのリンクのみ |
-| 中東 | 24H Series Middle East(GT4クラス) | 公式カレンダー/ランキングへのリンクのみ |
+| 欧州 | ニュルブルクリンク NLS・24h(SP10クラス) | 公式カレンダーへのリンク、季間累積ランキングが存在しないためクラス別優勝リストへのリンク |
+| 欧州 | GT4 Winter Series(イベリア半島) | 公式サイト(winter-series.racing)へのリンク、ランキングはPDF配布のみのためリンクのみ |
+| オセアニア | GT World Challenge Australia(GT3主体・参考掲載) | 日程・Overall Teams Championshipランキングを実データ取得 |
+| オセアニア | Monochrome GT4 Australia Series | 日程・Overall Teams Championshipランキングを実データ取得 |
+| 中東 | 24H Series Middle East(GT4クラス) | 公式カレンダー/ランキングへのリンクのみ(順位表はiframe埋め込みのため今回は見送り) |
 
 GT World Challenge各地域シリーズは、GT4クラスと同一大会ウィークエンドで開催されるGT3主体の
 上位カテゴリーとして参考掲載している(Supra GT4自体はGT4クラスの各シリーズに参戦)。
@@ -63,24 +63,35 @@ GT World Challenge各地域シリーズは、GT4クラスと同一大会ウィ�
 - **GT4 America(米国)**: gt4-america.comはTC America(tcamerica.us)と同じSRO Motorsports
   America系列の共通CMSで運用されており、"Silver Teams"クラスの順位表を実データで取得し、
   各レースの完全結果ページから補完した使用車種でGR Supra GT4参戦チームをハイライト表示している。
-- **GT World Challenge Asia・GT World Challenge America(GT3主体・参考掲載)**:
-  gt-world-challenge-asia.com/gt-world-challenge-america.comもGT4 Americaと同じSRO系列の
-  共通CMSで運用されていることを確認したため、`sro_platform.py` の汎用スクレイパーで日程
-  (calendar)とチームランキング(Asiaは"GT3 Teams Championship"、Americaは"Pro-Am Teams")を
-  実データ取得している。いずれもGT3主体のシリーズのためSupra GT4(GT4クラス)のハイライトは
-  対象外。
+- **SRO系列共通CMS(`sro_platform.py`)で実データ取得している8シリーズ**: SRO Motorsports
+  Groupが運用するサイトの多くは同一のCMSで構築されており、`filter_season_id`/
+  `filter_standing_type` のセレクトボックスで日程・順位表を切り替えられる共通構造を持つ。
+  この汎用スクレイパーで日程(calendar)とランキングを実データ取得しているのは、
+  GT World Challenge Asia("GT3 Teams Championship")・GT World Challenge America
+  ("Pro-Am Teams")・GT World Challenge Australia("Overall Teams Championship"、いずれも
+  GT3主体のためSupra GT4のハイライトは対象外)、SRO Japan Cup("GT4 Teams Championship"、
+  japancup.co)・GT4 European Series("PRO-AM"、gt4europeanseries.com。gt4series.comは
+  別法人が運営する全地域統合のGT4メーカーランキングサイトで別物のため使用していない)・
+  British GT Championship GT4クラス("GT4 Teams Championship")・French GT4 Cup/FFSA GT
+  ("GT4 Général"、ffsagt.gt4series.com)・Monochrome GT4 Australia Series
+  ("Overall Teams Championship")の8シリーズ。後者5シリーズは順位表に使用車種の記載がない
+  ため、Supra GT4個別のハイライトは行っていない。
 - **インタープロトシリーズ SUPRAクラス(日本・アジア)**: 富士スピードウェイで開催される
   ワンメイクレース。トップページの年間日程と、ランキングページ(/ranking/)の
   SUPRA[PROFESSIONAL]クラス順位表(`<table class="stali_ranktable">`)を、いずれも
   `inter_proto_series.py` で実データ取得している。全車GR Supra GT4 EVOのワンメイククラスの
   ため、特定チームのハイライトは行わない。
-- **上記5つ以外の14シリーズ**: 順位表のクラス別フィルター構造やチーム別使用車種の確定方法を
-  安定的に確認できていないため、誤表示リスクを避けグラフ化は行わず、公式カレンダー/ランキング
-  ページへの直接リンクのみを表示している(URLは実装時に実在を確認済み。ただしFrench GT4 Cup・
-  SRO GT Cup中国・ニュルブルクリンクNLS標準順位表・GT4 Winter Seriesの4シリーズは安定した
-  公式URLを特定できなかったため、Google検索へのリンクとしている)。トピックス/結果/ランキング
-  関連のニュースはGoogle News RSSでSupra GT4関連の話題を検索しているため、Supra GT4の
-  参戦実績が薄い/未確認のシリーズでは「該当情報なし」と表示されることがある。
+- **上記11シリーズ以外の8シリーズ**: 公式サイト自体は特定できているものの(2026年8月時点で
+  全リンクの実在を再確認済み)、以下の理由で安定したスクレイピングができないため公式サイトへの
+  直接リンクのみを表示している。IMSA Michelin Pilot Challenge(米国)はCloudflareのボット
+  対策により静的取得不可。GT4 Italian Series(欧州・acisport.it)とGT4 Winter Series
+  (欧州・winter-series.racing)はランキングがPDF配布のみでHTML表がない。ニュルブルクリンク
+  NLS(欧州)はGT3系シリーズのような季間累積ランキングが存在せず、レース毎のクラス別優勝リスト
+  のみ。24H Series Middle East(中東)は順位表がiframe埋め込み配信のため今回は見送り。
+  ADAC GT4 Germany(欧州)は静的HTMLで取得自体は可能と判明しているが未実装。SRO GT Cup
+  中国は専用の公式サイト自体が見つからず、Google検索へのリンクとしている。トピックス/結果/
+  ランキング関連のニュースはGoogle News RSSでSupra GT4関連の話題を検索しているため、
+  Supra GT4の参戦実績が薄い/未確認のシリーズでは「該当情報なし」と表示されることがある。
 
 ## 既知の制約
 

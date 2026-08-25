@@ -15,6 +15,7 @@ Toyota GR Supra GT4に関する情報を1か所に集約するモニタリング
 
 | 表示順 | セクション | 内容 | 取得方法 |
 | --- | --- | --- | --- |
+| 0 | 直近24時間ダイジェスト | GT4カテゴリー最新トピックス・YouTube新着動画・SNSでの話題・お客様の声/クレーム・参戦レース(トピックス/結果/ランキング)の各セクションについて、過去24時間以内に更新された件数をピル状の行で一覧表示。件数1件以上の行はハイライトされ、クリックすると該当セクションへスムーズスクロール。各セクション内の個別記事・動画も、24時間以内に公開されたものには背景ハイライトと「24時間以内」バッジを付与(判定はニュース記事のpublished日時、YouTube動画は取得時点からの経過秒数を使用) | 各セクションの取得データをブラウザ側で集計(サーバー側の追加処理なし) |
 | 1 | GT4参戦車両一覧 | 現在SRO GT4 Manufacturer Rankingに参加している9メーカー(Toyota・BMW・Mercedes-AMG・Porsche・Ford・Audi・McLaren・Aston Martin・Ginetta)に、日本のスーパー耐久ST-Zクラス等で参戦するNissanを加えた10メーカーの最新モデルを写真付きでリスト化。車名直下に特徴・戦闘力の説明、参考価格、エンジン/出力/トルク/車重/トランスミッション等のスペックと、各社公式サイトへのリンクを掲載。Supra GT4のみハイライト表示 | 各社公式発表・報道の参考価格(手動収集、静的データ)+ 写真はWikimedia Commonsのクリエイティブ・コモンズ・ライセンス画像(撮影者・ライセンスを明記) |
 | 2 | スーパー耐久 ST-Zクラス Supra GT4参戦チーム | 2026年シーズンにGR Supra GT4で参戦する全7チーム(埼玉Green Brave・SHADE RACING・WING HIN MOTORSPORTS JAPAN・青山学院大学自動車部・チームノア・TRACY SPORTS・OKABEJIDOSHA motorsport)をGT4参戦車両一覧と同じカード形式で表示。チーム名・運営母体/オーナーの説明、開幕戦から直近の開催済みラウンドまでに参戦した全ドライバー(重複除去済み、ジェントルマン/エキスパート・プラチナの推定表示)、ST-Zクラス内の現在順位・ポイントを掲載 | チーム背景は手動収集の静的データ。ドライバー名は各ラウンドの公式エントリーリスト(race/round_XX.html)、順位/ポイントは公式順位表(race/standing.html)から、いずれも公式サイト(supertaikyu.com)から毎回実データ取得。写真は取得できたチーム(3/7)のみWikimedia CommonsのCCライセンス画像を使用 |
 | 3 | GT4カテゴリー最新トピックス | GT4ホモロゲーション/レギュレーション、競合GT4(BMW M4 GT4・Mercedes-AMG GT4・Porsche Cayman GT4・Ford Mustang GT4・Aston Martin Vantage GT4・Audi R8 LMS GT4・McLaren Artura GT4等)の開発・アップデート、技術情報、Supra GT4や競合車の不具合情報をカテゴリー別バッジ付きで新着順に表示 | Google News RSS(日英) |

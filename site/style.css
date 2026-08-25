@@ -12,6 +12,10 @@
   --accent-soft: #3a1218;
   --accent-ink: #ff5a68;
 
+  /* 24時間ダイジェスト/新着ハイライト用のセカンダリアクセント(ブランド赤とは独立) */
+  --accent2: #4fb3e0;
+  --accent2-soft: #12293a;
+
   --good: #35c98a;
   --good-soft: #123527;
   --critical: #ff5a68;
@@ -68,6 +72,9 @@
     --accent: #c40819;
     --accent-soft: #fbe6e8;
     --accent-ink: #c40819;
+
+    --accent2: #1f6fa8;
+    --accent2-soft: #e2eef6;
 
     --good: #157a4c;
     --good-soft: #e2f4ea;
@@ -439,6 +446,55 @@ a { color: inherit; }
   border-bottom: 1px solid var(--line);
 }
 
+/* ---- 直近24時間ダイジェスト(最上部・セクション別件数のみ) ---- */
+
+.digest-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px 20px 18px;
+}
+
+.digest-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--surface-sunken);
+  font-size: 0.78rem;
+  color: var(--ink-muted);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.digest-row:hover,
+.digest-row:focus-visible {
+  border-color: var(--accent2);
+}
+
+.digest-row--active {
+  border-color: var(--accent2);
+  background: var(--accent2-soft);
+  color: var(--ink);
+}
+
+.digest-row__label {
+  font-weight: 600;
+}
+
+.digest-row__count {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink-muted);
+}
+
+.digest-row--active .digest-row__count {
+  color: var(--accent2);
+}
+
 .tab-group {
   display: flex;
   gap: 6px;
@@ -502,6 +558,10 @@ a { color: inherit; }
 .item--positive { border-left-color: var(--good); }
 .item--negative { border-left-color: var(--critical); }
 
+.item--recent { background: var(--accent2-soft); }
+.item--recent:hover,
+.item--recent:focus-visible { background: var(--surface-sunken); }
+
 .item__thumb {
   width: 108px;
   aspect-ratio: 16 / 9;
@@ -540,6 +600,19 @@ a { color: inherit; }
   color: var(--accent-ink);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
+}
+
+.new-badge {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.68rem;
+  letter-spacing: 0.03em;
+  padding: 1px 7px;
+  border-radius: 999px;
+  background: var(--accent2-soft);
+  color: var(--accent2);
 }
 
 .sentiment-pill {

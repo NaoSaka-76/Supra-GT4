@@ -16,6 +16,8 @@
       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4l9.5 16H2.5z"/><line x1="12" y1="10" x2="12" y2="14.5"/><circle cx="12" cy="17.3" r="0.9" fill="currentColor" stroke="none"/></svg>',
     car:
       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16.5V12l1.8-5A2 2 0 017.7 5.5h8.6a2 2 0 011.9 1.5l1.8 5v4.5"/><path d="M4 16.5h16"/><path d="M4 16.5v2.3a1 1 0 001 1h1.2a1 1 0 001-1v-2.3"/><path d="M16.8 16.5v2.3a1 1 0 001 1H19a1 1 0 001-1v-2.3"/><circle cx="7.5" cy="13.2" r="1.1" fill="currentColor" stroke="none"/><circle cx="16.5" cy="13.2" r="1.1" fill="currentColor" stroke="none"/></svg>',
+    clock:
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2"/><path d="M9 2h6"/></svg>',
   };
 
   // 表示順: GT4参戦車両一覧 → GT4カテゴリー最新トピックス → YouTube → SNS → お客様の声/クレーム
@@ -120,6 +122,9 @@
       photoCredit: "写真: ",
       viaCommons: "、Wikimedia Commonsより",
       analysisUpdatedPrefix: "分析更新: ",
+      digestTitle: "直近24時間ダイジェスト",
+      digestNote: "各セクションで過去24時間以内に更新された件数です(トピックス・動画・レース関連ニュース等の合計)。行をクリックすると該当セクションへ移動します。",
+      newBadge: "24時間以内",
       sections: {
         st_supra_teams: {
           title: "スーパー耐久 ST-Zクラス Supra GT4参戦チーム",
@@ -357,6 +362,9 @@
       photoCredit: "Photo: ",
       viaCommons: ", via Wikimedia Commons",
       analysisUpdatedPrefix: "Analysis updated: ",
+      digestTitle: "Last 24 Hours Digest",
+      digestNote: "Update counts per section within the last 24 hours (topics, videos, race-related news, etc.). Click a row to jump to that section.",
+      newBadge: "Within 24h",
       sections: {
         st_supra_teams: {
           title: "Super Taikyu ST-Z Class — Supra GT4 Teams",
@@ -569,6 +577,21 @@
     return raw;
   }
 
+  function isWithin24h(item) {
+    // YouTube動画はrecency_seconds(取得時点からの経過秒数)、ニュース記事は
+    // publishedのRSS日時文字列から判定する。
+    if (typeof item.recency_seconds === "number") {
+      return item.recency_seconds <= 86400;
+    }
+    if (item.published) {
+      var parsed = Date.parse(item.published);
+      if (!isNaN(parsed)) {
+        return Date.now() - parsed <= 86400000;
+      }
+    }
+    return false;
+  }
+
   function sentimentPill(sentiment) {
     if (!sentiment || sentiment.label === "neutral") return null;
     var s = t();
@@ -590,7 +613,8 @@
   function buildItem(item) {
     var s = t();
     var sentimentLabel = item.sentiment ? item.sentiment.label : "neutral";
-    var a = el("a", "item item--" + sentimentLabel);
+    var recent = isWithin24h(item);
+    var a = el("a", "item item--" + sentimentLabel + (recent ? " item--recent" : ""));
     a.href = item.url || "#";
     a.target = "_blank";
     a.rel = "noopener noreferrer";
@@ -615,6 +639,7 @@
       var categoryLabel = s.categories[item.category];
       if (categoryLabel) meta.appendChild(el("span", "topic-chip topic-chip--" + item.category, categoryLabel));
     }
+    if (recent) meta.appendChild(el("span", "new-badge", s.newBadge));
     var pill = sentimentPill(item.sentiment);
     if (pill) meta.appendChild(pill);
     if (item.source) meta.appendChild(el("span", null, item.source));
@@ -649,10 +674,68 @@
     return header;
   }
 
+  // ---- 最上部: 直近24時間ダイジェスト(セクション別件数のみ) -----------------
+
+  function countRecent(items) {
+    return (items || []).filter(isWithin24h).length;
+  }
+
+  function buildDigestPanel(data) {
+    var i18n = t();
+    var sections = (data && data.sections) || {};
+    var rows = [];
+
+    if (sections.gt4_topics) {
+      rows.push({ key: "gt4_topics", label: i18n.sections.gt4_topics.title, count: countRecent(sections.gt4_topics.items) });
+    }
+    if (sections.youtube_new) {
+      rows.push({ key: "youtube", label: i18n.sections.youtube.title, count: countRecent(sections.youtube_new.items) });
+    }
+    if (sections.social_buzz) {
+      rows.push({ key: "social_buzz", label: i18n.sections.social_buzz.title, count: countRecent(sections.social_buzz.items) });
+    }
+    if (sections.complaints) {
+      rows.push({ key: "complaints", label: i18n.sections.complaints.title, count: countRecent(sections.complaints.items) });
+    }
+    if (sections.motorsports && sections.motorsports.regions) {
+      var msCount = 0;
+      Object.values(sections.motorsports.regions).forEach(function (region) {
+        (region.series || []).forEach(function (s2) {
+          msCount += countRecent(s2.topics) + countRecent(s2.results) + countRecent(s2.standings);
+        });
+      });
+      rows.push({ key: "motorsports", label: i18n.sections.motorsports.title, count: msCount });
+    }
+
+    var totalCount = rows.reduce(function (sum, r) { return sum + r.count; }, 0);
+    var panel = el("section", "panel panel--full digest-panel");
+    panel.appendChild(buildPanelHeader("clock", i18n.digestTitle, totalCount));
+    if (i18n.digestNote) panel.appendChild(el("p", "panel__note", i18n.digestNote));
+
+    var list = el("div", "digest-list");
+    rows.forEach(function (r) {
+      var row = el("a", "digest-row" + (r.count > 0 ? " digest-row--active" : ""));
+      row.href = "#section-" + r.key;
+      row.addEventListener("click", function (evt) {
+        var target = document.getElementById("section-" + r.key);
+        if (target) {
+          evt.preventDefault();
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      });
+      row.appendChild(el("span", "digest-row__label", r.label));
+      row.appendChild(el("span", "digest-row__count", String(r.count)));
+      list.appendChild(row);
+    });
+    panel.appendChild(list);
+    return panel;
+  }
+
   function buildGenericPanel(icon, sectionKey, section, size) {
     var s = t();
     var meta = s.sections[sectionKey] || {};
     var panel = el("section", "panel panel--" + size);
+    panel.id = "section-" + sectionKey;
     var items = section.items || [];
     panel.appendChild(buildPanelHeader(icon, meta.title || sectionKey, items.length));
 
@@ -670,6 +753,7 @@
     var s = t();
     var meta = s.sections[sectionKey] || {};
     var panel = el("section", "panel panel--full");
+    panel.id = "section-" + sectionKey;
     var latestItems = section.items || [];
     var buzzItems = section.items_buzz || [];
     panel.appendChild(buildPanelHeader(icon, meta.title || sectionKey, latestItems.length));
@@ -714,6 +798,7 @@
     var newItems = (data.sections.youtube_new && data.sections.youtube_new.items) || [];
     var popularItems = (data.sections.youtube_popular && data.sections.youtube_popular.items) || [];
     var panel = el("section", "panel panel--full");
+    panel.id = "section-youtube";
     panel.appendChild(buildPanelHeader(icon, meta.title, newItems.length));
 
     var tabs = el("div", "tab-group");
@@ -908,6 +993,7 @@
     var i18n = t();
     var meta = i18n.sections.motorsports;
     var panel = el("section", "panel panel--full");
+    panel.id = "section-motorsports";
     var regions = section.regions || {};
     var totalCount = Object.values(regions).reduce(function (sum, r) {
       return (
@@ -1057,6 +1143,7 @@
   function buildCarsPanel(carsData) {
     var i18n = t();
     var panel = el("section", "panel panel--full");
+    panel.id = "section-gt4_cars";
     var cars = carsData.cars || [];
     panel.appendChild(buildPanelHeader("car", i18n.sections.gt4_cars.title, cars.length));
 
@@ -1165,6 +1252,7 @@
     var i18n = t();
     var meta = i18n.sections.st_supra_teams;
     var panel = el("section", "panel panel--full");
+    panel.id = "section-st_supra_teams";
     var teams = section.teams || [];
     panel.appendChild(buildPanelHeader("flag", meta.title, teams.length));
     if (meta.note) panel.appendChild(el("p", "panel__note", meta.note));
@@ -1197,6 +1285,7 @@
     buildStats(data);
 
     board.innerHTML = "";
+    board.appendChild(buildDigestPanel(data));
     if (carsData) board.appendChild(buildCarsPanel(carsData));
     if (data.sections && data.sections.st_supra_teams) {
       board.appendChild(buildStTeamsPanel(data.sections.st_supra_teams));
